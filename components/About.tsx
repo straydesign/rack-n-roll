@@ -1,8 +1,8 @@
 const features = [
-  { title: "Karaoke 7 Nights a Week", desc: "The mic is always on." },
-  { title: "Cheap Drinks, Good Food", desc: "No pretense, no surprises on the tab." },
-  { title: "20,000+ Songs", desc: "From Johnny Cash to Cardi B. We got you." },
-  { title: "Open Since 1989", desc: "Still here. Still loud. Still your place." },
+  { title: "Karaoke 7 Nights a Week", desc: "9:30pm to 1:30am, every single night. 20,000+ songs on KaraFun — no books, just search and sing." },
+  { title: "Cheap Drinks, Always", desc: "No pretense, no surprises on the tab. $2 pints on Wednesdays. Late night happy hour specials." },
+  { title: "Bar Food Done Right", desc: "Wings, burgers, Philly cheesesteaks, and fresh pizza. Kitchen open until 11pm." },
+  { title: "Open Since 1989", desc: "35+ years of good times. Still here. Still loud. Still your place." },
 ];
 
 export default function About() {
@@ -13,7 +13,8 @@ export default function About() {
       </h2>
       <p className="text-center text-charcoal/70 mb-12 max-w-2xl mx-auto text-lg">
         No cover. No dress code. Just a neighborhood spot where everybody sings,
-        the drinks are cheap, and the jukebox never stops.
+        the drinks are cheap, and the good times never stop. A welcoming mix of
+        regulars and newcomers — from college kids to old-timers.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {features.map((f) => (

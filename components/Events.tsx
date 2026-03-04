@@ -4,9 +4,12 @@ export default function Events() {
   return (
     <section className="px-6 py-20 bg-charcoal text-cream">
       <div className="max-w-4xl mx-auto">
-        <h2 className="font-serif text-3xl md:text-4xl mb-10 text-center">
+        <h2 className="font-serif text-3xl md:text-4xl mb-4 text-center">
           What&rsquo;s Happening
         </h2>
+        <p className="text-center text-cream/50 mb-10">
+          Karaoke every night 9:30pm&ndash;1:30am &middot; Kitchen open until 11pm
+        </p>
         {events.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {events.map((event, i) => (
@@ -24,7 +27,7 @@ export default function Events() {
           </div>
         ) : (
           <p className="text-center text-cream/70 text-lg">
-            Every night&rsquo;s a good night. Karaoke starts at 8pm.
+            Every night&rsquo;s a good night. Karaoke starts at 9:30pm.
           </p>
         )}
       </div>

@@ -24,12 +24,24 @@ export default function Info() {
           </div>
           <div>
             <h3 className="font-bold text-charcoal mb-1">Hours</h3>
-            <p className="text-charcoal/70">Mon&ndash;Sat, 3pm&ndash;2am</p>
+            <p className="text-charcoal/70">
+              Mon&ndash;Sat: 3pm&ndash;2am<br />
+              Wed opens early at 12pm<br />
+              Closed Sundays
+            </p>
           </div>
           <div>
-            <h3 className="font-bold text-charcoal mb-1">Socials</h3>
+            <h3 className="font-bold text-charcoal mb-1">Good to Know</h3>
+            <p className="text-charcoal/70 text-sm">
+              Non-smoking inside &middot; Smoke porch out front<br />
+              Kitchen open until 11pm<br />
+              Credit cards accepted &middot; Darts &middot; TVs
+            </p>
+          </div>
+          <div>
+            <h3 className="font-bold text-charcoal mb-1">Follow Us</h3>
             <a
-              href="https://www.facebook.com/people/Rack-N-Roll/100063656043968/"
+              href="https://www.facebook.com/profile.php?id=100053614732579"
               target="_blank"
               rel="noopener noreferrer"
               className="text-amber hover:underline"
