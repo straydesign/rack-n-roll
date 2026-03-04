@@ -13,7 +13,7 @@ export default function Menu() {
         <div className="grid gap-8 sm:grid-cols-3">
           {menu.map((cat) => (
             <div key={cat.category}>
-              <h3 className="font-bold text-lg text-charcoal mb-4 border-b border-amber/30 pb-2">
+              <h3 className="font-bold text-lg text-charcoal mb-4 border-b border-green/30 pb-2">
                 {cat.category}
               </h3>
               <ul className="space-y-3">

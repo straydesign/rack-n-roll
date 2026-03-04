@@ -20,7 +20,7 @@ export default function About() {
         {features.map((f) => (
           <div
             key={f.title}
-            className="border border-charcoal/10 rounded-xl p-6 hover:border-amber/40 transition-colors"
+            className="border border-charcoal/10 rounded-xl p-6 hover:border-green/40 transition-colors"
           >
             <h3 className="font-bold text-lg text-charcoal mb-1">{f.title}</h3>
             <p className="text-charcoal/60 text-sm">{f.desc}</p>

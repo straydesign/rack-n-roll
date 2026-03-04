@@ -25,7 +25,7 @@ export default function Schedule() {
                 <td className="py-3 pr-4 font-medium text-charcoal">{row.day}</td>
                 <td className="py-3 pr-4 text-charcoal/70">{row.hours}</td>
                 <td className="py-3 pr-4 text-charcoal/70">{row.karaoke}</td>
-                <td className="py-3 text-amber font-medium">
+                <td className="py-3 text-green font-medium">
                   {row.special || "—"}
                 </td>
               </tr>

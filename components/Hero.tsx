@@ -1,7 +1,7 @@
 export default function Hero() {
   return (
     <section className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6 py-24">
-      <p className="uppercase tracking-[0.25em] text-amber text-sm font-medium mb-6">
+      <p className="uppercase tracking-[0.25em] text-green text-sm font-medium mb-6">
         Karaoke Capitol of the Great Lakes
       </p>
       <h1 className="font-serif text-5xl md:text-7xl text-charcoal mb-6 leading-tight">
@@ -15,7 +15,7 @@ export default function Hero() {
         <span className="hidden sm:inline">&middot;</span>
         <span>Mon&ndash;Sat, 3pm&ndash;2am</span>
         <span className="hidden sm:inline">&middot;</span>
-        <a href="tel:+18148643535" className="hover:text-amber transition-colors">
+        <a href="tel:+18148643535" className="hover:text-green transition-colors">
           (814) 864-3535
         </a>
       </div>

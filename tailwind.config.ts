@@ -9,9 +9,10 @@ const config: Config = {
     extend: {
       colors: {
         cream: "#FAF7F2",
-        charcoal: "#2C2C2C",
+        charcoal: "#1A1A1A",
+        green: "#1A7A3A",
+        darkgreen: "#145C2C",
         amber: "#C4841D",
-        warmred: "#8B3A3A",
       },
       fontFamily: {
         sans: ["DM Sans", "sans-serif"],

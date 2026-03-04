@@ -17,7 +17,7 @@ export default function Info() {
             <h3 className="font-bold text-charcoal mb-1">Phone</h3>
             <a
               href="tel:+18148643535"
-              className="text-amber hover:underline"
+              className="text-green hover:underline"
             >
               (814) 864-3535
             </a>
@@ -44,7 +44,7 @@ export default function Info() {
               href="https://www.facebook.com/profile.php?id=100053614732579"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-amber hover:underline"
+              className="text-green hover:underline"
             >
               Facebook
             </a>
