@@ -31,7 +31,7 @@ const features = [
     accent: false,
   },
   {
-    title: 'Erie\'s Living Room Since 1989',
+    title: 'Open Since 1989',
     desc: 'No cover. No dress code. No pretense. Just a neighborhood spot where everybody sings and the good times never stop.',
     span: 'col-span-2',
     accent: true,

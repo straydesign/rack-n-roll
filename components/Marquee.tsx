@@ -9,7 +9,7 @@ const words = [
   'GOOD TIMES',
   'SINCE \'89',
   '20,000+ SONGS',
-  'ERIE\'S LIVING ROOM',
+  'ERIE PA',
   'NO COVER',
   'NO DRESS CODE',
 ]

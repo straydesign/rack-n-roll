@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero'
-import Marquee from '@/components/Marquee'
+import Header from '@/components/Header'
 import About from '@/components/About'
 import Schedule from '@/components/Schedule'
 import Events from '@/components/Events'
@@ -10,21 +10,25 @@ import Footer from '@/components/Footer'
 export default function Home() {
   return (
     <main>
+      <Header />
       <Hero />
       <div className="relative z-20">
-        <Marquee />
         {/* Light section: About + Schedule */}
         <div className="bg-cream">
-          <About />
+          <div id="about">
+            <About />
+          </div>
           <div className="hr-glow max-w-4xl mx-auto" />
-          <Schedule />
+          <div id="schedule">
+            <Schedule />
+          </div>
         </div>
         {/* Dark section: Events */}
         <div id="events">
           <Events />
         </div>
         {/* Light section: Menu */}
-        <div className="bg-cream">
+        <div id="menu" className="bg-cream">
           <Menu />
         </div>
         {/* Dark section: Info */}
