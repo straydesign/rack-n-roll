@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { DM_Sans, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/SmoothScroll";
+import ScrollProgress from "@/components/ScrollProgress";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -15,9 +17,9 @@ const dmSerif = DM_Serif_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Rack N Roll — Erie's Living Room Since '89",
+  title: "Rack N Roll — Karaoke Capitol of the Great Lakes",
   description:
-    "Karaoke bar in Erie, PA. Cheap drinks, 20,000+ songs, karaoke 7 nights a week. Come as you are.",
+    "Erie's living room since 1989. Karaoke 7 nights a week, cheap drinks, good food. Come as you are.",
 };
 
 export default function RootLayout({
@@ -27,8 +29,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${dmSans.variable} ${dmSerif.variable} font-sans antialiased`}>
-        {children}
+      <body
+        className={`${dmSans.variable} ${dmSerif.variable} font-sans antialiased grain`}
+      >
+        <SmoothScroll>
+          <ScrollProgress />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
