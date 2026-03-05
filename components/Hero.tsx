@@ -1,33 +1,24 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import dynamic from 'next/dynamic'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Mic, Music, Beer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-const Scene3D = dynamic(() => import('./Scene3D'), { ssr: false })
-
-// --- Utility ---
 const cn = (...classes: (string | boolean | undefined)[]) =>
   classes.filter(Boolean).join(' ')
 
 // --- Aurora Background ---
-interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
-  children: React.ReactNode
-  showRadialGradient?: boolean
-}
-
 function AuroraBackground({
   className,
   children,
   showRadialGradient = true,
   ...props
-}: AuroraBackgroundProps) {
+}: React.HTMLProps<HTMLDivElement> & { children: React.ReactNode; showRadialGradient?: boolean }) {
   return (
     <div
       className={cn(
-        'relative flex flex-col h-screen items-center justify-center bg-zinc-950 text-slate-50 transition-bg overflow-hidden',
+        'relative flex flex-col h-screen items-center justify-center bg-zinc-950 text-slate-50 overflow-hidden',
         className
       )}
       {...props}
@@ -46,17 +37,11 @@ function AuroraBackground({
             after:[background-size:200%,_100%]
             after:animate-aurora after:[background-attachment:fixed] after:mix-blend-difference
             pointer-events-none
-            absolute -inset-[10px] opacity-40 will-change-transform`,
+            absolute -inset-[10px] opacity-50 will-change-transform`,
             showRadialGradient &&
               `[mask-image:radial-gradient(ellipse_at_100%_0%,black_10%,var(--transparent)_70%)]`
           )}
-          style={
-            {
-              '--green': '#1A7A3A',
-              '--black': '#000000',
-              '--transparent': 'transparent',
-            } as React.CSSProperties
-          }
+          style={{ '--green': '#1A7A3A', '--black': '#000000', '--transparent': 'transparent' } as React.CSSProperties}
         />
       </div>
       {children}
@@ -65,22 +50,13 @@ function AuroraBackground({
 }
 
 // --- Morphing Text ---
-function MorphingText({
-  words,
-  className,
-  interval = 3000,
-}: {
-  words: string[]
-  className?: string
-  interval?: number
-}) {
+function MorphingText({ words, className, interval = 3000 }: { words: string[]; className?: string; interval?: number }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [displayText, setDisplayText] = useState(words[0])
 
   useEffect(() => {
     const currentWord = words[currentIndex]
     const nextWord = words[(currentIndex + 1) % words.length]
-    const morphDuration = 800
     const steps = 20
     let step = 0
 
@@ -88,26 +64,21 @@ function MorphingText({
       step++
       const progress = step / steps
       if (progress < 0.5) {
-        const charCount = Math.floor(currentWord.length * (1 - progress * 2))
-        setDisplayText(currentWord.slice(0, charCount))
+        setDisplayText(currentWord.slice(0, Math.floor(currentWord.length * (1 - progress * 2))))
       } else {
-        const charCount = Math.floor(nextWord.length * ((progress - 0.5) * 2))
-        setDisplayText(nextWord.slice(0, charCount))
+        setDisplayText(nextWord.slice(0, Math.floor(nextWord.length * ((progress - 0.5) * 2))))
       }
       if (step >= steps) {
         clearInterval(morphInterval)
         setDisplayText(nextWord)
       }
-    }, morphDuration / steps)
+    }, 40)
 
     const wordTimeout = setTimeout(() => {
       setCurrentIndex((currentIndex + 1) % words.length)
     }, interval)
 
-    return () => {
-      clearInterval(morphInterval)
-      clearTimeout(wordTimeout)
-    }
+    return () => { clearInterval(morphInterval); clearTimeout(wordTimeout) }
   }, [currentIndex, words, interval])
 
   return (
@@ -121,13 +92,7 @@ function MorphingText({
 }
 
 // --- Velocity Parallax Text ---
-function ParallaxText({
-  children,
-  baseVelocity = 100,
-}: {
-  children: string
-  baseVelocity: number
-}) {
+function ParallaxText({ children, baseVelocity = 100 }: { children: string; baseVelocity: number }) {
   const baseX = useRef(0)
   const { scrollY } = useScroll()
   const scrollVelocity = useRef(0)
@@ -135,48 +100,35 @@ function ParallaxText({
 
   useEffect(() => {
     let lastScrollY = scrollY.get()
-    const unsubscribe = scrollY.on('change', () => {
+    const unsub = scrollY.on('change', () => {
       const current = scrollY.get()
       scrollVelocity.current = current - lastScrollY
       lastScrollY = current
     })
-    return () => unsubscribe()
+    return () => unsub()
   }, [scrollY])
 
   useEffect(() => {
     let rafId: number
     let lastTime = Date.now()
-
     const animate = () => {
       const now = Date.now()
       const delta = (now - lastTime) / 1000
       lastTime = now
-
-      const moveBy = baseVelocity * delta + scrollVelocity.current * delta * 0.5
-      baseX.current += moveBy
-
-      // wrap between -25% and -50%
-      const range = 25
-      baseX.current = ((baseX.current % range) + range) % range - 50
-
+      baseX.current += baseVelocity * delta + scrollVelocity.current * delta * 0.5
+      baseX.current = ((baseX.current % 25) + 25) % 25 - 50
       setX(baseX.current)
       rafId = requestAnimationFrame(animate)
     }
-
     rafId = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(rafId)
   }, [baseVelocity])
 
   return (
     <div className="overflow-hidden whitespace-nowrap">
-      <motion.div
-        style={{ x: `${x}%` }}
-        className="font-bold uppercase text-6xl md:text-8xl flex whitespace-nowrap will-change-transform"
-      >
+      <motion.div style={{ x: `${x}%` }} className="font-bold uppercase text-6xl md:text-8xl flex whitespace-nowrap will-change-transform">
         {[...Array(4)].map((_, i) => (
-          <span key={i} className="block mr-8 text-green-500/[0.08]">
-            {children}{' '}
-          </span>
+          <span key={i} className="block mr-8 text-green-500/[0.08]">{children} </span>
         ))}
       </motion.div>
     </div>
@@ -194,16 +146,10 @@ export default function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9])
   const y = useTransform(scrollYProgress, [0, 0.5], [0, 80])
-  const bgOpacity = useTransform(scrollYProgress, [0.3, 0.9], [1, 0])
 
   return (
     <div ref={containerRef} className="relative">
-      {/* 3D Building - fixed behind everything */}
-      <motion.div className="fixed inset-0 z-0" style={{ opacity: bgOpacity }}>
-        <Scene3D />
-      </motion.div>
-
-      <AuroraBackground className="relative z-[1]">
+      <AuroraBackground>
         <motion.div
           style={{ opacity, scale, y }}
           className="relative z-10 flex flex-col items-center justify-center px-6 text-center min-h-screen"
@@ -269,9 +215,7 @@ export default function Hero() {
             <Button
               size="lg"
               className="bg-green-600 hover:bg-green-700 text-white px-8 py-6 text-base font-semibold rounded-full shadow-lg shadow-green-900/50 hover:scale-105 transition-all"
-              onClick={() => {
-                document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' })
-              }}
+              onClick={() => document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Beer className="w-5 h-5 mr-2" />
               What&rsquo;s Happening
@@ -280,9 +224,7 @@ export default function Hero() {
               size="lg"
               variant="outline"
               className="border-green-500/30 text-green-400 hover:bg-green-950/50 px-8 py-6 text-base font-semibold rounded-full backdrop-blur-sm hover:scale-105 transition-all"
-              onClick={() => {
-                document.getElementById('info')?.scrollIntoView({ behavior: 'smooth' })
-              }}
+              onClick={() => document.getElementById('info')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Mic className="w-5 h-5 mr-2" />
               Find Us
@@ -316,7 +258,6 @@ export default function Hero() {
           >
             <Mic className="w-16 h-16 text-green-500" />
           </motion.div>
-
           <motion.div
             className="absolute top-1/3 right-10 opacity-10"
             animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
