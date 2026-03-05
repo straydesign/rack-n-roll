@@ -164,3 +164,17 @@ body {
 .pulse-subtle {
   animation: subtle-pulse 3s ease-in-out infinite;
 }
+
+/* Aurora animation for hero background */
+@keyframes aurora-shift {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
+
+.animate-aurora {
+  animation: aurora-shift 60s linear infinite;
+}

@@ -20,13 +20,17 @@ export default function Home() {
           <Schedule />
         </div>
         {/* Dark section: Events */}
-        <Events />
+        <div id="events">
+          <Events />
+        </div>
         {/* Light section: Menu */}
         <div className="bg-cream">
           <Menu />
         </div>
         {/* Dark section: Info */}
-        <Info />
+        <div id="info">
+          <Info />
+        </div>
         {/* Footer */}
         <Footer />
       </div>
