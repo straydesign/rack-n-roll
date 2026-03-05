@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useTexture, Sparkles } from '@react-three/drei'
-import { useRef, useEffect, Suspense } from 'react'
+import { useRef, useEffect, Suspense, useMemo } from 'react'
 import * as THREE from 'three'
 
 function useScrollRef() {
@@ -23,66 +23,189 @@ function CameraRig() {
 
   useFrame((state) => {
     const t = state.clock.elapsedTime
-    const target = 5 - Math.min(scroll.current, 1.2) * 3.5
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, target, 0.05)
-    camera.position.x = Math.sin(t * 0.15) * 0.15
-    camera.position.y = Math.cos(t * 0.1) * 0.1
+    const targetZ = 7 - Math.min(scroll.current, 1.2) * 3.5
+    const targetY = 2.5 - Math.min(scroll.current, 1) * 0.8
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.04)
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.04)
+    camera.position.x = Math.sin(t * 0.12) * 0.25
+    camera.lookAt(0, 0.6, 0)
   })
 
   return null
 }
 
-function Logo() {
-  const meshRef = useRef<THREE.Mesh>(null)
-  const texture = useTexture('/logo.jpg')
+function Building() {
+  const groupRef = useRef<THREE.Group>(null)
+  const buildingTex = useTexture('/building.jpg')
+  const logoTex = useTexture('/logo.jpg')
   const scroll = useScrollRef()
 
+  // Brick-like color for sides
+  const brick = '#7A6050'
+  const brickDark = '#5C4538'
+  const roofColor = '#2E1F15'
+  const stone = '#9A9080'
+  const asphalt = '#3A3A3A'
+
+  // Side materials for main building box (right, left, top, bottom, front, back)
+  const bodyMaterials = useMemo(
+    () => [
+      new THREE.MeshStandardMaterial({ color: brick, roughness: 0.9 }),
+      new THREE.MeshStandardMaterial({ color: brick, roughness: 0.9 }),
+      new THREE.MeshStandardMaterial({ color: roofColor, roughness: 0.8 }),
+      new THREE.MeshStandardMaterial({ color: brickDark, roughness: 0.9 }),
+      new THREE.MeshStandardMaterial({ map: buildingTex, roughness: 0.7 }),
+      new THREE.MeshStandardMaterial({ color: brickDark, roughness: 0.9 }),
+    ],
+    [buildingTex]
+  )
+
   useFrame((state) => {
-    if (!meshRef.current) return
+    if (!groupRef.current) return
     const t = state.clock.elapsedTime
-    meshRef.current.rotation.y = t * 0.35 + scroll.current * Math.PI * 3
-    meshRef.current.rotation.x = Math.sin(t * 0.2) * 0.08
-    meshRef.current.rotation.z = Math.cos(t * 0.15) * 0.03
-    const pulse = 1 + Math.sin(t * 0.5) * 0.015
-    meshRef.current.scale.setScalar(pulse)
+    groupRef.current.rotation.y = t * 0.2 + scroll.current * Math.PI * 2
   })
 
   return (
-    <mesh ref={meshRef}>
-      <boxGeometry args={[2.6, 2.6, 0.12]} />
-      <meshStandardMaterial
-        map={texture}
-        transparent
-        roughness={0.3}
-        metalness={0.15}
+    <group ref={groupRef}>
+      {/* ---- MAIN BUILDING ---- */}
+      <mesh position={[0, 0.8, 0]} material={bodyMaterials}>
+        <boxGeometry args={[4.2, 1.6, 2.2]} />
+      </mesh>
+
+      {/* ---- ROOF OVERHANG ---- */}
+      <mesh position={[0, 1.72, 0]}>
+        <boxGeometry args={[4.5, 0.15, 2.5]} />
+        <meshStandardMaterial color={roofColor} roughness={0.8} />
+      </mesh>
+
+      {/* ---- STONE ENTRANCE FACADE ---- */}
+      <mesh position={[0.3, 0.65, 1.16]}>
+        <boxGeometry args={[1.4, 1.3, 0.15]} />
+        <meshStandardMaterial color={stone} roughness={0.85} />
+      </mesh>
+      {/* Door */}
+      <mesh position={[0.3, 0.45, 1.25]}>
+        <boxGeometry args={[0.55, 0.9, 0.05]} />
+        <meshStandardMaterial color="#1A1208" roughness={0.5} />
+      </mesh>
+
+      {/* ---- NEON WINDOW (left of entrance) ---- */}
+      <mesh position={[-0.8, 0.75, 1.12]}>
+        <boxGeometry args={[0.8, 0.5, 0.02]} />
+        <meshStandardMaterial
+          color="#1A7A3A"
+          emissive="#1A7A3A"
+          emissiveIntensity={0.6}
+          roughness={0.2}
+        />
+      </mesh>
+
+      {/* ---- SIGN POLE ---- */}
+      <mesh position={[-2.8, 1.2, 0.6]}>
+        <cylinderGeometry args={[0.04, 0.04, 2.6, 8]} />
+        <meshStandardMaterial color="#666" metalness={0.6} roughness={0.4} />
+      </mesh>
+      {/* Sign crossbar */}
+      <mesh position={[-2.8, 2.35, 0.6]}>
+        <boxGeometry args={[0.06, 0.06, 0.5]} />
+        <meshStandardMaterial color="#666" metalness={0.6} roughness={0.4} />
+      </mesh>
+      {/* Logo sign */}
+      <mesh position={[-2.8, 2.35, 0.6]}>
+        <planeGeometry args={[0.9, 0.9]} />
+        <meshStandardMaterial
+          map={logoTex}
+          transparent
+          side={THREE.DoubleSide}
+          roughness={0.3}
+        />
+      </mesh>
+
+      {/* ---- CAPTAIN MORGAN SIGN (below main sign) ---- */}
+      <mesh position={[-2.8, 1.6, 0.6]}>
+        <boxGeometry args={[0.7, 0.25, 0.05]} />
+        <meshStandardMaterial
+          color="#CC3300"
+          emissive="#CC3300"
+          emissiveIntensity={0.3}
+          roughness={0.3}
+        />
+      </mesh>
+
+      {/* ---- PARKING LOT ---- */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0.5]}>
+        <planeGeometry args={[9, 7]} />
+        <meshStandardMaterial color={asphalt} roughness={0.95} />
+      </mesh>
+
+      {/* Parking lines */}
+      {[-1.5, 0, 1.5].map((x) => (
+        <mesh
+          key={x}
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[x, 0.005, 2.8]}
+        >
+          <planeGeometry args={[0.06, 1.8]} />
+          <meshStandardMaterial color="#888" roughness={0.9} />
+        </mesh>
+      ))}
+
+      {/* ---- SIDEWALK ---- */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 1.4]}>
+        <planeGeometry args={[5, 0.5]} />
+        <meshStandardMaterial color="#8A8478" roughness={0.9} />
+      </mesh>
+    </group>
+  )
+}
+
+function Lights() {
+  return (
+    <>
+      <ambientLight intensity={0.5} />
+      <directionalLight
+        position={[5, 8, 5]}
+        intensity={1}
+        castShadow
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
       />
-    </mesh>
+      <pointLight
+        position={[0.3, 0.8, 2]}
+        intensity={0.8}
+        color="#FFCC66"
+        distance={5}
+      />
+      <pointLight
+        position={[-2.8, 2, 1.5]}
+        intensity={0.5}
+        color="#1A7A3A"
+        distance={6}
+      />
+    </>
   )
 }
 
 export default function Scene3D() {
   return (
     <Canvas
-      camera={{ position: [0, 0, 5], fov: 50 }}
+      camera={{ position: [0, 2.5, 7], fov: 42 }}
       gl={{ alpha: true, antialias: true }}
       style={{ background: 'transparent' }}
     >
       <CameraRig />
-      <ambientLight intensity={0.35} />
-      <directionalLight position={[5, 5, 5]} intensity={0.7} />
-      <pointLight position={[0, 0, -3]} intensity={2.5} color="#1A7A3A" distance={12} />
-      <pointLight position={[-3, 2, 3]} intensity={0.8} color="#1A7A3A" />
-      <pointLight position={[3, -2, 2]} intensity={0.4} color="#145C2C" />
+      <Lights />
       <Suspense fallback={null}>
-        <Logo />
+        <Building />
       </Suspense>
       <Sparkles
-        count={60}
-        scale={14}
-        size={2}
-        speed={0.3}
+        count={40}
+        scale={16}
+        size={1.5}
+        speed={0.2}
         color="#1A7A3A"
-        opacity={0.4}
+        opacity={0.3}
       />
     </Canvas>
   )
