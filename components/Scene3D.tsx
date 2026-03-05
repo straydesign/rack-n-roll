@@ -23,12 +23,12 @@ function CameraRig() {
 
   useFrame((state) => {
     const t = state.clock.elapsedTime
-    const targetZ = 7 - Math.min(scroll.current, 1.2) * 3.5
-    const targetY = 2.5 - Math.min(scroll.current, 1) * 0.8
+    const targetZ = 7.5 - Math.min(scroll.current, 1.2) * 3.5
+    const targetY = 3 - Math.min(scroll.current, 1) * 0.8
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.04)
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.04)
-    camera.position.x = Math.sin(t * 0.12) * 0.25
-    camera.lookAt(0, 0.6, 0)
+    camera.position.x = Math.sin(t * 0.1) * 0.2
+    camera.lookAt(0, 0.5, 0)
   })
 
   return null
@@ -36,125 +36,194 @@ function CameraRig() {
 
 function Building() {
   const groupRef = useRef<THREE.Group>(null)
-  const buildingTex = useTexture('/building.jpg')
+  const frontTex = useTexture('/building.jpg')
   const logoTex = useTexture('/logo.jpg')
   const scroll = useScrollRef()
 
-  // Brick-like color for sides
-  const brick = '#7A6050'
-  const brickDark = '#5C4538'
-  const roofColor = '#2E1F15'
-  const stone = '#9A9080'
-  const asphalt = '#3A3A3A'
+  // Accurate colors from Google Earth aerial
+  const brickFront = '#B05550' // pinkish-red brick
+  const sideWall = '#2A2222' // very dark brown/black sides
+  const roofTop = '#6B3535' // dark maroon roof
+  const roofFascia = '#1A1818' // black roof edge trim
+  const stoneColor = '#A09585' // stone entrance facade
+  const windowColor = '#0A0808'
+  const asphalt = '#484848'
+  const grass = '#4A8B3A'
+  const sidewalkColor = '#999088'
+  const roadColor = '#555555'
 
-  // Side materials for main building box (right, left, top, bottom, front, back)
-  const bodyMaterials = useMemo(
+  // Building body: right, left, top, bottom, front (photo), back
+  const bodyMats = useMemo(
     () => [
-      new THREE.MeshStandardMaterial({ color: brick, roughness: 0.9 }),
-      new THREE.MeshStandardMaterial({ color: brick, roughness: 0.9 }),
-      new THREE.MeshStandardMaterial({ color: roofColor, roughness: 0.8 }),
-      new THREE.MeshStandardMaterial({ color: brickDark, roughness: 0.9 }),
-      new THREE.MeshStandardMaterial({ map: buildingTex, roughness: 0.7 }),
-      new THREE.MeshStandardMaterial({ color: brickDark, roughness: 0.9 }),
+      new THREE.MeshStandardMaterial({ color: sideWall, roughness: 0.95 }), // right (parking side)
+      new THREE.MeshStandardMaterial({ color: sideWall, roughness: 0.95 }), // left (grass side)
+      new THREE.MeshStandardMaterial({ color: roofFascia, roughness: 0.9 }), // top edge
+      new THREE.MeshStandardMaterial({ color: '#3A2A2A', roughness: 0.95 }), // bottom
+      new THREE.MeshStandardMaterial({ map: frontTex, roughness: 0.75 }), // front (photo)
+      new THREE.MeshStandardMaterial({ color: brickFront, roughness: 0.9 }), // back
     ],
-    [buildingTex]
+    [frontTex]
   )
 
   useFrame((state) => {
     if (!groupRef.current) return
     const t = state.clock.elapsedTime
-    groupRef.current.rotation.y = t * 0.2 + scroll.current * Math.PI * 2
+    groupRef.current.rotation.y = t * 0.18 + scroll.current * Math.PI * 2
   })
 
+  // Building dimensions (proportional to real building ~80ft x 45ft)
+  const W = 4.8 // width (front face)
+  const D = 2.8 // depth
+  const H = 1.5 // wall height
+
   return (
-    <group ref={groupRef}>
-      {/* ---- MAIN BUILDING ---- */}
-      <mesh position={[0, 0.8, 0]} material={bodyMaterials}>
-        <boxGeometry args={[4.2, 1.6, 2.2]} />
+    <group ref={groupRef} position={[0, 0, 0]}>
+      {/* === MAIN BUILDING BODY === */}
+      <mesh position={[0, H / 2, 0]} material={bodyMats}>
+        <boxGeometry args={[W, H, D]} />
       </mesh>
 
-      {/* ---- ROOF OVERHANG ---- */}
-      <mesh position={[0, 1.72, 0]}>
-        <boxGeometry args={[4.5, 0.15, 2.5]} />
-        <meshStandardMaterial color={roofColor} roughness={0.8} />
+      {/* === ROOF (flat, slight overhang) === */}
+      <mesh position={[0, H + 0.08, 0]}>
+        <boxGeometry args={[W + 0.2, 0.16, D + 0.2]} />
+        <meshStandardMaterial color={roofTop} roughness={0.85} />
       </mesh>
 
-      {/* ---- STONE ENTRANCE FACADE ---- */}
-      <mesh position={[0.3, 0.65, 1.16]}>
-        <boxGeometry args={[1.4, 1.3, 0.15]} />
-        <meshStandardMaterial color={stone} roughness={0.85} />
+      {/* Roof fascia strip (black edge all around) */}
+      {/* Front fascia */}
+      <mesh position={[0, H + 0.01, D / 2 + 0.01]}>
+        <boxGeometry args={[W + 0.22, 0.14, 0.06]} />
+        <meshStandardMaterial color={roofFascia} roughness={0.8} />
+      </mesh>
+      {/* Back fascia */}
+      <mesh position={[0, H + 0.01, -(D / 2 + 0.01)]}>
+        <boxGeometry args={[W + 0.22, 0.14, 0.06]} />
+        <meshStandardMaterial color={roofFascia} roughness={0.8} />
+      </mesh>
+
+      {/* === FRONT FACE DETAILS (on top of photo texture) === */}
+      {/* Stone entrance facade */}
+      <mesh position={[0.4, H * 0.4, D / 2 + 0.02]}>
+        <boxGeometry args={[1.3, H * 0.8, 0.12]} />
+        <meshStandardMaterial color={stoneColor} roughness={0.85} />
       </mesh>
       {/* Door */}
-      <mesh position={[0.3, 0.45, 1.25]}>
-        <boxGeometry args={[0.55, 0.9, 0.05]} />
-        <meshStandardMaterial color="#1A1208" roughness={0.5} />
+      <mesh position={[0.4, 0.45, D / 2 + 0.09]}>
+        <boxGeometry args={[0.5, 0.9, 0.04]} />
+        <meshStandardMaterial color="#120E08" roughness={0.4} />
       </mesh>
 
-      {/* ---- NEON WINDOW (left of entrance) ---- */}
-      <mesh position={[-0.8, 0.75, 1.12]}>
-        <boxGeometry args={[0.8, 0.5, 0.02]} />
+      {/* Front windows (3 visible in photos) */}
+      {[-1.6, -0.5, 1.6].map((x, i) => (
+        <mesh key={`fw-${i}`} position={[x, H * 0.55, D / 2 + 0.01]}>
+          <boxGeometry args={[0.6, 0.35, 0.03]} />
+          <meshStandardMaterial color={windowColor} roughness={0.3} metalness={0.1} />
+        </mesh>
+      ))}
+
+      {/* === BACK WALL DETAILS === */}
+      {/* Back windows */}
+      {[-1.2, 0.8].map((x, i) => (
+        <mesh key={`bw-${i}`} position={[x, H * 0.55, -(D / 2 + 0.01)]}>
+          <boxGeometry args={[0.5, 0.3, 0.03]} />
+          <meshStandardMaterial color={windowColor} roughness={0.3} />
+        </mesh>
+      ))}
+
+      {/* === NEON GLOW (front window) === */}
+      <mesh position={[-1.6, H * 0.55, D / 2 + 0.03]}>
+        <planeGeometry args={[0.5, 0.25]} />
         <meshStandardMaterial
           color="#1A7A3A"
           emissive="#1A7A3A"
-          emissiveIntensity={0.6}
-          roughness={0.2}
+          emissiveIntensity={0.8}
+          transparent
+          opacity={0.7}
         />
       </mesh>
 
-      {/* ---- SIGN POLE ---- */}
-      <mesh position={[-2.8, 1.2, 0.6]}>
-        <cylinderGeometry args={[0.04, 0.04, 2.6, 8]} />
-        <meshStandardMaterial color="#666" metalness={0.6} roughness={0.4} />
+      {/* === SIGN POLE (left of building, facing front) === */}
+      <mesh position={[-3.2, 1.3, D / 2 - 0.3]}>
+        <cylinderGeometry args={[0.04, 0.05, 2.8, 8]} />
+        <meshStandardMaterial color="#555" metalness={0.5} roughness={0.4} />
       </mesh>
-      {/* Sign crossbar */}
-      <mesh position={[-2.8, 2.35, 0.6]}>
-        <boxGeometry args={[0.06, 0.06, 0.5]} />
-        <meshStandardMaterial color="#666" metalness={0.6} roughness={0.4} />
-      </mesh>
-      {/* Logo sign */}
-      <mesh position={[-2.8, 2.35, 0.6]}>
-        <planeGeometry args={[0.9, 0.9]} />
+      {/* Logo sign on pole */}
+      <mesh position={[-3.2, 2.5, D / 2 - 0.3]}>
+        <planeGeometry args={[0.85, 0.85]} />
         <meshStandardMaterial
           map={logoTex}
           transparent
           side={THREE.DoubleSide}
-          roughness={0.3}
         />
       </mesh>
-
-      {/* ---- CAPTAIN MORGAN SIGN (below main sign) ---- */}
-      <mesh position={[-2.8, 1.6, 0.6]}>
-        <boxGeometry args={[0.7, 0.25, 0.05]} />
+      {/* Red illuminated sign below */}
+      <mesh position={[-3.2, 1.75, D / 2 - 0.3]}>
+        <boxGeometry args={[0.65, 0.22, 0.04]} />
         <meshStandardMaterial
           color="#CC3300"
           emissive="#CC3300"
-          emissiveIntensity={0.3}
-          roughness={0.3}
+          emissiveIntensity={0.4}
         />
       </mesh>
 
-      {/* ---- PARKING LOT ---- */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0.5]}>
-        <planeGeometry args={[9, 7]} />
+      {/* === GROUND PLANE === */}
+      {/* Parking lot (front + right) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[1.5, -0.01, 1.5]}>
+        <planeGeometry args={[8, 5]} />
         <meshStandardMaterial color={asphalt} roughness={0.95} />
       </mesh>
 
       {/* Parking lines */}
-      {[-1.5, 0, 1.5].map((x) => (
+      {[-0.5, 1.0, 2.5, 4.0].map((x, i) => (
         <mesh
-          key={x}
+          key={`pl-${i}`}
           rotation={[-Math.PI / 2, 0, 0]}
-          position={[x, 0.005, 2.8]}
+          position={[x, 0.002, 2.5]}
         >
-          <planeGeometry args={[0.06, 1.8]} />
-          <meshStandardMaterial color="#888" roughness={0.9} />
+          <planeGeometry args={[0.05, 1.6]} />
+          <meshStandardMaterial color="#888" />
         </mesh>
       ))}
 
-      {/* ---- SIDEWALK ---- */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 1.4]}>
-        <planeGeometry args={[5, 0.5]} />
-        <meshStandardMaterial color="#8A8478" roughness={0.9} />
+      {/* Grass (left side) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-3.5, -0.005, 0]}>
+        <planeGeometry args={[3, 5]} />
+        <meshStandardMaterial color={grass} roughness={0.95} />
+      </mesh>
+
+      {/* Grass (front-left patch) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1.8, -0.005, D / 2 + 0.8]}>
+        <planeGeometry args={[2.5, 1.2]} />
+        <meshStandardMaterial color={grass} roughness={0.95} />
+      </mesh>
+
+      {/* Sidewalk (front) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.003, D / 2 + 1.6]}>
+        <planeGeometry args={[6, 0.6]} />
+        <meshStandardMaterial color={sidewalkColor} roughness={0.9} />
+      </mesh>
+
+      {/* Road (W 38th St) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.008, D / 2 + 3]}>
+        <planeGeometry args={[12, 2.5]} />
+        <meshStandardMaterial color={roadColor} roughness={0.9} />
+      </mesh>
+      {/* Yellow center line */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.005, D / 2 + 3]}>
+        <planeGeometry args={[10, 0.04]} />
+        <meshStandardMaterial color="#C8A830" />
+      </mesh>
+
+      {/* Grass across road */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, D / 2 + 5.5]}>
+        <planeGeometry args={[12, 3]} />
+        <meshStandardMaterial color="#5A9944" roughness={0.95} />
+      </mesh>
+
+      {/* === DUMPSTER (right-rear, visible in aerial) === */}
+      <mesh position={[W / 2 + 0.5, 0.3, -(D / 2 - 0.5)]}>
+        <boxGeometry args={[0.5, 0.6, 0.4]} />
+        <meshStandardMaterial color="#2A5A2A" roughness={0.9} />
       </mesh>
     </group>
   )
@@ -163,25 +232,29 @@ function Building() {
 function Lights() {
   return (
     <>
-      <ambientLight intensity={0.5} />
-      <directionalLight
-        position={[5, 8, 5]}
-        intensity={1}
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-      />
+      <ambientLight intensity={0.55} />
+      <directionalLight position={[6, 10, 4]} intensity={0.9} color="#FFF5E8" />
+      <directionalLight position={[-3, 6, -2]} intensity={0.3} color="#C8D0E0" />
+      {/* Warm entrance light */}
       <pointLight
-        position={[0.3, 0.8, 2]}
-        intensity={0.8}
+        position={[0.4, 0.8, 2.5]}
+        intensity={0.6}
         color="#FFCC66"
-        distance={5}
+        distance={4}
       />
+      {/* Green neon glow */}
       <pointLight
-        position={[-2.8, 2, 1.5]}
-        intensity={0.5}
+        position={[-1.6, 0.8, 2]}
+        intensity={0.4}
         color="#1A7A3A"
-        distance={6}
+        distance={3}
+      />
+      {/* Sign light */}
+      <pointLight
+        position={[-3.2, 2.5, 2]}
+        intensity={0.3}
+        color="#1A7A3A"
+        distance={4}
       />
     </>
   )
@@ -190,7 +263,7 @@ function Lights() {
 export default function Scene3D() {
   return (
     <Canvas
-      camera={{ position: [0, 2.5, 7], fov: 42 }}
+      camera={{ position: [0, 3, 7.5], fov: 40 }}
       gl={{ alpha: true, antialias: true }}
       style={{ background: 'transparent' }}
     >
@@ -200,12 +273,12 @@ export default function Scene3D() {
         <Building />
       </Suspense>
       <Sparkles
-        count={40}
-        scale={16}
-        size={1.5}
-        speed={0.2}
+        count={30}
+        scale={18}
+        size={1.2}
+        speed={0.15}
         color="#1A7A3A"
-        opacity={0.3}
+        opacity={0.25}
       />
     </Canvas>
   )
