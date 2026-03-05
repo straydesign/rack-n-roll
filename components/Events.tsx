@@ -58,7 +58,7 @@ export default function Events() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="text-center text-cream/30 mb-20 text-sm max-w-lg mx-auto"
         >
-          Karaoke every night 9:30pm&ndash;1:30am &middot; Kitchen open until 11pm
+          Karaoke Mon&ndash;Sat 9:30pm&ndash;1:30am &middot; Kitchen open until 11pm
         </motion.p>
 
         {/* Event cards — editorial large style */}

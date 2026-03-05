@@ -201,7 +201,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 1.4 }}
             className="mt-6 max-w-lg text-base md:text-lg text-slate-500 leading-relaxed"
           >
-            Since &rsquo;89. Come as you are. Karaoke 7 nights a week,
+            Since &rsquo;89. Come as you are. Karaoke 6 nights a week,
             cheap drinks, and the best bar food in Erie.
           </motion.p>
 
@@ -241,7 +241,7 @@ export default function Hero() {
             {[
               { val: '35+', label: 'Years' },
               { val: '20K+', label: 'Songs' },
-              { val: '7', label: 'Nights' },
+              { val: '6', label: 'Nights' },
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <div className="text-2xl md:text-3xl font-bold text-green-400">{s.val}</div>

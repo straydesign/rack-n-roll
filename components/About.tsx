@@ -7,13 +7,13 @@ import TextReveal from './TextReveal'
 const stats = [
   { number: '35+', label: 'Years Running', suffix: '' },
   { number: '20K', label: 'Songs on KaraFun', suffix: '+' },
-  { number: '7', label: 'Nights a Week', suffix: '' },
+  { number: '6', label: 'Nights a Week', suffix: '' },
   { number: '89', label: 'Since \'89', suffix: '\'' },
 ]
 
 const features = [
   {
-    title: 'Karaoke Every Single Night',
+    title: 'Karaoke 6 Nights a Week',
     desc: '9:30pm to 1:30am. 20,000+ songs on KaraFun — search on your phone, queue up, and bring the house down. DJ Paul Amann keeps it moving.',
     span: 'col-span-2',
     accent: true,

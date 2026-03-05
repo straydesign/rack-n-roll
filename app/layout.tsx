@@ -19,7 +19,7 @@ const dmSerif = DM_Serif_Display({
 export const metadata: Metadata = {
   title: "Rack N Roll — Erie's Premier Karaoke Bar Since '89",
   description:
-    "Erie's premier karaoke bar since 1989. 7 nights a week, cheap drinks, good food. Come as you are.",
+    "Erie's premier karaoke bar since 1989. 6 nights a week, cheap drinks, good food. Come as you are.",
 };
 
 export default function RootLayout({
