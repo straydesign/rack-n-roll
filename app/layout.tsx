@@ -17,7 +17,7 @@ const dmSerif = DM_Serif_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Rack N Roll — Karaoke Capitol of the Great Lakes",
+  title: "Rack N Roll — Erie's Premier Karaoke Bar Since '89",
   description:
     "Erie's living room since 1989. Karaoke 7 nights a week, cheap drinks, good food. Come as you are.",
 };
