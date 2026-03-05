@@ -1,27 +1,74 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
-const text =
-  'KARAOKE \u00B7 CHEAP DRINKS \u00B7 GOOD TIMES \u00B7 SINCE \u201989 \u00B7 20,000+ SONGS \u00B7 ERIE\u2019S LIVING ROOM \u00B7 '
+const words = [
+  'KARAOKE',
+  'CHEAP DRINKS',
+  'GOOD TIMES',
+  'SINCE \'89',
+  '20,000+ SONGS',
+  'ERIE\'S LIVING ROOM',
+  'NO COVER',
+  'NO DRESS CODE',
+]
 
 export default function Marquee() {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  })
+
+  const skew = useTransform(scrollYProgress, [0, 0.5, 1], [-1.5, 0, 1.5])
+
+  const text = words.map((w) => w + ' · ').join('')
+
   return (
-    <div className="overflow-hidden py-4 sm:py-5 bg-green">
+    <div ref={ref} className="relative overflow-hidden bg-green">
+      {/* Top line */}
+      <div className="h-px bg-cream/10" />
+
       <motion.div
-        animate={{ x: ['0%', '-50%'] }}
-        transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
-        className="flex whitespace-nowrap"
+        style={{ skewY: skew }}
+        className="py-5 sm:py-6"
       >
-        {[...Array(8)].map((_, i) => (
-          <span
-            key={i}
-            className="text-cream/90 text-sm sm:text-base md:text-lg font-bold tracking-[0.15em] mx-0"
-          >
-            {text}
-          </span>
-        ))}
+        {/* Row 1 — left */}
+        <motion.div
+          animate={{ x: ['0%', '-50%'] }}
+          transition={{ repeat: Infinity, duration: 25, ease: 'linear' }}
+          className="flex whitespace-nowrap mb-1"
+        >
+          {[...Array(6)].map((_, i) => (
+            <span
+              key={`a-${i}`}
+              className="text-cream/90 text-sm sm:text-base md:text-lg font-bold tracking-[0.15em]"
+            >
+              {text}
+            </span>
+          ))}
+        </motion.div>
+
+        {/* Row 2 — right (offset direction) */}
+        <motion.div
+          animate={{ x: ['-50%', '0%'] }}
+          transition={{ repeat: Infinity, duration: 30, ease: 'linear' }}
+          className="flex whitespace-nowrap"
+        >
+          {[...Array(6)].map((_, i) => (
+            <span
+              key={`b-${i}`}
+              className="text-cream/40 text-[10px] sm:text-xs tracking-[0.25em] uppercase"
+            >
+              {text}
+            </span>
+          ))}
+        </motion.div>
       </motion.div>
+
+      {/* Bottom line */}
+      <div className="h-px bg-cream/10" />
     </div>
   )
 }

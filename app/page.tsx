@@ -13,15 +13,21 @@ export default function Home() {
       <Hero />
       <div className="relative z-20">
         <Marquee />
+        {/* Light section: About + Schedule */}
         <div className="bg-cream">
           <About />
+          <div className="hr-glow max-w-4xl mx-auto" />
           <Schedule />
         </div>
+        {/* Dark section: Events */}
         <Events />
+        {/* Light section: Menu */}
         <div className="bg-cream">
           <Menu />
-          <Info />
         </div>
+        {/* Dark section: Info */}
+        <Info />
+        {/* Footer */}
         <Footer />
       </div>
     </main>
