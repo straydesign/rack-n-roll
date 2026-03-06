@@ -1,11 +1,13 @@
+import dynamic from 'next/dynamic'
 import Hero from '@/components/Hero'
 import Header from '@/components/Header'
-import About from '@/components/About'
-import Schedule from '@/components/Schedule'
-import Events from '@/components/Events'
-import Menu from '@/components/Menu'
-import Info from '@/components/Info'
-import Footer from '@/components/Footer'
+
+const About = dynamic(() => import('@/components/About'))
+const Schedule = dynamic(() => import('@/components/Schedule'))
+const Events = dynamic(() => import('@/components/Events'))
+const Menu = dynamic(() => import('@/components/Menu'))
+const Info = dynamic(() => import('@/components/Info'))
+const Footer = dynamic(() => import('@/components/Footer'))
 
 export default function Home() {
   return (

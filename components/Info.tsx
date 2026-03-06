@@ -159,9 +159,10 @@ export default function Info() {
               className="relative rounded-2xl overflow-hidden h-[280px] group"
             >
               <Image
-                src="/building.jpg"
+                src="/building.webp"
                 alt="Rack N Roll exterior"
                 fill
+                loading="lazy"
                 className="object-cover group-hover:scale-105 transition-transform duration-1000"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
