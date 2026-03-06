@@ -23,7 +23,7 @@ export default function Footer() {
           transition={{ duration: 1, ease }}
           className="text-center mb-16"
         >
-          <h2 className="font-serif display-text text-cream/10 leading-none select-none">
+          <h2 className="font-heading display-text text-cream/10 leading-none select-none">
             Rack N Roll
           </h2>
         </motion.div>

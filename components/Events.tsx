@@ -48,7 +48,7 @@ export default function Events() {
 
         <TextReveal
           text="Grab the mic. Own the night."
-          className="font-serif display-text text-cream text-center max-w-4xl mx-auto mb-6"
+          className="font-heading display-text text-cream text-center max-w-4xl mx-auto mb-6"
         />
 
         <motion.p
@@ -88,7 +88,7 @@ export default function Events() {
 
                   {/* Content */}
                   <div className="flex-1 relative z-10">
-                    <h3 className="font-serif text-2xl md:text-3xl lg:text-4xl text-cream mb-3 group-hover:text-green transition-colors duration-500">
+                    <h3 className="font-heading text-2xl md:text-3xl lg:text-4xl text-cream mb-3 group-hover:text-green transition-colors duration-500">
                       {event.title}
                     </h3>
                     <p className="text-cream/40 text-sm md:text-base leading-relaxed max-w-xl">

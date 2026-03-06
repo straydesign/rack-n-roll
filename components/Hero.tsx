@@ -83,9 +83,9 @@ function MorphingText({ words, className, interval = 3000 }: { words: string[]; 
 
   return (
     <span className={cn('inline-block', className)}>
-      <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-500 via-emerald-400 to-green-600">
+      <span className="font-bold text-green">
         {displayText}
-        <span className="inline-block w-0.5 h-[1em] bg-gradient-to-b from-green-500 to-emerald-600 animate-pulse ml-1 align-middle" />
+        <span className="inline-block w-0.5 h-[1em] bg-green animate-pulse ml-1 align-middle" />
       </span>
     </span>
   )
@@ -175,7 +175,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: [0.33, 1, 0.68, 1] }}
           >
-            <h1 className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight leading-[0.9]">
+            <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight leading-[0.9]">
               <span className="block text-cream">Rack N Roll</span>
             </h1>
           </motion.div>

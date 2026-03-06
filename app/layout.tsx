@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, DM_Serif_Display } from "next/font/google";
+import { DM_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -10,10 +10,10 @@ const dmSans = DM_Sans({
   weight: ["400", "500", "700"],
 });
 
-const dmSerif = DM_Serif_Display({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-dm-serif",
-  weight: "400",
+  variable: "--font-space-grotesk",
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${dmSans.variable} ${dmSerif.variable} font-sans antialiased grain`}
+        className={`${dmSans.variable} ${spaceGrotesk.variable} font-sans antialiased grain`}
       >
         <SmoothScroll>
           <ScrollProgress />

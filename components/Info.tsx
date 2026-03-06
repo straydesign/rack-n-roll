@@ -68,7 +68,7 @@ export default function Info() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease }}
-          className="font-serif heading-text text-cream text-center mb-20"
+          className="font-heading heading-text text-cream text-center mb-20"
         >
           Come as you are.
         </motion.h2>

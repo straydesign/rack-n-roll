@@ -39,7 +39,7 @@ export default function Header() {
         {/* Logo */}
         <motion.button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className={`font-serif text-lg transition-colors duration-300 tracking-tight ${
+          className={`font-heading text-lg transition-colors duration-300 tracking-tight ${
             scrolled ? 'text-cream hover:text-green' : 'text-cream/80 hover:text-cream'
           }`}
           whileHover={{ scale: 1.02 }}

@@ -45,7 +45,7 @@ export default function Menu() {
 
         <TextReveal
           text="Bar food. Done right."
-          className="font-serif heading-text text-charcoal text-center mb-4"
+          className="font-heading heading-text text-charcoal text-center mb-4"
         />
 
         <motion.p

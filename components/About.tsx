@@ -77,7 +77,7 @@ export default function About() {
         {/* Big text reveal */}
         <TextReveal
           text="The kind of bar that feels like home."
-          className="font-serif display-text text-charcoal text-center max-w-4xl mx-auto mb-8"
+          className="font-heading display-text text-charcoal text-center max-w-4xl mx-auto mb-8"
         />
 
         <motion.p
@@ -102,7 +102,7 @@ export default function About() {
               transition={{ duration: 0.7, delay: i * 0.1, ease }}
               className="text-center group"
             >
-              <span className="font-serif text-5xl md:text-6xl lg:text-7xl text-charcoal block leading-none group-hover:text-green transition-colors duration-700">
+              <span className="font-heading text-5xl md:text-6xl lg:text-7xl text-charcoal block leading-none group-hover:text-green transition-colors duration-700">
                 {stat.number}
                 <span className="text-green">{stat.suffix}</span>
               </span>

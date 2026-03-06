@@ -16,7 +16,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["DM Sans", "sans-serif"],
-        serif: ["DM Serif Display", "serif"],
+        heading: ["Space Grotesk", "sans-serif"],
       },
       animation: {
         aurora: "aurora-shift 60s linear infinite",

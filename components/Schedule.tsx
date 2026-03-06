@@ -36,7 +36,7 @@ export default function Schedule() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease }}
-          className="font-serif heading-text text-charcoal text-center mb-4"
+          className="font-heading heading-text text-charcoal text-center mb-4"
         >
           Make It
           <span className="text-gradient"> Your Night</span>
@@ -97,7 +97,7 @@ export default function Schedule() {
                   {row.day.slice(0, 3)}
                 </span>
 
-                <span className={`font-serif text-2xl block leading-none mb-1 transition-colors duration-300 ${isActive ? 'text-cream' : 'text-charcoal'}`}>
+                <span className={`font-heading text-2xl block leading-none mb-1 transition-colors duration-300 ${isActive ? 'text-cream' : 'text-charcoal'}`}>
                   {row.day}
                 </span>
 
