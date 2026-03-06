@@ -31,7 +31,7 @@ export default function Header() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-charcoal/70 backdrop-blur-xl border-b border-cream/[0.06] shadow-lg shadow-black/10'
+          ? 'bg-charcoal/90 backdrop-blur-2xl border-b border-cream/[0.06] shadow-lg shadow-black/20'
           : 'bg-transparent'
       }`}
     >
@@ -39,7 +39,9 @@ export default function Header() {
         {/* Logo */}
         <motion.button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="font-serif text-lg text-cream/80 hover:text-cream transition-colors duration-300 tracking-tight"
+          className={`font-serif text-lg transition-colors duration-300 tracking-tight ${
+            scrolled ? 'text-cream hover:text-green' : 'text-cream/80 hover:text-cream'
+          }`}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -52,7 +54,11 @@ export default function Header() {
             <button
               key={link.label}
               onClick={() => handleClick(link.href)}
-              className="px-4 py-2 text-xs font-medium text-cream/40 uppercase tracking-[0.15em] hover:text-green transition-colors duration-300 rounded-full hover:bg-cream/[0.04]"
+              className={`px-4 py-2 text-xs font-medium uppercase tracking-[0.15em] hover:text-green transition-colors duration-300 rounded-full ${
+                scrolled
+                  ? 'text-cream/70 hover:bg-cream/[0.06]'
+                  : 'text-cream/40 hover:bg-cream/[0.04]'
+              }`}
             >
               {link.label}
             </button>
@@ -73,15 +79,15 @@ export default function Header() {
         >
           <motion.span
             animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-            className="block w-5 h-px bg-cream/60"
+            className={`block w-5 h-px ${scrolled ? 'bg-cream/80' : 'bg-cream/60'}`}
           />
           <motion.span
             animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-            className="block w-5 h-px bg-cream/60"
+            className={`block w-5 h-px ${scrolled ? 'bg-cream/80' : 'bg-cream/60'}`}
           />
           <motion.span
             animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-            className="block w-5 h-px bg-cream/60"
+            className={`block w-5 h-px ${scrolled ? 'bg-cream/80' : 'bg-cream/60'}`}
           />
         </button>
       </nav>

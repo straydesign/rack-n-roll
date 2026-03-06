@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 
 const words = [
   'KARAOKE',
-  'CHEAP DRINKS',
+  'DRINK SPECIALS',
   'GOOD TIMES',
   'SINCE \'89',
   '20,000+ SONGS',

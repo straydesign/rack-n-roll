@@ -38,7 +38,7 @@ export default function Schedule() {
           transition={{ duration: 0.8, ease }}
           className="font-serif heading-text text-charcoal text-center mb-4"
         >
-          Every Night&rsquo;s
+          Make It
           <span className="text-gradient"> Your Night</span>
         </motion.h2>
 

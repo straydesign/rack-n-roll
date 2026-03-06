@@ -19,8 +19,8 @@ const features = [
     accent: true,
   },
   {
-    title: 'Cheap Drinks',
-    desc: '$2 pints on Wednesdays. Late-night happy hour. No surprises on the tab.',
+    title: 'Great Drink Specials',
+    desc: '$2 pints on Wednesdays. Late-night happy hour. Always a good deal.',
     span: 'col-span-1',
     accent: false,
   },
@@ -88,7 +88,7 @@ export default function About() {
           className="text-center text-charcoal/50 mb-20 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed"
         >
           No cover. No dress code. Just a neighborhood spot where everybody
-          sings, the drinks are cheap, and the good times never stop.
+          sings, the drinks are cold, and the good times never stop.
         </motion.p>
 
         {/* Stats row */}

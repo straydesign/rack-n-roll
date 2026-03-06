@@ -202,7 +202,7 @@ export default function Hero() {
             className="mt-6 max-w-lg text-base md:text-lg text-slate-500 leading-relaxed"
           >
             Since &rsquo;89. Come as you are. Karaoke 6 nights a week,
-            cheap drinks, and the best bar food in Erie.
+            great specials, and the best bar food in Erie.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -285,7 +285,7 @@ export default function Hero() {
 
       {/* Velocity Parallax */}
       <div className="relative z-[2] bg-black py-12 overflow-hidden">
-        <ParallaxText baseVelocity={-3}>RACK N ROLL · KARAOKE · CHEAP DRINKS · SINCE &apos;89 ·</ParallaxText>
+        <ParallaxText baseVelocity={-3}>RACK N ROLL · KARAOKE · GOOD TIMES · SINCE &apos;89 ·</ParallaxText>
         <div className="h-4" />
         <ParallaxText baseVelocity={3}>ERIE PA · 20,000+ SONGS · GOOD TIMES · COME AS YOU ARE ·</ParallaxText>
       </div>
