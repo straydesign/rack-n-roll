@@ -28,10 +28,17 @@ export const metadata: Metadata = {
   title: "Rack N Roll — Erie's Premier Karaoke Bar Since '89",
   description:
     "Erie's premier karaoke bar since 1989. 6 nights a week, great specials, good food. Come as you are.",
+  metadataBase: new URL("https://rack-n-roll.vercel.app"),
   openGraph: {
     title: "Rack N Roll",
     description: "Erie's premier karaoke bar since 1989. Come as you are.",
     type: "website",
+    siteName: "Rack N Roll",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rack N Roll",
+    description: "Erie's premier karaoke bar since 1989. Come as you are.",
   },
 };
 
