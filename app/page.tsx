@@ -1,13 +1,21 @@
 import dynamic from 'next/dynamic'
 import Hero from '@/components/Hero'
 import Header from '@/components/Header'
+import {
+  AboutSkeleton,
+  ScheduleSkeleton,
+  EventsSkeleton,
+  MenuSkeleton,
+  InfoSkeleton,
+  FooterSkeleton,
+} from '@/components/Skeletons'
 
-const About = dynamic(() => import('@/components/About'))
-const Schedule = dynamic(() => import('@/components/Schedule'))
-const Events = dynamic(() => import('@/components/Events'))
-const Menu = dynamic(() => import('@/components/Menu'))
-const Info = dynamic(() => import('@/components/Info'))
-const Footer = dynamic(() => import('@/components/Footer'))
+const About = dynamic(() => import('@/components/About'), { loading: () => <AboutSkeleton /> })
+const Schedule = dynamic(() => import('@/components/Schedule'), { loading: () => <ScheduleSkeleton /> })
+const Events = dynamic(() => import('@/components/Events'), { loading: () => <EventsSkeleton /> })
+const Menu = dynamic(() => import('@/components/Menu'), { loading: () => <MenuSkeleton /> })
+const Info = dynamic(() => import('@/components/Info'), { loading: () => <InfoSkeleton /> })
+const Footer = dynamic(() => import('@/components/Footer'), { loading: () => <FooterSkeleton /> })
 
 export default function Home() {
   return (
