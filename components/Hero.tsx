@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Mic, Music, Beer } from 'lucide-react'
+import { Mic, Music, Beer, ListMusic } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const cn = (...classes: (string | boolean | undefined)[]) =>
@@ -220,15 +220,20 @@ export default function Hero() {
               <Beer className="w-5 h-5 mr-2" />
               What&rsquo;s Happening
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-green-500/30 text-green-400 hover:bg-green-950/50 px-8 py-6 text-base font-semibold rounded-full backdrop-blur-sm hover:scale-105 transition-all"
-              onClick={() => document.getElementById('info')?.scrollIntoView({ behavior: 'smooth' })}
+            <a
+              href="https://www.karafun.com/karaoke/"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <Mic className="w-5 h-5 mr-2" />
-              Find Us
-            </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-green-500/30 text-green-400 hover:bg-green-950/50 px-8 py-6 text-base font-semibold rounded-full backdrop-blur-sm hover:scale-105 transition-all"
+              >
+                <ListMusic className="w-5 h-5 mr-2" />
+                Browse Songs
+              </Button>
+            </a>
           </motion.div>
 
           {/* Stats */}
