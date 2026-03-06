@@ -202,7 +202,7 @@ export default function Hero() {
             className="mt-6 max-w-lg text-base md:text-lg text-slate-500 leading-relaxed"
           >
             Since &rsquo;89. Come as you are. Karaoke 6 nights a week,
-            great specials, and the best bar food in Erie.
+            great specials, and great food.
           </motion.p>
 
           {/* CTA Buttons */}
