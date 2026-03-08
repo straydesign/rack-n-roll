@@ -1,3 +1,5 @@
+import { withSentryConfig } from "@sentry/nextjs";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -9,4 +11,10 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  org: "stray-design-nm",
+  project: "javascript-nextjs",
+  widenClientFileUpload: true,
+  tunnelRoute: "/monitoring",
+  silent: !process.env.CI,
+});
