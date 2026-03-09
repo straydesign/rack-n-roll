@@ -49,7 +49,7 @@ export default function Schedule() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center text-charcoal/40 mb-16 text-sm"
         >
-          DJ Paul Amann on the mic &middot; Karaoke 9:30pm&ndash;1:30am
+          Karaoke every night &middot; Trivia &middot; Darts &middot; Bar opens 3 PM
         </motion.p>
 
         {/* Animated line */}
@@ -62,7 +62,7 @@ export default function Schedule() {
         </div>
 
         {/* Day cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
           {weeklySchedule.map((row, i) => {
             const isActive = activeDay === i
             const hasSpecial = !!row.special
@@ -106,7 +106,7 @@ export default function Schedule() {
                 </span>
 
                 <span className={`text-xs block mt-1 transition-colors duration-300 ${isActive ? 'text-green' : 'text-charcoal/30'}`}>
-                  🎤 {row.karaoke}
+                  🎤 {row.karaoke}{'host' in row && row.host ? ` w/ ${row.host}` : ''}
                 </span>
 
                 {/* Special badge */}
@@ -134,7 +134,7 @@ export default function Schedule() {
           viewport={{ once: true }}
           className="text-charcoal/25 text-xs mt-8 text-center tracking-wide"
         >
-          Closed Sundays &middot; We all need a night off
+          Closed Sun &amp; Mon &middot; Kitchen opens at 4 PM
         </motion.p>
       </div>
     </section>

@@ -3,12 +3,13 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import TextReveal from './TextReveal'
+import AnimatedCounter from './AnimatedCounter'
 
 const stats = [
-  { number: '35+', label: 'Years Running', suffix: '' },
-  { number: '20K', label: 'Songs on KaraFun', suffix: '+' },
-  { number: '6', label: 'Nights a Week', suffix: '' },
-  { number: '89', label: 'Since \'89', suffix: '\'' },
+  { value: 35, display: '35+', label: 'Years Running', suffix: '+', prefix: '' },
+  { value: 20000, display: '20K+', label: 'Songs on KaraFun', suffix: '+', prefix: '' },
+  { value: 6, display: '6', label: 'Nights a Week', suffix: '', prefix: '' },
+  { value: 89, display: "'89", label: 'Since \'89', suffix: '', prefix: '\'' },
 ]
 
 const features = [
@@ -103,8 +104,7 @@ export default function About() {
               className="text-center group"
             >
               <span className="font-heading text-5xl md:text-6xl lg:text-7xl text-charcoal block leading-none group-hover:text-green transition-colors duration-700">
-                {stat.number}
-                <span className="text-green">{stat.suffix}</span>
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} prefix={stat.prefix} />
               </span>
               <span className="text-charcoal/40 text-xs uppercase tracking-[0.2em] mt-3 block">
                 {stat.label}

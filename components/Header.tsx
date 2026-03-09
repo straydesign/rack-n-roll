@@ -1,19 +1,31 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const links = [
-  { label: 'About', href: '#about' },
-  { label: 'Schedule', href: '#schedule' },
-  { label: 'Events', href: '#events' },
-  { label: 'Menu', href: '#menu' },
-  { label: 'Find Us', href: '#info' },
+type NavLink = {
+  label: string
+  href: string
+  type: 'anchor' | 'page'
+}
+
+const links: NavLink[] = [
+  { label: 'About', href: '#about', type: 'anchor' },
+  { label: 'Schedule', href: '#schedule', type: 'anchor' },
+  { label: 'Events', href: '/events', type: 'page' },
+  { label: 'Menu', href: '#menu', type: 'anchor' },
+  { label: 'Gallery', href: '/gallery', type: 'page' },
+  { label: 'Find Us', href: '#info', type: 'anchor' },
 ]
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+  const isHome = pathname === '/'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -21,10 +33,35 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const handleClick = (href: string) => {
+  const handleClick = (link: NavLink) => {
     setMobileOpen(false)
-    const el = document.querySelector(href)
-    el?.scrollIntoView({ behavior: 'smooth' })
+
+    if (link.type === 'page') {
+      router.push(link.href)
+      return
+    }
+
+    // Anchor link
+    if (isHome) {
+      const el = document.querySelector(link.href)
+      el?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      router.push('/' + link.href)
+    }
+  }
+
+  const handleLogoClick = () => {
+    setMobileOpen(false)
+    if (isHome) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      router.push('/')
+    }
+  }
+
+  const isActive = (link: NavLink) => {
+    if (link.type === 'page') return pathname === link.href
+    return false
   }
 
   return (
@@ -38,7 +75,7 @@ export default function Header() {
       <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
         {/* Logo */}
         <motion.button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={handleLogoClick}
           className={`font-heading text-lg transition-colors duration-300 tracking-tight ${
             scrolled ? 'text-cream hover:text-green' : 'text-cream/80 hover:text-cream'
           }`}
@@ -50,19 +87,35 @@ export default function Header() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-1">
-          {links.map((link) => (
-            <button
-              key={link.label}
-              onClick={() => handleClick(link.href)}
-              className={`px-4 py-2 text-xs font-medium uppercase tracking-[0.15em] hover:text-green transition-colors duration-300 rounded-full ${
-                scrolled
-                  ? 'text-cream/70 hover:bg-cream/[0.06]'
-                  : 'text-cream/40 hover:bg-cream/[0.04]'
-              }`}
-            >
-              {link.label}
-            </button>
-          ))}
+          {links.map((link) =>
+            link.type === 'page' ? (
+              <Link
+                key={link.label}
+                href={link.href}
+                className={`px-4 py-2 text-xs font-medium uppercase tracking-[0.15em] hover:text-green transition-colors duration-300 rounded-full ${
+                  isActive(link)
+                    ? 'text-green'
+                    : scrolled
+                      ? 'text-cream/70 hover:bg-cream/[0.06]'
+                      : 'text-cream/40 hover:bg-cream/[0.04]'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <button
+                key={link.label}
+                onClick={() => handleClick(link)}
+                className={`px-4 py-2 text-xs font-medium uppercase tracking-[0.15em] hover:text-green transition-colors duration-300 rounded-full ${
+                  scrolled
+                    ? 'text-cream/70 hover:bg-cream/[0.06]'
+                    : 'text-cream/40 hover:bg-cream/[0.04]'
+                }`}
+              >
+                {link.label}
+              </button>
+            )
+          )}
           <a
             href="tel:+18148643535"
             className="ml-3 px-4 py-2 text-xs font-semibold text-green border border-green/20 rounded-full hover:bg-green/10 transition-all duration-300 uppercase tracking-wider"
@@ -103,18 +156,37 @@ export default function Header() {
             className="md:hidden bg-charcoal/95 backdrop-blur-xl border-b border-cream/[0.06] overflow-hidden"
           >
             <div className="px-6 py-6 flex flex-col gap-1">
-              {links.map((link, i) => (
-                <motion.button
-                  key={link.label}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05, duration: 0.3 }}
-                  onClick={() => handleClick(link.href)}
-                  className="text-left py-3 text-sm text-cream/60 uppercase tracking-[0.15em] hover:text-green transition-colors border-b border-cream/[0.04] last:border-0"
-                >
-                  {link.label}
-                </motion.button>
-              ))}
+              {links.map((link, i) =>
+                link.type === 'page' ? (
+                  <motion.div
+                    key={link.label}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05, duration: 0.3 }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className={`block text-left py-3 text-sm uppercase tracking-[0.15em] transition-colors border-b border-cream/[0.04] last:border-0 ${
+                        isActive(link) ? 'text-green' : 'text-cream/60 hover:text-green'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ) : (
+                  <motion.button
+                    key={link.label}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05, duration: 0.3 }}
+                    onClick={() => handleClick(link)}
+                    className="text-left py-3 text-sm text-cream/60 uppercase tracking-[0.15em] hover:text-green transition-colors border-b border-cream/[0.04] last:border-0"
+                  >
+                    {link.label}
+                  </motion.button>
+                )
+              )}
               <motion.a
                 href="tel:+18148643535"
                 initial={{ opacity: 0, x: -20 }}

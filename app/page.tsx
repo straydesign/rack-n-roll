@@ -14,6 +14,7 @@ const About = dynamic(() => import('@/components/About'), { loading: () => <Abou
 const Schedule = dynamic(() => import('@/components/Schedule'), { loading: () => <ScheduleSkeleton /> })
 const Events = dynamic(() => import('@/components/Events'), { loading: () => <EventsSkeleton /> })
 const Menu = dynamic(() => import('@/components/Menu'), { loading: () => <MenuSkeleton /> })
+const Reviews = dynamic(() => import('@/components/Reviews'), { loading: () => <div className="bg-charcoal py-40" /> })
 const Info = dynamic(() => import('@/components/Info'), { loading: () => <InfoSkeleton /> })
 const Footer = dynamic(() => import('@/components/Footer'), { loading: () => <FooterSkeleton /> })
 
@@ -40,6 +41,10 @@ export default function Home() {
         {/* Light section: Menu */}
         <div id="menu" className="bg-cream">
           <Menu />
+        </div>
+        {/* Dark section: Reviews */}
+        <div id="reviews">
+          <Reviews />
         </div>
         {/* Dark section: Info */}
         <div id="info">

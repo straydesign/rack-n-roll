@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 import MagneticButton from './MagneticButton'
 
 const ease = [0.33, 1, 0.68, 1] as const
@@ -29,7 +30,7 @@ export default function Footer() {
         </motion.div>
 
         {/* Info row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -58,6 +59,31 @@ export default function Footer() {
               Mon&ndash;Sat: 3pm&ndash;2am<br />
               Karaoke: 9:30pm&ndash;1:30am
             </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15, ease }}
+          >
+            <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-3">
+              Explore
+            </span>
+            <div className="flex flex-col gap-2">
+              <Link
+                href="/events"
+                className="text-cream/40 text-sm hover:text-green transition-colors duration-300"
+              >
+                Events & Specials
+              </Link>
+              <Link
+                href="/gallery"
+                className="text-cream/40 text-sm hover:text-green transition-colors duration-300"
+              >
+                Gallery
+              </Link>
+            </div>
           </motion.div>
 
           <motion.div

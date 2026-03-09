@@ -179,3 +179,7 @@ body {
 .animate-aurora {
   animation: aurora-shift 60s linear infinite;
 }
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}

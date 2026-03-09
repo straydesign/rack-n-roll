@@ -104,3 +104,42 @@ export function FooterSkeleton() {
     </div>
   )
 }
+
+export function EventsPageSkeleton() {
+  return (
+    <div className="bg-charcoal px-6 py-28 md:py-40">
+      <div className="max-w-6xl mx-auto">
+        <Bar className="bg-cream/5 h-3 w-32 mx-auto mb-8" />
+        <Bar className="bg-cream/10 h-12 w-80 mx-auto mb-6" />
+        <Bar className="bg-cream/5 h-4 w-64 mx-auto mb-16" />
+        <div className="flex gap-3 justify-center mb-12">
+          {[...Array(3)].map((_, i) => (
+            <Bar key={i} className="bg-cream/5 h-10 w-32 rounded-full" />
+          ))}
+        </div>
+        <Bar className="bg-cream/5 h-48 rounded-2xl mb-6" />
+        <div className="space-y-4">
+          {[...Array(4)].map((_, i) => (
+            <Bar key={i} className="bg-cream/5 h-32 rounded-2xl" />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function GalleryPageSkeleton() {
+  return (
+    <div className="bg-charcoal px-6 py-28 md:py-40">
+      <div className="max-w-6xl mx-auto">
+        <Bar className="bg-cream/5 h-3 w-24 mx-auto mb-8" />
+        <Bar className="bg-cream/10 h-12 w-72 mx-auto mb-16" />
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
+          {['h-48', 'h-64', 'h-44', 'h-56', 'h-48', 'h-72', 'h-52', 'h-60', 'h-44'].map((h, i) => (
+            <Bar key={i} className={`bg-cream/5 rounded-2xl mb-4 w-full ${h}`} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}

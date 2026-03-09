@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import Link from 'next/link'
 import { events } from '@/data/events'
 import TextReveal from './TextReveal'
 
@@ -58,13 +59,39 @@ export default function Events() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="text-center text-cream/30 mb-20 text-sm max-w-lg mx-auto"
         >
-          Karaoke Mon&ndash;Sat 9:30pm&ndash;1:30am &middot; Kitchen open until 11pm
+          Karaoke Tue&ndash;Sat starting 9:30 PM &middot; Trivia &middot; Darts &middot; Kitchen open
         </motion.p>
 
+        {/* Featured event highlight */}
+        {events.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.98 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, ease }}
+            className="mb-8 group"
+          >
+            <div className="relative rounded-2xl p-10 md:p-14 overflow-hidden border border-green/20 bg-green/[0.04]">
+              <div className="absolute inset-0 bg-gradient-to-br from-green/[0.08] via-transparent to-transparent pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-green/10 rounded-bl-full pointer-events-none" />
+              <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-6">
+                <div className="flex-shrink-0">
+                  <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-1">Featured</span>
+                  <span className="text-green/60 text-[10px] font-bold uppercase tracking-[0.3em] block">{events[0].date}</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl text-cream mb-3">{events[0].title}</h3>
+                  <p className="text-cream/50 text-base md:text-lg leading-relaxed max-w-xl">{events[0].description}</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Event cards — editorial large style */}
-        {events.length > 0 ? (
+        {events.length > 1 ? (
           <div className="space-y-4">
-            {events.map((event, i) => (
+            {events.slice(1).map((event, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 60, rotateX: 5 }}
@@ -111,6 +138,25 @@ export default function Events() {
             Every night&rsquo;s a good night. Karaoke starts at 9:30pm.
           </p>
         )}
+
+        {/* See All Events link */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4, ease }}
+          className="text-center mt-16"
+        >
+          <Link
+            href="/events"
+            className="inline-flex items-center gap-2 px-8 py-3 text-xs font-semibold text-green border border-green/20 rounded-full hover:bg-green/10 transition-all duration-300 uppercase tracking-wider group"
+          >
+            See All Events
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </Link>
+        </motion.div>
       </div>
     </section>
   )

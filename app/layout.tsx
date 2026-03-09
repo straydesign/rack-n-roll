@@ -3,6 +3,8 @@ import { DM_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
+import MobileCTA from "@/components/MobileCTA";
+import Preloader from "@/components/Preloader";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -52,9 +54,11 @@ export default function RootLayout({
       <body
         className={`${dmSans.variable} ${spaceGrotesk.variable} font-sans antialiased grain`}
       >
+        <Preloader />
         <SmoothScroll>
           <ScrollProgress />
           {children}
+          <MobileCTA />
         </SmoothScroll>
       </body>
     </html>
