@@ -209,10 +209,11 @@ body {
 
 .hologram-logo {
   animation:
-    hologram-spin 10s linear infinite,
+    hologram-spin 12s linear infinite,
     hologram-glow-pulse 3s ease-in-out infinite,
     hologram-flicker 8s ease-in-out infinite;
   transform-style: preserve-3d;
+  position: relative;
 }
 
 .hologram-logo::after {
@@ -222,13 +223,14 @@ body {
   background: repeating-linear-gradient(
     0deg,
     transparent 0px,
-    rgba(34, 197, 94, 0.03) 1px,
+    rgba(34, 197, 94, 0.04) 1px,
     transparent 2px,
     transparent 4px
   );
   animation: hologram-scanline 3s linear infinite;
   pointer-events: none;
   border-radius: inherit;
+  z-index: 10;
 }
 
 @keyframes hologram-scanline {

@@ -161,13 +161,23 @@ export default function Hero() {
             transition={{ duration: 1.2, delay: 0.2, ease: [0.33, 1, 0.68, 1] }}
             className="mb-4 hologram-container"
           >
-            <div className="relative">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logo.svg"
-                alt="Rack N Roll"
-                className="hologram-logo w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 relative"
-              />
+            <div className="relative hologram-logo w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52">
+              {/* Stacked layers for 3D thickness */}
+              {[...Array(8)].map((_, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={i}
+                  src="/logo.svg"
+                  alt={i === 0 ? 'Rack N Roll' : ''}
+                  aria-hidden={i > 0}
+                  className="absolute inset-0 w-full h-full"
+                  style={{
+                    transform: `translateZ(${i * -3}px)`,
+                    opacity: i === 0 ? 1 : 0.15,
+                    filter: i > 0 ? `brightness(0.4) saturate(1.5)` : undefined,
+                  }}
+                />
+              ))}
               {/* Base glow reflection */}
               <div className="hologram-base absolute -bottom-4 left-1/2 -translate-x-1/2 w-40 h-6 rounded-full blur-md" />
             </div>
