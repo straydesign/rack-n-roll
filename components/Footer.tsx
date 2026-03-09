@@ -78,6 +78,12 @@ export default function Footer() {
                 Events & Specials
               </Link>
               <Link
+                href="/menu"
+                className="text-cream/40 text-sm hover:text-green transition-colors duration-300"
+              >
+                Full Menu
+              </Link>
+              <Link
                 href="/gallery"
                 className="text-cream/40 text-sm hover:text-green transition-colors duration-300"
               >

@@ -137,6 +137,16 @@ export interface MenuCategory {
   items: MenuItem[];
 }
 
+// Homepage preview — just the crowd favorites
+export const menuPreview: MenuItem[] = [
+  { name: "Sampler Platter", price: "$9.50", description: "Cheese balls, pizza logs, mozz sticks, & pretzel" },
+  { name: "Rack Burger", price: "$6.95", description: "Pepper jack, hot sauce, ring peppers" },
+  { name: "Breakfast Burger", price: "$6.95", description: "American cheese, fried egg, bacon" },
+  { name: "Taco Nachos", price: "$7.50", description: "Cheese, taco meat, lettuce, tomato, onion & taco sauce" },
+  { name: "Chicken Tenders & Fries", price: "$7.25", description: "3 juicy strips with a large portion of fries" },
+  { name: "Deep Fried Twinkie", price: "$5.95", description: "Fried and topped with chocolate sauce" },
+];
+
 // Real menu — Rack and Roll, 2040 West 38th Street, Erie PA
 export const menu: MenuCategory[] = [
   {

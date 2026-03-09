@@ -128,6 +128,31 @@ export function EventsPageSkeleton() {
   )
 }
 
+export function MenuPageSkeleton() {
+  return (
+    <div className="bg-charcoal px-6 py-16 md:py-24">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex gap-3 justify-center mb-16">
+          {[...Array(5)].map((_, i) => (
+            <Bar key={i} className="bg-cream/5 h-10 w-28 rounded-full" />
+          ))}
+        </div>
+        <div className="space-y-3">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="flex justify-between items-center p-5">
+              <div className="flex-1">
+                <Bar className="bg-cream/8 h-5 w-48 mb-2" />
+                <Bar className="bg-cream/5 h-4 w-72" />
+              </div>
+              <Bar className="bg-cream/8 h-5 w-16" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function GalleryPageSkeleton() {
   return (
     <div className="bg-charcoal px-6 py-28 md:py-40">
