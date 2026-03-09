@@ -6,18 +6,15 @@ import { allEvents, type EventCategory } from '@/data/events'
 
 const ease = [0.33, 1, 0.68, 1] as const
 
-const tabs: { label: string; value: 'all' | EventCategory }[] = [
-  { label: 'All', value: 'all' },
+const tabs: { label: string; value: EventCategory }[] = [
   { label: 'Weekly Specials', value: 'weekly' },
-  { label: 'Special Events', value: 'special' },
+  { label: 'Events', value: 'special' },
 ]
 
 export default function EventsPageContent() {
-  const [activeTab, setActiveTab] = useState<'all' | EventCategory>('all')
+  const [activeTab, setActiveTab] = useState<EventCategory>('weekly')
 
-  const filtered = activeTab === 'all'
-    ? allEvents
-    : allEvents.filter((e) => e.category === activeTab)
+  const filtered = allEvents.filter((e) => e.category === activeTab)
 
   const featured = filtered.find((e) => e.featured)
   const rest = featured ? filtered.filter((e) => e !== featured) : filtered

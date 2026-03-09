@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 
 type NavLink = {
@@ -76,13 +77,22 @@ export default function Header() {
         {/* Logo */}
         <motion.button
           onClick={handleLogoClick}
-          className={`font-heading text-lg transition-colors duration-300 tracking-tight ${
-            scrolled ? 'text-cream hover:text-green' : 'text-cream/80 hover:text-cream'
-          }`}
+          className="flex items-center gap-2"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          Rack N Roll
+          <Image
+            src="/facebook/logo.jpg"
+            alt="Rack N Roll"
+            width={40}
+            height={40}
+            className="rounded-md"
+          />
+          <span className={`font-heading text-lg transition-colors duration-300 tracking-tight hidden sm:inline ${
+            scrolled ? 'text-cream hover:text-green' : 'text-cream/80 hover:text-cream'
+          }`}>
+            Rack N Roll
+          </span>
         </motion.button>
 
         {/* Desktop links */}

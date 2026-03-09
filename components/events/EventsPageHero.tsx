@@ -57,7 +57,7 @@ export default function EventsPageHero() {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="text-cream/30 text-sm max-w-lg mx-auto"
         >
-          Karaoke Mon&ndash;Sat 9:30pm&ndash;1:30am &middot; Kitchen open until 11pm
+          Karaoke Tue&ndash;Sat starting 9:30 PM &middot; Trivia &middot; Darts &middot; Kitchen open at 4 PM
         </motion.p>
       </div>
     </section>

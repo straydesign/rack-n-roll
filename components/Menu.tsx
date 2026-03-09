@@ -107,15 +107,17 @@ export default function Menu() {
                   className="group flex items-start gap-4 p-5 rounded-xl hover:bg-charcoal/[0.03] transition-all duration-300"
                 >
                   <div className="flex-1">
-                    <h4 className="font-bold text-charcoal text-lg group-hover:text-green transition-colors duration-300">
-                      {item.name}
-                    </h4>
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h4 className="font-bold text-charcoal text-lg group-hover:text-green transition-colors duration-300">
+                        {item.name}
+                      </h4>
+                      {item.price && (
+                        <span className="text-green font-bold text-base flex-shrink-0">{item.price}</span>
+                      )}
+                    </div>
                     {item.description && (
                       <p className="text-charcoal/40 text-sm mt-1">{item.description}</p>
                     )}
-                  </div>
-                  <div className="w-8 h-8 rounded-full border border-charcoal/5 flex items-center justify-center flex-shrink-0 mt-1 group-hover:border-green/30 group-hover:bg-green/5 transition-all duration-300">
-                    <div className="w-1.5 h-1.5 rounded-full bg-charcoal/15 group-hover:bg-green transition-colors duration-300" />
                   </div>
                 </motion.div>
               ))}
@@ -123,16 +125,23 @@ export default function Menu() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Bottom tag */}
+        {/* View Full Menu button */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3, ease }}
           className="text-center mt-12"
         >
-          <span className="inline-block px-5 py-2 rounded-full border border-charcoal/8 text-charcoal/30 text-xs tracking-wider">
-            $0.50 boneless wings on Wednesdays
-          </span>
+          <a
+            href="#menu"
+            className="inline-flex items-center gap-2 px-8 py-3 text-xs font-semibold text-charcoal border border-charcoal/15 rounded-full hover:bg-charcoal hover:text-cream transition-all duration-300 uppercase tracking-wider group"
+          >
+            View Full Menu
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
         </motion.div>
       </div>
     </section>
