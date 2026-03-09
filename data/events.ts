@@ -137,31 +137,64 @@ export interface MenuCategory {
   items: MenuItem[];
 }
 
-// Bar food menu — kitchen opens at 4 PM
+// Real menu — Rack and Roll, 2040 West 38th Street, Erie PA
 export const menu: MenuCategory[] = [
   {
-    category: "Wings",
+    category: "Appetizers",
     items: [
-      { name: "Bone-In Wings (6)", price: "$8.99", description: "Tossed in your choice of sauce" },
-      { name: "Bone-In Wings (12)", price: "$14.99", description: "Tossed in your choice of sauce" },
-      { name: "Boneless Wings", price: "$8.99", description: "$0.50 each on Wednesdays" },
+      { name: "Mac & Cheese Bites", price: "$6.95", description: "8 fried mac & cheese wedges with ranch dipping sauce" },
+      { name: "Spicy Deep Fried Pickles", price: "$5.50", description: "6 beer battered pickles with house made ranch" },
+      { name: "Pizza Logs", price: "$5.25", description: "3 cheese and pepperoni filled logs with ranch or marinara" },
+      { name: "Mozzarella Sticks", price: "$5.50", description: "5 fried sticks of gooey mozzarella with house made ranch or marinara" },
+      { name: "Jumbo Pretzels", price: "$2.50", description: "With cheddar cheese & jalapeños. Add taco meat $1.50" },
+      { name: "Hot Pepper Cheese Balls", price: "$5.95", description: "Bite sized balls filled with hot pepper cheese & served with ranch" },
+      { name: "Buffalo Chicken Dip", price: "$5.50", description: "Home made buffalo chicken dip served with our nacho chips" },
+      { name: "Mini Tacos", price: "$5.50", description: "10 mini chicken and cheese filled tacos with salsa or sour cream" },
+      { name: "Buffalo Chicken Quesadilla", price: "$6.50", description: "Grilled buffalo chicken, cheese, peppers, and onions with salsa and sour cream" },
+      { name: "Chicken Quesadilla", price: "$6.25", description: "Grilled buffalo chicken, cheese, peppers, and onions with salsa and sour cream" },
+      { name: "Jalapeño Bites", price: "$6.50", description: "10 cream cheese filled jalapeño poppers with house made ranch" },
+      { name: "Zucchini Planks", price: "$6.25", description: "5 large fried planks of zucchini with ranch or marinara" },
+      { name: "Onion Rings", price: "$5.95", description: "10 large beer battered onion rings with your favorite dipping sauce" },
+      { name: "Sampler Platter", price: "$9.50", description: "10 hot pepper cheese balls, 2 pizza logs, 2 mozzarella sticks, & 1 jumbo pretzel with ranch, cheese & marinara" },
     ],
   },
   {
-    category: "From the Grill",
+    category: "Burgers",
     items: [
-      { name: "Burger", price: "$9.99" },
-      { name: "Breakfast Burger", price: "$11.99", description: "Our signature — egg, bacon, cheese" },
-      { name: "Philly Cheesesteak", price: "$10.99" },
-      { name: "Chicken Tenders", price: "$8.99", description: "With fries" },
+      { name: "Hamburger", price: "$5.75", description: "With lettuce, tomato, & mayo" },
+      { name: "Cheeseburger", price: "$6.25", description: "With your choice of cheese, lettuce, tomato, & mayo" },
+      { name: "BBQ Bacon", price: "$6.95", description: "With bacon, cheddar cheese, BBQ sauce, lettuce & tomato" },
+      { name: "Rack Burger", price: "$6.95", description: "With pepper jack cheese, hot sauce, lettuce, tomato, & ring peppers" },
+      { name: "Breakfast Burger", price: "$6.95", description: "With American cheese, fried egg, and bacon" },
+      { name: "Mushroom Swiss", price: "$6.50", description: "With grilled onions, mushrooms, & Swiss cheese" },
+      { name: "Greek Burger", price: "$6.50", description: "With house made greek sauce, onion, ketchup & mustard" },
+      { name: "Big Muns", price: "$6.95", description: "With fried bologna, fried egg, American cheese, & mustard" },
+      { name: "Pepper & Onion", price: "$6.75", description: "Sausage patty topped with grilled peppers & onions" },
+      { name: "Black and Blue", price: "$6.75", description: "With blue cheese, lettuce, & tomato" },
     ],
   },
   {
-    category: "Pizza",
+    category: "Nachos & Baskets",
     items: [
-      { name: "Cheese Pizza", price: "$9.99", description: "Made to order" },
-      { name: "Pepperoni Pizza", price: "$10.99" },
-      { name: "Specialty Pizza", price: "$12.99", description: "Ask about today's special" },
+      { name: "Traditional Nachos", price: "$3.75", description: "Nacho chips covered with cheese & jalapeños" },
+      { name: "Taco Nachos", price: "$7.50", description: "Crispy chips covered in cheese, taco meat, lettuce, tomato, onion & taco sauce" },
+      { name: "Fish and Chips", price: "$7.25", description: "3 pieces of cod with fries and tartar sauce" },
+      { name: "Chicken Tenders & Fries", price: "$7.25", description: "3 juicy chicken strips with a large portion of fries" },
+    ],
+  },
+  {
+    category: "Salads",
+    items: [
+      { name: "Antipasto Salad", price: "$6.25", description: "Lettuce with ham, pepperoni, mozzarella, banana peppers, & tomato" },
+      { name: "Grilled Chicken Salad", price: "$7.75", description: "With cheddar cheese, grilled chicken, tomato, red onion, and French fries" },
+      { name: "Blackened Chicken Salad", price: "$6.25", description: "Blackened grilled chicken on lettuce with dry blue cheese, red onion, tomato, & French fries" },
+    ],
+  },
+  {
+    category: "Sweet Treats",
+    items: [
+      { name: "Deep Fried Twinkie", price: "$5.95", description: "2 Twinkies fried and topped with chocolate sauce. Strawberry sauce on the side" },
+      { name: "Funnel Cake Fries", price: "$4.95", description: "Fried shoe string funnel cake fries topped with powdered sugar. Side of maple syrup" },
     ],
   },
 ];

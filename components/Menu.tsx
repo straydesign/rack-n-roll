@@ -8,9 +8,11 @@ import TextReveal from './TextReveal'
 const ease = [0.33, 1, 0.68, 1] as const
 
 const categoryIcons: Record<string, string> = {
-  Wings: '🍗',
-  'From the Grill': '🔥',
-  Pizza: '🍕',
+  Appetizers: '🧀',
+  Burgers: '🍔',
+  'Nachos & Baskets': '🐟',
+  Salads: '🥗',
+  'Sweet Treats': '🍩',
 }
 
 export default function Menu() {
