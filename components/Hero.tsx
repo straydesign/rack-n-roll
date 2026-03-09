@@ -154,12 +154,31 @@ export default function Hero() {
           style={{ opacity, scale, y }}
           className="relative z-10 flex flex-col items-center justify-center px-6 text-center min-h-screen"
         >
+          {/* 3D Hologram Logo */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.2, ease: [0.33, 1, 0.68, 1] }}
+            className="mb-4 hologram-container"
+          >
+            <div className="relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo.svg"
+                alt="Rack N Roll"
+                className="hologram-logo w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 relative"
+              />
+              {/* Base glow reflection */}
+              <div className="hologram-base absolute -bottom-4 left-1/2 -translate-x-1/2 w-40 h-6 rounded-full blur-md" />
+            </div>
+          </motion.div>
+
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-8"
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mb-6"
           >
             <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-green-950/50 border border-green-500/20 backdrop-blur-sm">
               <Mic className="w-3.5 h-3.5 text-green-400" />
@@ -173,7 +192,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5, ease: [0.33, 1, 0.68, 1] }}
+            transition={{ duration: 1, delay: 0.8, ease: [0.33, 1, 0.68, 1] }}
           >
             <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight leading-[0.9]">
               <span className="block text-cream">Rack N Roll</span>
@@ -184,7 +203,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1 }}
+            transition={{ duration: 1, delay: 1.2 }}
             className="mt-8 text-lg md:text-2xl text-slate-400 font-light"
           >
             <span>Where every night is </span>
@@ -198,7 +217,7 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.4 }}
+            transition={{ duration: 0.8, delay: 1.5 }}
             className="mt-6 max-w-lg text-base md:text-lg text-slate-500 leading-relaxed"
           >
             Since &rsquo;89. Come as you are. Karaoke 6 nights a week,
@@ -209,7 +228,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.7 }}
+            transition={{ duration: 0.8, delay: 1.8 }}
             className="mt-10 flex flex-col sm:flex-row gap-4"
           >
             <Button
@@ -257,18 +276,18 @@ export default function Hero() {
 
           {/* Floating Icons */}
           <motion.div
-            className="absolute top-1/4 left-10 opacity-10"
+            className="absolute top-[15%] left-8 md:left-16 opacity-[0.06]"
             animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <Mic className="w-16 h-16 text-green-500" />
+            <Mic className="w-12 h-12 md:w-16 md:h-16 text-green-500" />
           </motion.div>
           <motion.div
-            className="absolute top-1/3 right-10 opacity-10"
+            className="absolute top-[25%] right-8 md:right-16 opacity-[0.06]"
             animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
           >
-            <Music className="w-20 h-20 text-green-500" />
+            <Music className="w-14 h-14 md:w-20 md:h-20 text-green-500" />
           </motion.div>
         </motion.div>
 

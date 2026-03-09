@@ -82,7 +82,7 @@ export default function Header() {
           whileTap={{ scale: 0.98 }}
         >
           <Image
-            src="/facebook/logo.jpg"
+            src="/logo.svg"
             alt="Rack N Roll"
             width={40}
             height={40}
