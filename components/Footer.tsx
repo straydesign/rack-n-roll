@@ -56,7 +56,7 @@ export default function Footer() {
               Hours
             </span>
             <p className="text-cream/40 text-sm leading-relaxed">
-              Mon&ndash;Sat: 3pm&ndash;2am<br />
+              Tue&ndash;Sat: 3pm&ndash;2am<br />
               Karaoke: 9:30pm&ndash;1:30am
             </p>
           </motion.div>
