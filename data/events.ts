@@ -115,15 +115,16 @@ export interface GalleryImage {
 // Gallery photos — auto-pulled from Google Places API.
 // Re-run: GOOGLE_PLACES_KEY=xxx node scripts/pull-gallery.mjs
 export const galleryImages: GalleryImage[] = [
-  { src: "/gallery/bar-interior.jpg", alt: "The bar at Rack N Roll", width: 1200, height: 675, featured: true },
+  { src: "/gallery/karaoke-night-1.jpg", alt: "Karaoke night at Rack N Roll", width: 1200, height: 1600, featured: true },
   { src: "/gallery/crowd-singing.jpg", alt: "Crowd singing along", width: 1200, height: 1593, featured: true },
-  { src: "/gallery/friday-night.jpg", alt: "Friday night vibes", width: 1200, height: 1600, featured: true },
-  { src: "/gallery/stage-lights.jpg", alt: "Stage lights and karaoke", width: 1200, height: 1600 },
-  { src: "/gallery/saturday-crowd.jpg", alt: "Saturday night crowd", width: 1200, height: 1600 },
-  { src: "/gallery/good-times.jpg", alt: "Good times at Rack N Roll", width: 1080, height: 1920 },
-  { src: "/gallery/pint-night.jpg", alt: "Pint night", width: 1200, height: 676 },
-  { src: "/gallery/karaoke-night-1.jpg", alt: "Karaoke night at Rack N Roll", width: 1200, height: 1600 },
+  { src: "/gallery/bar-interior.jpg", alt: "The bar at Rack N Roll", width: 1200, height: 675, featured: true },
   { src: "/gallery/wings-special.jpg", alt: "Wing night special", width: 1200, height: 1600 },
+  { src: "/gallery/friday-night.jpg", alt: "Friday night vibes", width: 1200, height: 1600 },
+  { src: "/gallery/stage-lights.jpg", alt: "Stage lights and karaoke", width: 1200, height: 1600 },
+  { src: "/gallery/pint-night.jpg", alt: "$2 pint night", width: 1080, height: 1920 },
+  { src: "/gallery/saturday-crowd.jpg", alt: "Saturday night crowd", width: 1200, height: 676 },
+  { src: "/gallery/good-times.jpg", alt: "Good times at Rack N Roll", width: 1200, height: 1600 },
+  { src: "/gallery/trivia-night.jpg", alt: "Trivia night at Rack N Roll", width: 1080, height: 1920 },
 ];
 
 export interface MenuItem {

@@ -37,7 +37,7 @@ if (!API_KEY) {
 }
 
 const SEARCH_QUERY = "Rack N Roll 2040 W 38th St Erie PA";
-const MAX_PHOTOS = 10;
+const MAX_PHOTOS = 30;
 const MAX_WIDTH = 1200;
 
 async function findPlace() {
@@ -118,6 +118,17 @@ function generateSlug(index) {
     "pint-night",
     "saturday-crowd",
     "good-times",
+    "trivia-night",
+    "darts-tournament",
+    "late-night-crew",
+    "bartender-pour",
+    "karaoke-duet",
+    "burger-closeup",
+    "regulars-table",
+    "karaoke-night-2",
+    "drink-specials",
+    "weekend-vibes",
+    "closing-time",
   ];
   return names[index] || `photo-${index + 1}`;
 }
@@ -133,6 +144,17 @@ function generateAlt(index) {
     "$2 pint night",
     "Saturday night crowd",
     "Good times at Rack N Roll",
+    "Trivia night at Rack N Roll",
+    "Darts tournament",
+    "Late night crew having fun",
+    "Bartender pouring drinks",
+    "Karaoke duet on stage",
+    "Rack Burger closeup",
+    "Regulars at their table",
+    "Another great karaoke night",
+    "Drink specials at the bar",
+    "Weekend vibes at Rack N Roll",
+    "Closing time smiles",
   ];
   return alts[index] || `Rack N Roll photo ${index + 1}`;
 }

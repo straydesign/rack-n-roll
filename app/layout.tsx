@@ -4,6 +4,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
 import MobileCTA from "@/components/MobileCTA";
+import AudioPlayer from "@/components/AudioPlayer";
 import Preloader from "@/components/Preloader";
 
 const dmSans = DM_Sans({
@@ -60,6 +61,7 @@ export default function RootLayout({
           {children}
           <MobileCTA />
         </SmoothScroll>
+        <AudioPlayer />
       </body>
     </html>
   );
