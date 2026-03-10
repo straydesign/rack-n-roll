@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment } from '@react-three/drei'
+// drei no longer needed — plain lighting only
 import * as THREE from 'three'
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
@@ -119,8 +119,8 @@ function ExtrudedLogo() {
           <mesh key={i} geometry={m.geometry}>
             <meshStandardMaterial
               color={m.color}
-              metalness={0.6}
-              roughness={0.45}
+              metalness={0.15}
+              roughness={0.7}
             />
           </mesh>
         ))}
@@ -137,8 +137,9 @@ export default function Logo3D({ className }: { className?: string }) {
         gl={{ alpha: true, antialias: true }}
         style={{ background: 'transparent' }}
       >
-        <Environment preset="apartment" environmentIntensity={1.2} />
-        <ambientLight intensity={1.5} />
+        <ambientLight intensity={2.0} />
+        <directionalLight position={[5, 5, 5]} intensity={1.0} />
+        <directionalLight position={[-3, 3, 2]} intensity={0.5} />
 
         <Suspense fallback={null}>
           <ExtrudedLogo />
