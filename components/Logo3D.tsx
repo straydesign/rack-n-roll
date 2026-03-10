@@ -119,8 +119,8 @@ function ExtrudedLogo() {
           <mesh key={i} geometry={m.geometry}>
             <meshStandardMaterial
               color={m.color}
-              metalness={0.85}
-              roughness={0.2}
+              metalness={0.7}
+              roughness={0.35}
             />
           </mesh>
         ))}
@@ -137,13 +137,13 @@ export default function Logo3D({ className }: { className?: string }) {
         gl={{ alpha: true, antialias: true }}
         style={{ background: 'transparent' }}
       >
-        <Environment preset="sunset" environmentIntensity={1.8} />
-        <ambientLight intensity={1.5} />
-        <directionalLight position={[5, 8, 5]} intensity={3.0} />
-        <directionalLight position={[-5, 5, 3]} intensity={2.0} />
-        <directionalLight position={[0, -3, 5]} intensity={1.5} />
-        <directionalLight position={[3, 0, -4]} intensity={1.0} />
-        <directionalLight position={[0, 5, 0]} intensity={1.5} />
+        <Environment preset="sunset" environmentIntensity={1.0} />
+        <ambientLight intensity={1.0} />
+        <directionalLight position={[5, 8, 5]} intensity={1.5} />
+        <directionalLight position={[-5, 5, 3]} intensity={1.0} />
+        <directionalLight position={[0, -3, 5]} intensity={0.8} />
+        <directionalLight position={[3, 0, -4]} intensity={0.5} />
+        <directionalLight position={[0, 5, 0]} intensity={0.8} />
 
         <Suspense fallback={null}>
           <ExtrudedLogo />
