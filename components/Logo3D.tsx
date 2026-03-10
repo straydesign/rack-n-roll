@@ -119,8 +119,8 @@ function ExtrudedLogo() {
           <mesh key={i} geometry={m.geometry}>
             <meshStandardMaterial
               color={m.color}
-              metalness={0.7}
-              roughness={0.4}
+              metalness={0.6}
+              roughness={0.45}
             />
           </mesh>
         ))}
