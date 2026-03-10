@@ -2,7 +2,13 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { allEvents, type EventCategory } from '@/data/events'
+
+const flyerImages = [
+  { src: '/flyers/darts-blind-draw.jpg', alt: 'Dart Gear Blind Draw — Friday Feb 20' },
+  { src: '/flyers/hiring-doorman.jpg', alt: 'Now Hiring — Weekend Doorman' },
+]
 
 const ease = [0.33, 1, 0.68, 1] as const
 
@@ -139,6 +145,40 @@ export default function EventsPageContent() {
             )}
           </motion.div>
         </AnimatePresence>
+
+        {/* Flyers & Promos */}
+        <div className="mt-24">
+          <h2 className="font-heading text-3xl md:text-4xl text-cream text-center mb-4">
+            Flyers &amp; Promos
+          </h2>
+          <p className="text-cream/40 text-sm text-center mb-12 max-w-md mx-auto">
+            Latest promotions and announcements from our Facebook page.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {flyerImages.map((flyer, i) => (
+              <motion.div
+                key={flyer.src}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.7, delay: i * 0.15, ease }}
+                className="group relative rounded-2xl overflow-hidden border border-cream/[0.06] hover:border-green/20 transition-all duration-500"
+              >
+                <Image
+                  src={flyer.src}
+                  alt={flyer.alt}
+                  width={600}
+                  height={600}
+                  className="w-full h-auto object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                  <p className="text-cream text-sm font-medium">{flyer.alt}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )
