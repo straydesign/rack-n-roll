@@ -117,11 +117,7 @@ function ExtrudedLogo() {
       <group ref={innerRef} visible={centered}>
         {meshData.map((m, i) => (
           <mesh key={i} geometry={m.geometry}>
-            <meshStandardMaterial
-              color={m.color}
-              metalness={0.15}
-              roughness={0.7}
-            />
+            <meshLambertMaterial color={m.color} />
           </mesh>
         ))}
       </group>
