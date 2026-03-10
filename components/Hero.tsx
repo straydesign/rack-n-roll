@@ -2,11 +2,11 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Mic, Music, Beer, ListMusic } from 'lucide-react'
+import { Mic, Music, Beer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import dynamic from 'next/dynamic'
 
-const Logo3D = dynamic(() => import('./Logo3D'), { ssr: false })
+const SpinningLogo3D = dynamic(() => import('./SpinningLogo3D'), { ssr: false })
 
 const cn = (...classes: (string | boolean | undefined)[]) =>
   classes.filter(Boolean).join(' ')
@@ -163,7 +163,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5, delay: 0.2 }}
           >
-            <Logo3D className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64" />
+            <SpinningLogo3D className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64" />
           </motion.div>
 
           {/* Badge */}
@@ -232,20 +232,6 @@ export default function Hero() {
               <Beer className="w-5 h-5 mr-2" />
               What&rsquo;s Happening
             </Button>
-            <a
-              href="https://www.karafun.com/karaoke/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-green-500/30 text-green-400 hover:bg-green-950/50 px-8 py-6 text-base font-semibold rounded-full backdrop-blur-sm hover:scale-105 transition-all"
-              >
-                <ListMusic className="w-5 h-5 mr-2" />
-                Browse Songs
-              </Button>
-            </a>
           </motion.div>
 
           {/* Stats */}
