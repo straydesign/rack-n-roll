@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useRef, useEffect } from "react";
+import { Suspense, useRef, useEffect, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Environment } from "@react-three/drei";
 import { motion } from "framer-motion";
@@ -10,21 +10,26 @@ function LogoModel() {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF("/images/logo.glb");
 
-  // Auto-fit: measure the loaded model and scale to fit the camera view
+  // Clone so useGLTF cache doesn't cause issues
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
+
+  // Auto-fit to camera view
   useEffect(() => {
     if (!groupRef.current) return;
+
     const box = new THREE.Box3().setFromObject(groupRef.current);
     const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
     const scale = 4 / maxDim;
+
     groupRef.current.scale.setScalar(scale);
     groupRef.current.position.set(
       -center.x * scale,
       -center.y * scale,
       -center.z * scale
     );
-  }, [scene]);
+  }, [clonedScene]);
 
   useFrame((_state, delta) => {
     if (groupRef.current) {
@@ -34,7 +39,7 @@ function LogoModel() {
 
   return (
     <group ref={groupRef} rotation={[0.15, 0, 0]}>
-      <primitive object={scene} />
+      <primitive object={clonedScene} />
     </group>
   );
 }
