@@ -170,23 +170,20 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Main Heading with Logo */}
+          {/* Logo — big and centered */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.5, ease: [0.33, 1, 0.68, 1] }}
-            className="flex items-center gap-4 md:gap-6"
           >
             <Image
               src="/logo.svg"
-              alt=""
-              width={80}
-              height={80}
-              className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24"
+              alt="Rack N Roll"
+              width={825}
+              height={825}
+              priority
+              className="w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[440px] md:h-[440px] lg:w-[520px] lg:h-[520px] drop-shadow-2xl"
             />
-            <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight leading-[0.9]">
-              <span className="block text-cream">Rack N Roll</span>
-            </h1>
           </motion.div>
 
           {/* Morphing tagline */}

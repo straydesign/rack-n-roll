@@ -80,9 +80,7 @@ export default function Header() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <span className={`font-heading text-lg transition-colors duration-300 tracking-tight ${
-            scrolled ? 'text-cream hover:text-green' : 'text-cream/80 hover:text-cream'
-          }`}>
+          <span className="font-heading text-lg tracking-tight varsity-brand-sm">
             Rack N Roll
           </span>
         </motion.button>
