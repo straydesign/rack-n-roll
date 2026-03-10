@@ -49,7 +49,7 @@ export default function Schedule() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center text-charcoal/40 mb-16 text-sm"
         >
-          Karaoke every night &middot; Trivia &middot; Darts &middot; Bar opens 3 PM
+          Karaoke Tue&ndash;Sat &middot; Trivia &middot; Darts &middot; Bar opens 3 PM
         </motion.p>
 
         {/* Animated line */}
@@ -62,7 +62,7 @@ export default function Schedule() {
         </div>
 
         {/* Day cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {weeklySchedule.map((row, i) => {
             const isActive = activeDay === i
             const hasSpecial = !!row.special

@@ -87,7 +87,7 @@ export default function Reviews() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.8, delay: i * 0.12, ease }}
-              className="glass rounded-2xl p-7 group hover:scale-[1.02] transition-transform duration-500"
+              className="glass rounded-2xl p-7 group hover:scale-[1.02] transition-transform duration-500 relative"
             >
               {/* Hover glow */}
               <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-br from-green/5 via-transparent to-transparent" />

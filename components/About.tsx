@@ -5,16 +5,16 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import TextReveal from './TextReveal'
 import AnimatedCounter from './AnimatedCounter'
 
-const stats = [
+const stats: { value: number; display: string; label: string; suffix: string; prefix: string; static?: boolean }[] = [
   { value: 35, display: '35+', label: 'Years Running', suffix: '+', prefix: '' },
   { value: 20000, display: '20K+', label: 'Songs on KaraFun', suffix: '+', prefix: '' },
-  { value: 6, display: '6', label: 'Nights a Week', suffix: '', prefix: '' },
-  { value: 89, display: "'89", label: 'Since \'89', suffix: '', prefix: '\'' },
+  { value: 5, display: '5', label: 'Nights a Week', suffix: '', prefix: '' },
+  { value: 1989, display: "'89", label: 'Since \'89', suffix: '', prefix: '', static: true },
 ]
 
 const features = [
   {
-    title: 'Karaoke 6 Nights a Week',
+    title: 'Karaoke 5 Nights a Week',
     desc: '9:30pm to 1:30am. 20,000+ songs on KaraFun — search on your phone, queue up, and bring the house down. DJ Paul Amann keeps it moving.',
     span: 'col-span-2',
     accent: true,
@@ -104,7 +104,7 @@ export default function About() {
               className="text-center group"
             >
               <span className="font-heading text-5xl md:text-6xl lg:text-7xl text-charcoal block leading-none group-hover:text-green transition-colors duration-700">
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} prefix={stat.prefix} />
+                {stat.static ? stat.display : <AnimatedCounter value={stat.value} suffix={stat.suffix} prefix={stat.prefix} />}
               </span>
               <span className="text-charcoal/40 text-xs uppercase tracking-[0.2em] mt-3 block">
                 {stat.label}

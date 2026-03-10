@@ -20,7 +20,7 @@ const details = [
   },
   {
     label: 'Hours',
-    value: 'Mon–Sat: 3pm–2am\nWed opens early at 12pm\nClosed Sundays',
+    value: 'Tue–Sat: 3pm–2am\nClosed Sun & Mon',
   },
 ]
 

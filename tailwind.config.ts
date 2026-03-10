@@ -10,9 +10,21 @@ const config: Config = {
       colors: {
         cream: "#FAF7F2",
         charcoal: "#1A1A1A",
-        green: "#1A7A3A",
+        green: {
+          DEFAULT: "#1A7A3A",
+          300: "#86efac",
+          400: "#4ade80",
+          500: "#22c55e",
+          600: "#16a34a",
+          700: "#15803d",
+          900: "#14532d",
+          950: "#052e16",
+        },
         darkgreen: "#145C2C",
-        amber: "#C4841D",
+        amber: {
+          DEFAULT: "#C4841D",
+          400: "#fbbf24",
+        },
       },
       fontFamily: {
         sans: ["DM Sans", "sans-serif"],

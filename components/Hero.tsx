@@ -88,7 +88,7 @@ function MorphingText({ words, className, interval = 3000 }: { words: string[]; 
     <span className={cn('inline-block', className)}>
       <span className="font-bold text-green">
         {displayText}
-        <span className="inline-block w-0.5 h-[1em] bg-green animate-pulse ml-1 align-middle" />
+        <span className="inline-block w-0.5 h-[1em] bg-green animate-pulse ml-1 align-middle" aria-hidden="true" />
       </span>
     </span>
   )
@@ -213,7 +213,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 1.5 }}
             className="mt-6 max-w-lg text-base md:text-lg text-slate-500 leading-relaxed"
           >
-            Since &rsquo;89. Come as you are. Karaoke 6 nights a week,
+            Since &rsquo;89. Come as you are. Karaoke 5 nights a week,
             great specials, and great food.
           </motion.p>
 
@@ -234,17 +234,32 @@ export default function Hero() {
             </Button>
           </motion.div>
 
+          {/* Hiring notice */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 2 }}
+            className="mt-8"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/20 backdrop-blur-sm">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              <span className="text-xs font-medium text-amber-400 uppercase tracking-wider">
+                Now hiring: Weekend Doorman
+              </span>
+            </div>
+          </motion.div>
+
           {/* Stats */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 2 }}
-            className="mt-16 grid grid-cols-3 gap-8 max-w-md"
+            transition={{ duration: 0.8, delay: 2.2 }}
+            className="mt-10 grid grid-cols-3 gap-8 max-w-md"
           >
             {[
               { val: '35+', label: 'Years' },
               { val: '20K+', label: 'Songs' },
-              { val: '6', label: 'Nights' },
+              { val: '5', label: 'Nights' },
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <div className="text-2xl md:text-3xl font-bold text-green-400">{s.val}</div>
