@@ -4,9 +4,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Mic, Music, Beer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import dynamic from 'next/dynamic'
-
-const Logo3D = dynamic(() => import('./Logo3D'), { ssr: false })
 
 const cn = (...classes: (string | boolean | undefined)[]) =>
   classes.filter(Boolean).join(' ')
@@ -157,20 +154,11 @@ export default function Hero() {
           style={{ opacity, scale, y }}
           className="relative z-10 flex flex-col items-center justify-center px-6 text-center min-h-screen"
         >
-          {/* 3D Logo */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, delay: 0.2 }}
-          >
-            <Logo3D className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64" />
-          </motion.div>
-
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
             className="mb-6"
           >
             <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-green-950/50 border border-green-500/20 backdrop-blur-sm">
@@ -185,7 +173,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8, ease: [0.33, 1, 0.68, 1] }}
+            transition={{ duration: 1, delay: 0.5, ease: [0.33, 1, 0.68, 1] }}
           >
             <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight leading-[0.9]">
               <span className="block text-cream">Rack N Roll</span>
@@ -196,7 +184,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.2 }}
+            transition={{ duration: 1, delay: 0.9 }}
             className="mt-8 text-lg md:text-2xl text-slate-400 font-light"
           >
             <span>Where every night is </span>
@@ -210,7 +198,7 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.5 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
             className="mt-6 max-w-lg text-base md:text-lg text-slate-500 leading-relaxed"
           >
             Since &rsquo;89. Come as you are. Karaoke 5 nights a week,
@@ -221,7 +209,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.8 }}
+            transition={{ duration: 0.8, delay: 1.5 }}
             className="mt-10 flex flex-col sm:flex-row gap-4"
           >
             <Button
@@ -238,7 +226,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 2 }}
+            transition={{ duration: 0.8, delay: 1.7 }}
             className="mt-8"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/20 backdrop-blur-sm">
@@ -253,7 +241,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 2.2 }}
+            transition={{ duration: 0.8, delay: 1.9 }}
             className="mt-10 grid grid-cols-3 gap-8 max-w-md"
           >
             {[
