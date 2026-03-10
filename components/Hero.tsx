@@ -6,7 +6,7 @@ import { Mic, Music, Beer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import dynamic from 'next/dynamic'
 
-const SpinningLogo3D = dynamic(() => import('./SpinningLogo3D'), { ssr: false })
+const Logo3D = dynamic(() => import('./Logo3D'), { ssr: false })
 
 const cn = (...classes: (string | boolean | undefined)[]) =>
   classes.filter(Boolean).join(' ')
@@ -163,7 +163,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5, delay: 0.2 }}
           >
-            <SpinningLogo3D className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64" />
+            <Logo3D className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64" />
           </motion.div>
 
           {/* Badge */}
