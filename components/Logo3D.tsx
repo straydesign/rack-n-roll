@@ -12,6 +12,21 @@ interface MeshData {
   color: string
 }
 
+// CSS class → fill color from the SVG's <style> block
+const CLASS_COLORS: Record<string, string> = {
+  st0: '#1a1a1a',
+  st1: '#22c55e',
+  st2: '#e8f5e9',
+}
+
+function inlineSvgFills(svgText: string): string {
+  let result = svgText
+  for (const [cls, color] of Object.entries(CLASS_COLORS)) {
+    result = result.replaceAll(`class="${cls}"`, `fill="${color}"`)
+  }
+  return result
+}
+
 function ExtrudedLogo() {
   const outerRef = useRef<THREE.Group>(null)
   const innerRef = useRef<THREE.Group>(null)
@@ -22,10 +37,11 @@ function ExtrudedLogo() {
     fetch('/logo.svg')
       .then((r) => r.text())
       .then((svgText) => {
+        // Inline fill colors so SVGLoader can read them
+        const inlined = inlineSvgFills(svgText)
         const loader = new SVGLoader()
-        const data = loader.parse(svgText)
+        const data = loader.parse(inlined)
 
-        // Group shapes by fill color
         const colorGroups = new Map<string, THREE.Shape[]>()
 
         for (const path of data.paths) {
@@ -36,13 +52,11 @@ function ExtrudedLogo() {
           colorGroups.get(hex)!.push(...shapes)
         }
 
-        // Extrude each color group into a single merged mesh
-        // SVG is 825x825, depth ~1/8 of height = ~103
         const extrudeSettings: THREE.ExtrudeGeometryOptions = {
-          depth: 103,
+          depth: 12,
           bevelEnabled: true,
-          bevelThickness: 6,
-          bevelSize: 3,
+          bevelThickness: 1.5,
+          bevelSize: 1,
           bevelSegments: 3,
         }
 
@@ -61,9 +75,11 @@ function ExtrudedLogo() {
 
         setMeshData(result)
       })
+      .catch((err) => {
+        console.error('Logo3D: Failed to load SVG', err)
+      })
   }, [])
 
-  // Center and scale after geometry is ready
   useEffect(() => {
     if (!innerRef.current || meshData.length === 0) return
 
@@ -73,7 +89,6 @@ function ExtrudedLogo() {
     const maxDim = Math.max(size.x, size.y)
     const scale = 4 / maxDim
 
-    // SVG Y is flipped vs Three.js — scale Y negative
     innerRef.current.scale.set(scale, -scale, scale)
     innerRef.current.position.set(
       -center.x * scale,
@@ -84,30 +99,22 @@ function ExtrudedLogo() {
     setCentered(true)
   }, [meshData])
 
-  // Slow auto-rotation
   useFrame((_, delta) => {
     if (outerRef.current) {
-      outerRef.current.rotation.y += delta * 0.3
+      outerRef.current.rotation.y += delta * 1.2
     }
   })
 
-  const getMaterial = (color: string) => {
-    const isGreen = color === '#22c55e'
-    const isDark = color === '#1a1a1a'
-
-    return (
-      <meshStandardMaterial
-        color={color}
-        metalness={isGreen ? 0.5 : isDark ? 0.7 : 0.3}
-        roughness={isGreen ? 0.25 : isDark ? 0.3 : 0.4}
-        emissive={isGreen ? '#22c55e' : '#000000'}
-        emissiveIntensity={isGreen ? 0.15 : 0}
-      />
-    )
-  }
+  const getMaterial = (color: string) => (
+    <meshStandardMaterial
+      color={color}
+      metalness={1.0}
+      roughness={0.05}
+    />
+  )
 
   return (
-    <group ref={outerRef}>
+    <group ref={outerRef} rotation={[0.15, 0, 0]}>
       <group ref={innerRef} visible={centered}>
         {meshData.map((m, i) => (
           <mesh key={i} geometry={m.geometry}>
@@ -127,22 +134,16 @@ export default function Logo3D({ className }: { className?: string }) {
         gl={{ alpha: true, antialias: true }}
         style={{ background: 'transparent' }}
       >
-        <ambientLight intensity={0.3} />
-        <directionalLight position={[5, 5, 5]} intensity={1.2} />
-        <directionalLight
-          position={[-3, -2, 4]}
-          intensity={0.4}
-          color="#22c55e"
-        />
-        <pointLight
-          position={[0, 0, 6]}
-          intensity={0.5}
-          color="#22c55e"
-          distance={15}
-        />
+        <Environment preset="sunset" environmentIntensity={3.0} />
+        <ambientLight intensity={3.0} />
+        <directionalLight position={[5, 8, 5]} intensity={8.0} />
+        <directionalLight position={[-5, 5, 3]} intensity={5.0} />
+        <directionalLight position={[0, -3, 5]} intensity={4.0} />
+        <directionalLight position={[3, 0, -4]} intensity={3.0} />
+        <directionalLight position={[0, 5, 0]} intensity={4.0} />
+
         <Suspense fallback={null}>
           <ExtrudedLogo />
-          <Environment preset="city" />
         </Suspense>
       </Canvas>
     </div>
