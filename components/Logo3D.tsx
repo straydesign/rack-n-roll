@@ -15,8 +15,8 @@ interface MeshData {
 // CSS class → fill color from the SVG's <style> block
 const CLASS_COLORS: Record<string, string> = {
   st0: '#2a2a2a',
-  st1: '#22c55e',
-  st2: '#e8f5e9',
+  st1: '#1A7A3A',
+  st2: '#FAF7F2',
 }
 
 function inlineSvgFills(svgText: string): string {
