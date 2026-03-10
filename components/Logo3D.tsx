@@ -14,7 +14,7 @@ interface MeshData {
 
 // CSS class → fill color from the SVG's <style> block
 const CLASS_COLORS: Record<string, string> = {
-  st0: '#1a1a1a',
+  st0: '#2a2a2a',
   st1: '#22c55e',
   st2: '#e8f5e9',
 }
@@ -99,26 +99,29 @@ function ExtrudedLogo() {
     setCentered(true)
   }, [meshData])
 
+  // Dispose geometries on unmount
+  useEffect(() => {
+    return () => {
+      meshData.forEach((m) => m.geometry.dispose())
+    }
+  }, [meshData])
+
   useFrame((_, delta) => {
     if (outerRef.current) {
       outerRef.current.rotation.y += delta * 1.2
     }
   })
 
-  const getMaterial = (color: string) => (
-    <meshStandardMaterial
-      color={color}
-      metalness={1.0}
-      roughness={0.05}
-    />
-  )
-
   return (
     <group ref={outerRef} rotation={[0.15, 0, 0]}>
       <group ref={innerRef} visible={centered}>
         {meshData.map((m, i) => (
           <mesh key={i} geometry={m.geometry}>
-            {getMaterial(m.color)}
+            <meshStandardMaterial
+              color={m.color}
+              metalness={1.0}
+              roughness={0.05}
+            />
           </mesh>
         ))}
       </group>
