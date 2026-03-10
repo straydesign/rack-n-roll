@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import Image from 'next/image'
 import { Mic, Music, Beer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -169,12 +170,20 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Main Heading */}
+          {/* Main Heading with Logo */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: [0.33, 1, 0.68, 1] }}
+            className="flex items-center gap-4 md:gap-6"
           >
+            <Image
+              src="/logo.svg"
+              alt=""
+              width={80}
+              height={80}
+              className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24"
+            />
             <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight leading-[0.9]">
               <span className="block text-cream">Rack N Roll</span>
             </h1>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 
 type NavLink = {
@@ -81,13 +80,6 @@ export default function Header() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <Image
-            src="/logo.svg"
-            alt="Rack N Roll"
-            width={32}
-            height={32}
-            className="w-8 h-8"
-          />
           <span className={`font-heading text-lg transition-colors duration-300 tracking-tight ${
             scrolled ? 'text-cream hover:text-green' : 'text-cream/80 hover:text-cream'
           }`}>
