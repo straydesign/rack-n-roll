@@ -137,9 +137,7 @@ export default function Logo3D({ className }: { className?: string }) {
         gl={{ alpha: true, antialias: true }}
         style={{ background: 'transparent' }}
       >
-        <ambientLight intensity={2.0} />
-        <directionalLight position={[5, 5, 5]} intensity={1.0} />
-        <directionalLight position={[-3, 3, 2]} intensity={0.5} />
+        <ambientLight intensity={2.5} />
 
         <Suspense fallback={null}>
           <ExtrudedLogo />
