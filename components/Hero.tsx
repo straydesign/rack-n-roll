@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import Image from 'next/image'
 import { Mic, Music, Beer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -168,22 +167,6 @@ export default function Hero() {
                 Erie&rsquo;s Premier Karaoke Bar
               </span>
             </div>
-          </motion.div>
-
-          {/* Logo — big and centered */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.5, ease: [0.33, 1, 0.68, 1] }}
-          >
-            <Image
-              src="/logo.svg"
-              alt="Rack N Roll"
-              width={825}
-              height={825}
-              priority
-              className="w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] md:w-[440px] md:h-[440px] lg:w-[520px] lg:h-[520px] drop-shadow-2xl"
-            />
           </motion.div>
 
           {/* Morphing tagline */}

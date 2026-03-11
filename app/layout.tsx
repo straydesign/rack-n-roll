@@ -1,10 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans } from "next/font/google";
-import localFont from "next/font/local";
+import { DM_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
-import MobileCTA from "@/components/MobileCTA";
 import AudioPlayer from "@/components/AudioPlayer";
 import Preloader from "@/components/Preloader";
 
@@ -15,11 +13,11 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-const freshman = localFont({
-  src: "../public/fonts/Freshman.woff2",
-  variable: "--font-freshman",
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  weight: ["500", "700"],
   display: "swap",
-  weight: "400",
 });
 
 export const viewport: Viewport = {
@@ -54,13 +52,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${dmSans.variable} ${freshman.variable} font-sans antialiased grain`}
+        className={`${dmSans.variable} ${spaceGrotesk.variable} font-sans antialiased grain`}
       >
         <Preloader />
         <SmoothScroll>
           <ScrollProgress />
           {children}
-          <MobileCTA />
         </SmoothScroll>
         <AudioPlayer />
       </body>

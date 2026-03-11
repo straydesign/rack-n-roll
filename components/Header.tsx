@@ -80,7 +80,7 @@ export default function Header() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <span className="font-heading text-lg tracking-tight varsity-brand-sm">
+          <span className="font-heading text-lg tracking-tight text-cream">
             Rack N Roll
           </span>
         </motion.button>

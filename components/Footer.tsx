@@ -24,7 +24,7 @@ export default function Footer() {
           transition={{ duration: 1, ease }}
           className="text-center mb-16"
         >
-          <h2 className="font-heading display-text text-cream/10 leading-none select-none varsity-brand" style={{ opacity: 0.1 }}>
+          <h2 className="font-heading display-text text-cream/10 leading-none select-none" style={{ opacity: 0.1 }}>
             Rack N Roll
           </h2>
         </motion.div>

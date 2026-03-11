@@ -38,7 +38,7 @@ export default function Preloader() {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.1, ease }}
-              className="font-heading text-4xl md:text-5xl tracking-tight varsity-brand"
+              className="font-heading text-4xl md:text-5xl tracking-tight text-cream"
             >
               Rack N Roll
             </motion.h1>

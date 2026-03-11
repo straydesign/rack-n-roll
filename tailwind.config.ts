@@ -28,7 +28,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["DM Sans", "sans-serif"],
-        heading: ["var(--font-freshman)", "sans-serif"],
+        heading: ["Space Grotesk", "sans-serif"],
       },
       animation: {
         aurora: "aurora-shift 60s linear infinite",
