@@ -6,7 +6,7 @@ import { useGLTF, Environment } from "@react-three/drei";
 import { motion } from "framer-motion";
 import * as THREE from "three";
 
-function LogoModel() {
+function LogoModel({ spinning = true }: { spinning?: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF("/images/logo.glb");
 
@@ -32,7 +32,7 @@ function LogoModel() {
   }, [clonedScene]);
 
   useFrame((_state, delta) => {
-    if (groupRef.current) {
+    if (groupRef.current && spinning) {
       groupRef.current.rotation.y += delta * 1.2;
     }
   });
@@ -46,8 +46,12 @@ function LogoModel() {
 
 export default function SpinningLogo3D({
   className = "",
+  spinning = true,
+  cameraZ = 4.5,
 }: {
   className?: string;
+  spinning?: boolean;
+  cameraZ?: number;
 }) {
   return (
     <motion.div
@@ -57,7 +61,7 @@ export default function SpinningLogo3D({
       className={className}
     >
       <Canvas
-        camera={{ position: [0, 0, 4.5], fov: 30 }}
+        camera={{ position: [0, 0, cameraZ], fov: 30 }}
         gl={{ alpha: true, antialias: true }}
         style={{ background: "transparent" }}
       >
@@ -70,7 +74,7 @@ export default function SpinningLogo3D({
         <directionalLight position={[0, 5, 0]} intensity={4.0} />
 
         <Suspense fallback={null}>
-          <LogoModel />
+          <LogoModel spinning={spinning} />
         </Suspense>
       </Canvas>
     </motion.div>

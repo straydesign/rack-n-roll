@@ -22,10 +22,11 @@ import fs from 'fs';
 import path from 'path';
 
 // ── CONFIG ──
+// All layers same depth — stacked via zOffset so nothing clips
+const DEPTH = 12;
+const GREEN = [0.05, 0.39, 0.25];
 const LAYERS_CONFIG = {
-  st2: { name: 'cream', color: [0.91, 0.96, 0.91], depth: 5 },
-  st1: { name: 'green', color: [0.13, 0.77, 0.37], depth: 10 },
-  st0: { name: 'dark',  color: [0.10, 0.10, 0.10], depth: 10 },
+  st0: { name: 'logo', color: GREEN, depth: DEPTH, zOffset: 0, metallic: 1.0, roughness: 0.05 },
 };
 
 // ── SVG PATH → THREE.js SHAPES ──
@@ -60,7 +61,9 @@ let m;
 const pathRegex = /<path\s+class="(\w+)"\s+d="([^"]+)"/g;
 while ((m = pathRegex.exec(svgText)) !== null) {
   if (!pathsByClass[m[1]]) pathsByClass[m[1]] = [];
-  pathsByClass[m[1]].push(m[2]);
+  // Strip the 825x825 border box if present (it's the SVG artboard outline)
+  const d = m[2].replace(/^M825,0v825H0V0h825Z/, '');
+  pathsByClass[m[1]].push(d);
 }
 
 const polyRegex = /<polygon\s+class="(\w+)"\s+points="([^"]+)"/g;
@@ -144,13 +147,18 @@ const cy = (globalBox.max.y + globalBox.min.y) / 2;
 const cz = (globalBox.max.z + globalBox.min.z) / 2;
 console.log(`\nGlobal center: (${cx.toFixed(1)}, ${cy.toFixed(1)}, ${cz.toFixed(1)})`);
 
-for (const { geom } of layerResults) {
+for (const { geom, config } of layerResults) {
   // Center
   geom.translate(-cx, -cy, -cz);
 
   // Flip Y (SVG top-down → 3D bottom-up)
   const pos = geom.attributes.position.array;
   for (let i = 0; i < pos.length; i += 3) pos[i + 1] *= -1;
+
+  // Apply Z-offset so layers stack front-to-back
+  if (config.zOffset) {
+    for (let i = 0; i < pos.length; i += 3) pos[i + 2] += config.zOffset;
+  }
 
   // Recompute normals
   geom.computeVertexNormals();
@@ -179,8 +187,8 @@ for (const { geom, config } of layerResults) {
     .setMaterial(
       doc.createMaterial(config.name)
         .setBaseColorFactor([...config.color, 1])
-        .setMetallicFactor(1.0)
-        .setRoughnessFactor(0.05));
+        .setMetallicFactor(config.metallic)
+        .setRoughnessFactor(config.roughness));
 
   mesh.addPrimitive(prim);
   rootNode.addChild(doc.createNode(config.name).setMesh(mesh));

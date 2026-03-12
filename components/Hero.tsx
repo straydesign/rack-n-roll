@@ -154,20 +154,6 @@ export default function Hero() {
           style={{ opacity, scale, y }}
           className="relative z-10 flex flex-col items-center justify-center px-6 text-center min-h-screen"
         >
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mb-6"
-          >
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-green-950/50 border border-green-500/20 backdrop-blur-sm">
-              <Mic className="w-3.5 h-3.5 text-green-400" />
-              <span className="text-xs font-semibold text-green-300 uppercase tracking-[0.15em]">
-                Erie&rsquo;s Premier Karaoke Bar
-              </span>
-            </div>
-          </motion.div>
 
           {/* Morphing tagline */}
           <motion.div

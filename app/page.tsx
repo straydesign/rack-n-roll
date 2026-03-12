@@ -25,21 +25,19 @@ export default function Home() {
       <Hero />
       <div className="relative z-20">
         {/* Light section: About + Schedule */}
-        <div className="bg-cream">
-          <div id="about">
-            <About />
-          </div>
-          <div className="hr-glow max-w-4xl mx-auto" />
-          <div id="schedule">
-            <Schedule />
-          </div>
+        <div id="about">
+          <About />
+        </div>
+        <div className="hr-glow max-w-4xl mx-auto" />
+        <div id="schedule">
+          <Schedule />
         </div>
         {/* Dark section: Events */}
         <div id="events">
           <Events />
         </div>
         {/* Light section: Menu */}
-        <div id="menu" className="bg-cream">
+        <div id="menu">
           <Menu />
         </div>
         {/* Dark section: Reviews */}

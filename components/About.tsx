@@ -26,12 +26,6 @@ const features = [
     accent: false,
   },
   {
-    title: 'Bar Food Done Right',
-    desc: 'Wings, burgers, the famous Breakfast Burger, Philly cheesesteaks, fresh pizza. Kitchen cranking until 11pm.',
-    span: 'col-span-1',
-    accent: false,
-  },
-  {
     title: 'Open Since 1989',
     desc: 'No cover. No dress code. No pretense. Just a neighborhood spot where everybody sings and the good times never stop.',
     span: 'col-span-2',
@@ -78,7 +72,7 @@ export default function About() {
         {/* Big text reveal */}
         <TextReveal
           text="The kind of bar that feels like home."
-          className="font-heading display-text text-charcoal text-center max-w-4xl mx-auto mb-8"
+          className="font-heading display-text text-white text-center max-w-4xl mx-auto mb-8"
         />
 
         <motion.p
@@ -86,7 +80,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.8, delay: 0.3, ease }}
-          className="text-center text-charcoal/50 mb-20 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed"
+          className="text-center text-white/50 mb-20 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed"
         >
           No cover. No dress code. Just a neighborhood spot where everybody
           sings, the drinks are cold, and the good times never stop.
@@ -103,10 +97,10 @@ export default function About() {
               transition={{ duration: 0.7, delay: i * 0.1, ease }}
               className="text-center group"
             >
-              <span className="font-heading text-5xl md:text-6xl lg:text-7xl text-charcoal block leading-none group-hover:text-green transition-colors duration-700">
+              <span className="font-heading text-5xl md:text-6xl lg:text-7xl text-white block leading-none group-hover:text-green transition-colors duration-700">
                 {stat.static ? stat.display : <AnimatedCounter value={stat.value} suffix={stat.suffix} prefix={stat.prefix} />}
               </span>
-              <span className="text-charcoal/40 text-xs uppercase tracking-[0.2em] mt-3 block">
+              <span className="text-white/40 text-xs uppercase tracking-[0.2em] mt-3 block">
                 {stat.label}
               </span>
             </motion.div>
@@ -132,10 +126,10 @@ export default function About() {
               {/* Glow on hover */}
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none ${f.accent ? 'bg-gradient-to-br from-green/10 via-transparent to-transparent' : 'bg-gradient-to-br from-green/5 via-transparent to-transparent'}`} />
 
-              <h3 className={`font-bold text-lg md:text-xl mb-3 relative z-10 ${f.accent ? 'text-cream' : 'text-charcoal'} group-hover:text-green transition-colors duration-500`}>
+              <h3 className={`font-bold text-lg md:text-xl mb-3 relative z-10 ${f.accent ? 'text-cream' : 'text-white'} group-hover:text-green transition-colors duration-500`}>
                 {f.title}
               </h3>
-              <p className={`text-sm md:text-base leading-relaxed relative z-10 ${f.accent ? 'text-cream/60' : 'text-charcoal/50'}`}>
+              <p className={`text-sm md:text-base leading-relaxed relative z-10 ${f.accent ? 'text-cream/60' : 'text-white/50'}`}>
                 {f.desc}
               </p>
 

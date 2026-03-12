@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 
 type NavLink = {
   label: string
@@ -80,9 +81,7 @@ export default function Header() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <span className="font-heading text-lg tracking-tight text-cream">
-            Rack N Roll
-          </span>
+          <Image src="/racknroll.svg" alt="Rack N Roll" width={90} height={90} />
         </motion.button>
 
         {/* Desktop links */}

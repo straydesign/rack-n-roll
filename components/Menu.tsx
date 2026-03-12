@@ -39,7 +39,7 @@ export default function Menu() {
 
         <TextReveal
           text="Bar food. Done right."
-          className="font-heading heading-text text-charcoal text-center mb-4"
+          className="font-heading heading-text text-white text-center mb-4"
         />
 
         <motion.p
@@ -47,7 +47,7 @@ export default function Menu() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-center text-charcoal/40 mb-16 text-sm"
+          className="text-center text-white/40 mb-16 text-sm"
         >
           Kitchen opens at 4 PM &middot; Nothing fancy, everything good
         </motion.p>
@@ -65,7 +65,7 @@ export default function Menu() {
             >
               <div className="flex-1">
                 <div className="flex items-baseline justify-between gap-4">
-                  <h4 className="font-bold text-charcoal text-lg group-hover:text-green transition-colors duration-300">
+                  <h4 className="font-bold text-white text-lg group-hover:text-green transition-colors duration-300">
                     {item.name}
                   </h4>
                   {item.price && (
@@ -73,7 +73,7 @@ export default function Menu() {
                   )}
                 </div>
                 {item.description && (
-                  <p className="text-charcoal/40 text-sm mt-1">{item.description}</p>
+                  <p className="text-white/40 text-sm mt-1">{item.description}</p>
                 )}
               </div>
             </motion.div>
@@ -90,7 +90,7 @@ export default function Menu() {
         >
           <Link
             href="/menu"
-            className="inline-flex items-center gap-2 px-8 py-3 text-xs font-semibold text-charcoal border border-charcoal/15 rounded-full hover:bg-charcoal hover:text-cream transition-all duration-300 uppercase tracking-wider group"
+            className="inline-flex items-center gap-2 px-8 py-3 text-xs font-semibold text-white border border-charcoal/15 rounded-full hover:bg-charcoal hover:text-cream transition-all duration-300 uppercase tracking-wider group"
           >
             View Full Menu
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
