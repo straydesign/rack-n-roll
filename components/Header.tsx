@@ -81,7 +81,7 @@ export default function Header() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <Image src="/racknroll.svg" alt="Rack N Roll" width={90} height={90} />
+          <Image src="/racknroll.svg" alt="Rack N Roll" width={90} height={90} className="h-10 w-auto md:h-[90px]" />
         </motion.button>
 
         {/* Desktop links */}
