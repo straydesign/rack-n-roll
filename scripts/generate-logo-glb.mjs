@@ -1,5 +1,6 @@
 /**
  * Generate a 3D extruded GLB from the RacknRoll SVG logo.
+ * Front/back faces keep logo colors; side edges get silver chrome.
  *
  * Usage: node scripts/generate-logo-glb.mjs
  */
@@ -22,13 +23,17 @@ import fs from 'fs';
 import path from 'path';
 
 // ── CONFIG ──
-// Same depth, tiny z-offsets to prevent z-fighting (white in front, dark in back)
+// rack.svg classes: st2=#222020(dark), st3=#116743(green), st4=#fefefe(white)
 const DEPTH = 10;
+const GREEN = [0.05, 0.39, 0.25];
 const LAYERS_CONFIG = {
-  st4: { name: 'white',  color: [0.99, 0.99, 0.99], depth: DEPTH, zOffset: 0.5,  metallic: 1.0, roughness: 0.05 },
-  st1: { name: 'green',  color: [0.05, 0.39, 0.25], depth: DEPTH, zOffset: 0,    metallic: 1.0, roughness: 0.05 },
-  st3: { name: 'dark',   color: [0.12, 0.12, 0.12], depth: DEPTH, zOffset: -0.5, metallic: 1.0, roughness: 0.05 },
+  st4: { name: 'white',  color: GREEN, depth: DEPTH, zOffset: 0.5,  metallic: 1.0, roughness: 0.05 },
+  st3: { name: 'green',  color: GREEN, depth: DEPTH, zOffset: 0,    metallic: 1.0, roughness: 0.05 },
+  st2: { name: 'dark',   color: GREEN, depth: DEPTH, zOffset: -0.5, metallic: 1.0, roughness: 0.05 },
 };
+
+// Silver chrome for the extruded side edges
+const SILVER = { color: [0.85, 0.85, 0.88], metallic: 1.0, roughness: 0.03 };
 
 // ── SVG PATH → THREE.js SHAPES ──
 function svgPathToShapes(d) {
@@ -53,7 +58,7 @@ function polygonPointsToD(points) {
 }
 
 // ── READ SVG ──
-const svgFilePath = path.resolve('public/racknroll.svg');
+const svgFilePath = path.resolve('public/rack.svg');
 const svgText = fs.readFileSync(svgFilePath, 'utf-8');
 
 const pathsByClass = {};
@@ -62,7 +67,6 @@ let m;
 const pathRegex = /<path\s+class="(\w+)"\s+d="([^"]+)"/g;
 while ((m = pathRegex.exec(svgText)) !== null) {
   if (!pathsByClass[m[1]]) pathsByClass[m[1]] = [];
-  // Strip the 825x825 border box if present (it's the SVG artboard outline)
   const d = m[2].replace(/^M825,0v825H0V0h825Z/, '');
   pathsByClass[m[1]].push(d);
 }
@@ -80,9 +84,46 @@ console.log('SVG elements:');
 for (const [cls, paths] of Object.entries(pathsByClass))
   console.log(`  ${cls}: ${paths.length}`);
 
-// ── BUILD LAYER GEOMETRY (no centering — done globally later) ──
-function buildLayerGeometry(paths, depth) {
-  const geometries = [];
+// ── SPLIT GEOMETRY BY MATERIAL GROUP ──
+// ExtrudeGeometry creates groups: materialIndex 0 = front/back faces, 1 = side edges
+function splitByGroup(geom) {
+  const pos = geom.attributes.position;
+  const norm = geom.attributes.normal;
+  const idx = geom.index ? geom.index.array : null;
+
+  const faceIndices = [];
+  const sideIndices = [];
+
+  for (const group of geom.groups) {
+    const target = group.materialIndex === 0 ? faceIndices : sideIndices;
+    for (let i = group.start; i < group.start + group.count; i++) {
+      target.push(idx ? idx[i] : i);
+    }
+  }
+
+  function makeGeomFromIndices(indices) {
+    if (!indices.length) return null;
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', pos.clone());
+    g.setAttribute('normal', norm.clone());
+    g.setIndex(new THREE.BufferAttribute(new Uint32Array(indices), 1));
+    return g;
+  }
+
+  return {
+    faces: makeGeomFromIndices(faceIndices),
+    sides: makeGeomFromIndices(sideIndices),
+  };
+}
+
+// ── OUTLINE STROKE WIDTH (SVG units) ──
+const OUTLINE_WIDTH = 6;
+
+// ── BUILD LAYER GEOMETRIES (faces + sides + outline) ──
+function buildLayerGeometries(paths, depth) {
+  const faceGeometries = [];
+  const sideGeometries = [];
+  const outlineGeometries = [];
   let skipped = 0;
 
   for (const d of paths) {
@@ -90,12 +131,13 @@ function buildLayerGeometry(paths, depth) {
       const shapes = svgPathToShapes(d);
       if (!shapes.length) { skipped++; continue; }
 
+      // Main extrusion (green faces + silver sides)
       const geom = new THREE.ExtrudeGeometry(shapes, {
         depth,
         bevelEnabled: true,
-        bevelThickness: 1.5,
-        bevelSize: 1,
-        bevelSegments: 2,
+        bevelThickness: 2,
+        bevelSize: 1.5,
+        bevelSegments: 3,
       });
 
       if (!geom.index) {
@@ -105,19 +147,56 @@ function buildLayerGeometry(paths, depth) {
         geom.setIndex(new THREE.BufferAttribute(indices, 1));
       }
 
-      if (geom.attributes.position.count > 0) geometries.push(geom);
+      if (geom.attributes.position.count === 0) { skipped++; continue; }
+
+      const { faces, sides } = splitByGroup(geom);
+      if (faces) faceGeometries.push(faces);
+      if (sides) sideGeometries.push(sides);
+      geom.dispose();
+
+      // Silver outline: same shapes but with big bevel, offset behind
+      const outlineGeom = new THREE.ExtrudeGeometry(shapes, {
+        depth: depth + 2,
+        bevelEnabled: true,
+        bevelThickness: OUTLINE_WIDTH,
+        bevelSize: OUTLINE_WIDTH,
+        bevelSegments: 2,
+      });
+
+      if (!outlineGeom.index) {
+        const count = outlineGeom.attributes.position.count;
+        const indices = new Uint32Array(count);
+        for (let j = 0; j < count; j++) indices[j] = j;
+        outlineGeom.setIndex(new THREE.BufferAttribute(indices, 1));
+      }
+
+      // Offset outline behind the main shape
+      const oPos = outlineGeom.attributes.position.array;
+      for (let i = 0; i < oPos.length; i += 3) oPos[i + 2] -= 1;
+
+      if (outlineGeom.attributes.position.count > 0) {
+        outlineGeometries.push(outlineGeom);
+      }
     } catch {
       skipped++;
     }
   }
 
-  if (!geometries.length) return null;
-  console.log(`  Extruded ${geometries.length}/${paths.length} (${skipped} skipped)`);
+  console.log(`  Extruded ${faceGeometries.length}/${paths.length} (${skipped} skipped)`);
 
-  const rawMerged = mergeGeometries(geometries, false);
-  const merged = mergeVertices(rawMerged, 0.01);
-  geometries.forEach(g => g.dispose());
-  return merged;
+  const mergeParts = (geos) => {
+    if (!geos.length) return null;
+    const raw = mergeGeometries(geos, false);
+    const merged = mergeVertices(raw, 0.01);
+    geos.forEach(g => g.dispose());
+    return merged;
+  };
+
+  return {
+    faces: mergeParts(faceGeometries),
+    sides: mergeParts(sideGeometries),
+    outline: mergeParts(outlineGeometries),
+  };
 }
 
 // ── BUILD ALL LAYERS ──
@@ -128,19 +207,24 @@ for (const [cls, config] of Object.entries(LAYERS_CONFIG)) {
   if (!paths.length) continue;
   console.log(`Building ${config.name} (${paths.length} paths, depth ${config.depth})...`);
 
-  const geom = buildLayerGeometry(paths, config.depth);
-  if (!geom) { console.warn(`  Failed: ${config.name}`); continue; }
+  const { faces, sides, outline } = buildLayerGeometries(paths, config.depth);
+  if (!faces && !sides && !outline) { console.warn(`  Failed: ${config.name}`); continue; }
 
-  layerResults.push({ geom, config });
-  console.log(`  ✓ ${config.name}: ${geom.attributes.position.count} verts`);
+  layerResults.push({ faces, sides, outline, config });
+  const fv = faces ? faces.attributes.position.count : 0;
+  const sv = sides ? sides.attributes.position.count : 0;
+  const ov = outline ? outline.attributes.position.count : 0;
+  console.log(`  ✓ ${config.name}: ${fv} face, ${sv} side, ${ov} outline verts`);
 }
 
-// ── GLOBAL CENTER + Y-FLIP (all layers share the same transform) ──
-// Compute global bounding box across ALL layers
+// ── GLOBAL CENTER + Y-FLIP ──
 const globalBox = new THREE.Box3();
-for (const { geom } of layerResults) {
-  geom.computeBoundingBox();
-  globalBox.union(geom.boundingBox);
+for (const { faces, sides, outline } of layerResults) {
+  for (const geom of [faces, sides, outline]) {
+    if (!geom) continue;
+    geom.computeBoundingBox();
+    globalBox.union(geom.boundingBox);
+  }
 }
 
 const cx = (globalBox.max.x + globalBox.min.x) / 2;
@@ -148,21 +232,20 @@ const cy = (globalBox.max.y + globalBox.min.y) / 2;
 const cz = (globalBox.max.z + globalBox.min.z) / 2;
 console.log(`\nGlobal center: (${cx.toFixed(1)}, ${cy.toFixed(1)}, ${cz.toFixed(1)})`);
 
-for (const { geom, config } of layerResults) {
-  // Center
-  geom.translate(-cx, -cy, -cz);
+for (const { faces, sides, outline, config } of layerResults) {
+  for (const geom of [faces, sides, outline]) {
+    if (!geom) continue;
+    geom.translate(-cx, -cy, -cz);
 
-  // Flip Y (SVG top-down → 3D bottom-up)
-  const pos = geom.attributes.position.array;
-  for (let i = 0; i < pos.length; i += 3) pos[i + 1] *= -1;
+    const pos = geom.attributes.position.array;
+    for (let i = 0; i < pos.length; i += 3) pos[i + 1] *= -1;
 
-  // Apply Z-offset so layers stack front-to-back
-  if (config.zOffset) {
-    for (let i = 0; i < pos.length; i += 3) pos[i + 2] += config.zOffset;
+    if (config.zOffset) {
+      for (let i = 0; i < pos.length; i += 3) pos[i + 2] += config.zOffset;
+    }
+
+    geom.computeVertexNormals();
   }
-
-  // Recompute normals
-  geom.computeVertexNormals();
 }
 
 // ── EXPORT TO GLB ──
@@ -172,28 +255,74 @@ const scene = doc.createScene();
 const rootNode = doc.createNode('Logo');
 scene.addChild(rootNode);
 
-for (const { geom, config } of layerResults) {
-  const pos = geom.attributes.position.array;
-  const norm = geom.attributes.normal.array;
-  const idx = geom.index.array;
+// Shared silver material for all side edges
+const silverMat = doc.createMaterial('silver')
+  .setBaseColorFactor([...SILVER.color, 1])
+  .setMetallicFactor(SILVER.metallic)
+  .setRoughnessFactor(SILVER.roughness);
 
+for (const { faces, sides, outline, config } of layerResults) {
   const mesh = doc.createMesh(config.name);
-  const prim = doc.createPrimitive()
-    .setAttribute('POSITION',
-      doc.createAccessor().setArray(new Float32Array(pos)).setType('VEC3').setBuffer(buffer))
-    .setAttribute('NORMAL',
-      doc.createAccessor().setArray(new Float32Array(norm)).setType('VEC3').setBuffer(buffer))
-    .setIndices(
-      doc.createAccessor().setArray(new Uint32Array(idx)).setType('SCALAR').setBuffer(buffer))
-    .setMaterial(
-      doc.createMaterial(config.name)
-        .setBaseColorFactor([...config.color, 1])
-        .setMetallicFactor(config.metallic)
-        .setRoughnessFactor(config.roughness));
 
-  mesh.addPrimitive(prim);
+  const makeAccessor = (arr, type) =>
+    doc.createAccessor()
+      .setArray(arr instanceof Float32Array ? arr : new Float32Array(arr))
+      .setType(type)
+      .setBuffer(buffer);
+
+  // Front/back faces — logo color
+  if (faces) {
+    const pos = faces.attributes.position.array;
+    const norm = faces.attributes.normal.array;
+    const idx = faces.index.array;
+
+    const facePrim = doc.createPrimitive()
+      .setAttribute('POSITION', makeAccessor(pos, 'VEC3'))
+      .setAttribute('NORMAL', makeAccessor(norm, 'VEC3'))
+      .setIndices(doc.createAccessor().setArray(new Uint32Array(idx)).setType('SCALAR').setBuffer(buffer))
+      .setMaterial(
+        doc.createMaterial(`${config.name}-face`)
+          .setBaseColorFactor([...config.color, 1])
+          .setMetallicFactor(config.metallic)
+          .setRoughnessFactor(config.roughness));
+
+    mesh.addPrimitive(facePrim);
+    console.log(`  → ${config.name} faces: ${idx.length / 3} tris`);
+  }
+
+  // Side edges — silver chrome
+  if (sides) {
+    const pos = sides.attributes.position.array;
+    const norm = sides.attributes.normal.array;
+    const idx = sides.index.array;
+
+    const sidePrim = doc.createPrimitive()
+      .setAttribute('POSITION', makeAccessor(pos, 'VEC3'))
+      .setAttribute('NORMAL', makeAccessor(norm, 'VEC3'))
+      .setIndices(doc.createAccessor().setArray(new Uint32Array(idx)).setType('SCALAR').setBuffer(buffer))
+      .setMaterial(silverMat);
+
+    mesh.addPrimitive(sidePrim);
+    console.log(`  → ${config.name} sides: ${idx.length / 3} tris (silver)`);
+  }
+
+  // Silver outline behind the shape
+  if (outline) {
+    const pos = outline.attributes.position.array;
+    const norm = outline.attributes.normal.array;
+    const idx = outline.index.array;
+
+    const outlinePrim = doc.createPrimitive()
+      .setAttribute('POSITION', makeAccessor(pos, 'VEC3'))
+      .setAttribute('NORMAL', makeAccessor(norm, 'VEC3'))
+      .setIndices(doc.createAccessor().setArray(new Uint32Array(idx)).setType('SCALAR').setBuffer(buffer))
+      .setMaterial(silverMat);
+
+    mesh.addPrimitive(outlinePrim);
+    console.log(`  → ${config.name} outline: ${idx.length / 3} tris (silver)`);
+  }
+
   rootNode.addChild(doc.createNode(config.name).setMesh(mesh));
-  console.log(`  → ${config.name}: ${idx.length / 3} tris`);
 }
 
 const io = new NodeIO();

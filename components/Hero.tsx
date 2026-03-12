@@ -156,8 +156,18 @@ export default function Hero() {
           className="relative z-10 flex flex-col items-center justify-center px-6 text-center min-h-screen"
         >
 
+          {/* Badge */}
+          <motion.span
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-xs font-bold uppercase tracking-[0.3em] text-green"
+          >
+            Erie&rsquo;s Premier Karaoke Bar
+          </motion.span>
+
           {/* 3D Spinning Logo */}
-          <SpinningLogo3D className="w-40 h-40 md:w-56 md:h-56 mb-4" />
+          <SpinningLogo3D className="w-[450px] h-[550px] md:w-[750px] md:h-[850px] mb-4 mt-16 md:mt-24" />
 
           {/* Morphing tagline */}
           <motion.div
