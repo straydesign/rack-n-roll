@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Mic, Music, Beer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import SpinningLogo3D from '@/components/SpinningLogo3D'
 
 const cn = (...classes: (string | boolean | undefined)[]) =>
   classes.filter(Boolean).join(' ')
@@ -154,6 +155,9 @@ export default function Hero() {
           style={{ opacity, scale, y }}
           className="relative z-10 flex flex-col items-center justify-center px-6 text-center min-h-screen"
         >
+
+          {/* 3D Spinning Logo */}
+          <SpinningLogo3D className="w-40 h-40 md:w-56 md:h-56 mb-4" />
 
           {/* Morphing tagline */}
           <motion.div

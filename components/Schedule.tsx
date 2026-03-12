@@ -36,7 +36,7 @@ export default function Schedule() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease }}
-          className="font-heading heading-text text-charcoal text-center mb-4"
+          className="font-heading heading-text text-white text-center mb-4"
         >
           Make It
           <span className="text-gradient"> Your Night</span>
@@ -47,14 +47,14 @@ export default function Schedule() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-center text-charcoal/40 mb-16 text-sm"
+          className="text-center text-white/40 mb-16 text-sm"
         >
           Karaoke Tue&ndash;Sat &middot; Trivia &middot; Darts &middot; Bar opens 3 PM
         </motion.p>
 
         {/* Animated line */}
         <div className="relative mb-12">
-          <div className="h-px bg-charcoal/10 w-full" />
+          <div className="h-px bg-white/10 w-full" />
           <motion.div
             style={{ width: lineWidth }}
             className="absolute top-0 left-0 h-px bg-green/40"
@@ -81,7 +81,7 @@ export default function Schedule() {
                     ? 'bg-charcoal text-cream scale-105 glow-green'
                     : hasSpecial
                       ? 'bg-green/[0.06] border border-green/15 hover:border-green/30'
-                      : 'bg-charcoal/[0.02] border border-charcoal/5 hover:border-charcoal/15'
+                      : 'bg-white/[0.04] border border-white/10 hover:border-white/20'
                   }`}
               >
                 {/* Glow orb */}
@@ -93,19 +93,19 @@ export default function Schedule() {
                   />
                 )}
 
-                <span className={`text-[10px] uppercase tracking-[0.2em] font-bold block mb-3 transition-colors duration-300 ${isActive ? 'text-green' : 'text-charcoal/30'}`}>
+                <span className={`text-[10px] uppercase tracking-[0.2em] font-bold block mb-3 transition-colors duration-300 ${isActive ? 'text-green' : 'text-white/30'}`}>
                   {row.day.slice(0, 3)}
                 </span>
 
-                <span className={`font-heading text-2xl block leading-none mb-1 transition-colors duration-300 ${isActive ? 'text-cream' : 'text-charcoal'}`}>
+                <span className={`font-heading text-2xl block leading-none mb-1 transition-colors duration-300 ${isActive ? 'text-cream' : 'text-white'}`}>
                   {row.day}
                 </span>
 
-                <span className={`text-xs block mt-3 transition-colors duration-300 ${isActive ? 'text-cream/60' : 'text-charcoal/40'}`}>
+                <span className={`text-xs block mt-3 transition-colors duration-300 ${isActive ? 'text-cream/60' : 'text-white/40'}`}>
                   {row.hours}
                 </span>
 
-                <span className={`text-xs block mt-1 transition-colors duration-300 ${isActive ? 'text-green' : 'text-charcoal/30'}`}>
+                <span className={`text-xs block mt-1 transition-colors duration-300 ${isActive ? 'text-green' : 'text-white/30'}`}>
                   🎤 {row.karaoke}{'host' in row && row.host ? ` w/ ${row.host}` : ''}
                 </span>
 
@@ -132,7 +132,7 @@ export default function Schedule() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-charcoal/25 text-xs mt-8 text-center tracking-wide"
+          className="text-white/25 text-xs mt-8 text-center tracking-wide"
         >
           Closed Sun &amp; Mon &middot; Kitchen opens at 4 PM
         </motion.p>

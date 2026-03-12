@@ -3,7 +3,6 @@ import Hero from '@/components/Hero'
 import Header from '@/components/Header'
 import {
   AboutSkeleton,
-  ScheduleSkeleton,
   EventsSkeleton,
   MenuSkeleton,
   InfoSkeleton,
@@ -11,7 +10,6 @@ import {
 } from '@/components/Skeletons'
 
 const About = dynamic(() => import('@/components/About'), { loading: () => <AboutSkeleton /> })
-const Schedule = dynamic(() => import('@/components/Schedule'), { loading: () => <ScheduleSkeleton /> })
 const Events = dynamic(() => import('@/components/Events'), { loading: () => <EventsSkeleton /> })
 const Menu = dynamic(() => import('@/components/Menu'), { loading: () => <MenuSkeleton /> })
 const Reviews = dynamic(() => import('@/components/Reviews'), { loading: () => <div className="bg-charcoal py-40" /> })
@@ -29,9 +27,6 @@ export default function Home() {
           <About />
         </div>
         <div className="hr-glow max-w-4xl mx-auto" />
-        <div id="schedule">
-          <Schedule />
-        </div>
         {/* Dark section: Events */}
         <div id="events">
           <Events />

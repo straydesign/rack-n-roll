@@ -14,7 +14,7 @@ type NavLink = {
 
 const links: NavLink[] = [
   { label: 'About', href: '#about', type: 'anchor' },
-  { label: 'Schedule', href: '#schedule', type: 'anchor' },
+  { label: 'Schedule', href: '#events', type: 'anchor' },
   { label: 'Events', href: '/events', type: 'page' },
   { label: 'Menu', href: '/menu', type: 'page' },
   { label: 'Gallery', href: '/gallery', type: 'page' },

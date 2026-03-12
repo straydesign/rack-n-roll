@@ -22,11 +22,12 @@ import fs from 'fs';
 import path from 'path';
 
 // ── CONFIG ──
-// All layers same depth — stacked via zOffset so nothing clips
-const DEPTH = 12;
-const GREEN = [0.05, 0.39, 0.25];
+// Same depth, tiny z-offsets to prevent z-fighting (white in front, dark in back)
+const DEPTH = 10;
 const LAYERS_CONFIG = {
-  st0: { name: 'logo', color: GREEN, depth: DEPTH, zOffset: 0, metallic: 1.0, roughness: 0.05 },
+  st4: { name: 'white',  color: [0.99, 0.99, 0.99], depth: DEPTH, zOffset: 0.5,  metallic: 1.0, roughness: 0.05 },
+  st1: { name: 'green',  color: [0.05, 0.39, 0.25], depth: DEPTH, zOffset: 0,    metallic: 1.0, roughness: 0.05 },
+  st3: { name: 'dark',   color: [0.12, 0.12, 0.12], depth: DEPTH, zOffset: -0.5, metallic: 1.0, roughness: 0.05 },
 };
 
 // ── SVG PATH → THREE.js SHAPES ──
@@ -52,7 +53,7 @@ function polygonPointsToD(points) {
 }
 
 // ── READ SVG ──
-const svgFilePath = path.resolve('public/logo.svg');
+const svgFilePath = path.resolve('public/racknroll.svg');
 const svgText = fs.readFileSync(svgFilePath, 'utf-8');
 
 const pathsByClass = {};
