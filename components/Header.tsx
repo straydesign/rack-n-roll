@@ -73,7 +73,7 @@ export default function Header() {
           : 'bg-transparent'
       }`}
     >
-      <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+      <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between h-12">
         {/* Logo */}
         <motion.button
           onClick={handleLogoClick}
@@ -81,7 +81,7 @@ export default function Header() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <Image src="/racknroll.svg" alt="Rack N Roll" width={90} height={90} className="h-14 w-auto md:h-[90px]" />
+          <Image src="/racknroll.svg" alt="Rack N Roll" width={150} height={150} className="h-28 w-auto md:h-32 -mt-2" />
         </motion.button>
 
         {/* Desktop links */}
