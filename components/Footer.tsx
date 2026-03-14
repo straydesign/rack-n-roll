@@ -133,6 +133,17 @@ export default function Footer() {
           >
             Since &rsquo;89. Come as you are.
           </motion.p>
+          <motion.a
+            href="https://straywebdesign.co"
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-cream/10 text-xs tracking-wider hover:text-green transition-colors duration-300"
+          >
+            Built by Stray Web Design
+          </motion.a>
         </div>
       </div>
     </footer>
