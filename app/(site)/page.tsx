@@ -1,8 +1,10 @@
+import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import Hero from '@/components/Hero'
 import Header from '@/components/Header'
 import { NavigableSection } from '@/components/NavigableSection'
 import { getSiteSettings, getDailySpecials } from '@/lib/queries'
+import { buildPageMetadata } from '@/lib/metadata'
 import type { DailySpecial } from '@/data/events'
 import type { SanityDailySpecial } from '@/lib/types'
 import {
@@ -12,6 +14,18 @@ import {
   InfoSkeleton,
   FooterSkeleton,
 } from '@/components/Skeletons'
+
+const HOME_DEFAULTS = {
+  title: "Rack N Roll \u2014 Erie's Premier Karaoke Bar Since '89",
+  description:
+    "Erie's premier karaoke bar since 1989. 6 nights a week, great specials, good food. Come as you are.",
+  ogDescription: "Erie's premier karaoke bar since 1989. Come as you are.",
+} as const
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  return buildPageMetadata(settings?.homeSeo, settings, HOME_DEFAULTS)
+}
 
 const About = dynamic(() => import('@/components/About'), { loading: () => <AboutSkeleton /> })
 const EventsSection = dynamic(() => import('@/components/EventsSection'), { loading: () => <EventsSkeleton /> })

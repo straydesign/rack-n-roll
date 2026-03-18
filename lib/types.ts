@@ -1,15 +1,37 @@
 import type { SanityImageSource } from '@sanity/image-url'
 
+export interface SanityPageSeo {
+  metaTitle?: string
+  metaDescription?: string
+  ogImage?: SanityImageSource
+}
+
 export interface SanitySiteSettings {
+  // General
   bannerEnabled: boolean
   bannerText?: string
-  address?: string
+  businessName?: string
   phone?: string
+  addressStreet?: string
+  addressCity?: string
+  addressState?: string
+  addressZip?: string
+  address?: string
   hours?: string
   closedDays?: string
   amenities?: string[]
   hiringEnabled?: boolean
   hiringText?: string
+  // SEO & Social
+  siteName?: string
+  defaultOgImage?: SanityImageSource
+  homeSeo?: SanityPageSeo
+  eventsSeo?: SanityPageSeo
+  menuSeo?: SanityPageSeo
+  gallerySeo?: SanityPageSeo
+  // JSON-LD
+  cuisineType?: string
+  jsonLdDescription?: string
 }
 
 export interface SanityDailySpecial {

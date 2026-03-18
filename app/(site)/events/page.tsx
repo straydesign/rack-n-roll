@@ -5,6 +5,7 @@ import { NavigableSection } from '@/components/NavigableSection'
 import { EventsPageSkeleton, FooterSkeleton } from '@/components/Skeletons'
 import EventsPageHero from '@/components/events/EventsPageHero'
 import { getDailySpecials, getFlyers, getCalendarEvents, getSiteSettings } from '@/lib/queries'
+import { buildPageMetadata } from '@/lib/metadata'
 import { urlFor } from '@/lib/sanity'
 import type { DailySpecial } from '@/data/events'
 import type { SanityDailySpecial } from '@/lib/types'
@@ -19,14 +20,17 @@ const Footer = dynamic(
   { loading: () => <FooterSkeleton /> }
 )
 
-export const metadata: Metadata = {
-  title: "Events & Specials — Rack N Roll",
-  description: "Weekly specials, karaoke nights, and upcoming events at Rack N Roll in Erie, PA. $2 pint nights, sing-alongs, and more.",
-  openGraph: {
-    title: "Events & Specials — Rack N Roll",
-    description: "Weekly specials, karaoke nights, and upcoming events at Rack N Roll in Erie, PA.",
-    type: "website",
-  },
+const EVENTS_DEFAULTS = {
+  title: 'Events & Specials \u2014 Rack N Roll',
+  description:
+    'Weekly specials, karaoke nights, and upcoming events at Rack N Roll in Erie, PA. $2 pint nights, sing-alongs, and more.',
+  ogDescription:
+    'Weekly specials, karaoke nights, and upcoming events at Rack N Roll in Erie, PA.',
+} as const
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  return buildPageMetadata(settings?.eventsSeo, settings, EVENTS_DEFAULTS)
 }
 
 function toLocalSpecials(sanity: SanityDailySpecial[]): DailySpecial[] {

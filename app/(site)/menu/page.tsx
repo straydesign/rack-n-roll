@@ -5,6 +5,7 @@ import { NavigableSection } from '@/components/NavigableSection'
 import { MenuPageSkeleton, FooterSkeleton } from '@/components/Skeletons'
 import MenuPageHero from '@/components/menu/MenuPageHero'
 import { getMenuCategories, getSiteSettings } from '@/lib/queries'
+import { buildPageMetadata } from '@/lib/metadata'
 import type { MenuCategory } from '@/data/events'
 import type { SanityMenuCategory } from '@/lib/types'
 
@@ -18,14 +19,17 @@ const Footer = dynamic(
   { loading: () => <FooterSkeleton /> }
 )
 
-export const metadata: Metadata = {
-  title: "Menu — Rack N Roll",
-  description: "Full menu at Rack N Roll in Erie, PA. Burgers, wings, appetizers, nachos, salads, and sweet treats. Kitchen opens at 4 PM.",
-  openGraph: {
-    title: "Menu — Rack N Roll",
-    description: "Full menu at Rack N Roll in Erie, PA. Burgers, wings, appetizers, and more.",
-    type: "website",
-  },
+const MENU_DEFAULTS = {
+  title: 'Menu \u2014 Rack N Roll',
+  description:
+    'Full menu at Rack N Roll in Erie, PA. Burgers, wings, appetizers, nachos, salads, and sweet treats. Kitchen opens at 4 PM.',
+  ogDescription:
+    'Full menu at Rack N Roll in Erie, PA. Burgers, wings, appetizers, and more.',
+} as const
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  return buildPageMetadata(settings?.menuSeo, settings, MENU_DEFAULTS)
 }
 
 function toLocalMenu(sanity: SanityMenuCategory[]): MenuCategory[] {

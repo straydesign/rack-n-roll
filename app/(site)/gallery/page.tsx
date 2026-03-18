@@ -5,6 +5,7 @@ import { NavigableSection } from '@/components/NavigableSection'
 import { GalleryPageSkeleton, FooterSkeleton } from '@/components/Skeletons'
 import GalleryPageHero from '@/components/gallery/GalleryPageHero'
 import { getGalleryImages, getSiteSettings } from '@/lib/queries'
+import { buildPageMetadata } from '@/lib/metadata'
 import { urlFor } from '@/lib/sanity'
 import type { GalleryImage } from '@/data/events'
 
@@ -18,14 +19,15 @@ const Footer = dynamic(
   { loading: () => <FooterSkeleton /> }
 )
 
-export const metadata: Metadata = {
-  title: "Gallery — Rack N Roll",
-  description: "Photos from karaoke nights, specials, and good times at Rack N Roll in Erie, PA.",
-  openGraph: {
-    title: "Gallery — Rack N Roll",
-    description: "Photos from karaoke nights, specials, and good times at Rack N Roll in Erie, PA.",
-    type: "website",
-  },
+const GALLERY_DEFAULTS = {
+  title: 'Gallery \u2014 Rack N Roll',
+  description:
+    'Photos from karaoke nights, specials, and good times at Rack N Roll in Erie, PA.',
+} as const
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  return buildPageMetadata(settings?.gallerySeo, settings, GALLERY_DEFAULTS)
 }
 
 export default async function GalleryPage() {

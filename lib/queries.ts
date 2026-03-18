@@ -24,13 +24,42 @@ export async function getSiteSettings(): Promise<SanitySiteSettings | null> {
     `*[_type == "siteSettings"][0]{
       bannerEnabled,
       bannerText,
-      address,
+      businessName,
       phone,
+      addressStreet,
+      addressCity,
+      addressState,
+      addressZip,
+      address,
       hours,
       closedDays,
       amenities,
       hiringEnabled,
-      hiringText
+      hiringText,
+      siteName,
+      defaultOgImage,
+      "homeSeo": {
+        "metaTitle": homeMetaTitle,
+        "metaDescription": homeMetaDescription,
+        "ogImage": homeOgImage
+      },
+      "eventsSeo": {
+        "metaTitle": eventsMetaTitle,
+        "metaDescription": eventsMetaDescription,
+        "ogImage": eventsOgImage
+      },
+      "menuSeo": {
+        "metaTitle": menuMetaTitle,
+        "metaDescription": menuMetaDescription,
+        "ogImage": menuOgImage
+      },
+      "gallerySeo": {
+        "metaTitle": galleryMetaTitle,
+        "metaDescription": galleryMetaDescription,
+        "ogImage": galleryOgImage
+      },
+      cuisineType,
+      jsonLdDescription
     }`,
     null
   )
