@@ -145,7 +145,7 @@ export default function Header() {
           whileTap={{ scale: 0.98 }}
         >
           <Image
-            src="/rack.svg"
+            src="/racknroll.svg"
             alt="Rack N Roll"
             width={150}
             height={150}

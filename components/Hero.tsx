@@ -187,10 +187,11 @@ export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled 
           className="relative z-10 flex flex-col items-center justify-center px-6 text-center min-h-dvh"
         >
 
-          {/* Logo — small spinning chrome */}
-          <SpinningLogo3D
-            className="w-[220px] h-[220px] md:w-[320px] md:h-[320px] mb-2 -mt-4 md:-mt-8"
-            cameraZ={3.8}
+          {/* Logo — static SVG */}
+          <img
+            src="/rack.svg"
+            alt="Rack N Roll"
+            className="w-[220px] md:w-[320px] h-auto mb-2 -mt-4 md:-mt-8"
           />
 
           {/* Announcement banner */}
