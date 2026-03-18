@@ -4,12 +4,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useScroll, useTransform } from 'framer-motion'
 import { Mic, Music, Beer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import dynamic from 'next/dynamic'
-
-const SpinningLogo3D = dynamic(() => import('./SpinningLogo3D'), {
-  ssr: false,
-  loading: () => <div className="w-[220px] h-[220px] md:w-[320px] md:h-[320px]" />,
-})
 
 const cn = (...classes: (string | boolean | undefined)[]) =>
   classes.filter(Boolean).join(' ')
