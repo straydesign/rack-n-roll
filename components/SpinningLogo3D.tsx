@@ -1,13 +1,12 @@
 "use client";
 
-import { Component, Suspense, useRef, useEffect, useMemo } from "react";
+import { Component, Suspense, useRef, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Environment } from "@react-three/drei";
-import { motion } from "framer-motion";
+import Image from "next/image";
 import * as THREE from "three";
 
-// Error boundary — if WebGL/Three.js fails, render nothing instead of crashing the page
 class WebGLErrorBoundary extends Component<
   { children: ReactNode; fallback?: ReactNode },
   { hasError: boolean }
@@ -16,40 +15,49 @@ class WebGLErrorBoundary extends Component<
     super(props);
     this.state = { hasError: false };
   }
-
   static getDerivedStateFromError() {
     return { hasError: true };
   }
-
-  componentDidCatch() {
-    console.warn("SpinningLogo3D: WebGL/Three.js failed, hiding 3D logo");
-  }
-
   render() {
     if (this.state.hasError) return this.props.fallback ?? null;
     return this.props.children;
   }
 }
 
-function LogoModel({ spinning = true }: { spinning?: boolean }) {
-  const groupRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF("/images/logo.glb");
+function StaticLogo({ className }: { className?: string }) {
+  return (
+    <div className={`flex items-center justify-center ${className ?? ""}`}>
+      <div className="w-2/3 h-2/3 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-black/20">
+        <Image
+          src="/logo.jpg"
+          alt="Rack N Roll"
+          width={200}
+          height={200}
+          className="w-3/4 h-3/4 object-contain"
+          priority
+        />
+      </div>
+    </div>
+  );
+}
 
+function LogoModel({ spinning = true, onReady }: { spinning?: boolean; onReady?: () => void }) {
+  const groupRef = useRef<THREE.Group>(null);
+  const readyFired = useRef(false);
+  const { scene } = useGLTF("/images/logo.glb");
   const clonedScene = useMemo(() => scene.clone(), [scene]);
 
   useEffect(() => {
     if (!groupRef.current) return;
-
     const box = new THREE.Box3().setFromObject(groupRef.current);
     const size = box.getSize(new THREE.Vector3());
     const center = box.getCenter(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 1.1 / maxDim;
-
+    const scale = 1.5 / maxDim;
     groupRef.current.scale.setScalar(scale);
     groupRef.current.position.set(
       -center.x * scale,
-      -center.y * scale - 0.58,
+      -center.y * scale - 0.09,
       -center.z * scale
     );
   }, [clonedScene]);
@@ -57,6 +65,11 @@ function LogoModel({ spinning = true }: { spinning?: boolean }) {
   useFrame((_state, delta) => {
     if (groupRef.current && spinning) {
       groupRef.current.rotation.y += delta * 1.2;
+    }
+    // Signal ready after the first frame with the model actually rendering
+    if (!readyFired.current && groupRef.current) {
+      readyFired.current = true;
+      onReady?.();
     }
   });
 
@@ -67,41 +80,53 @@ function LogoModel({ spinning = true }: { spinning?: boolean }) {
   );
 }
 
+useGLTF.preload("/images/logo.glb");
+
 export default function SpinningLogo3D({
   className = "",
   spinning = true,
-  cameraZ = 4.5,
+  cameraZ = 3.8,
 }: {
   className?: string;
   spinning?: boolean;
   cameraZ?: number;
 }) {
-  return (
-    <WebGLErrorBoundary>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-        className={className}
-      >
-        <Canvas
-          camera={{ position: [0, 0, cameraZ], fov: 30 }}
-          gl={{ alpha: true, antialias: true }}
-          style={{ background: "transparent" }}
-        >
-          <Environment preset="sunset" environmentIntensity={3.0} />
-          <ambientLight intensity={3.0} />
-          <directionalLight position={[5, 8, 5]} intensity={8.0} />
-          <directionalLight position={[-5, 5, 3]} intensity={5.0} />
-          <directionalLight position={[0, -3, 5]} intensity={4.0} />
-          <directionalLight position={[3, 0, -4]} intensity={3.0} />
-          <directionalLight position={[0, 5, 0]} intensity={4.0} />
+  const [canvasReady, setCanvasReady] = useState(false);
 
-          <Suspense fallback={null}>
-            <LogoModel spinning={spinning} />
-          </Suspense>
-        </Canvas>
-      </motion.div>
+  return (
+    <WebGLErrorBoundary fallback={<StaticLogo className={className} />}>
+      <div className={`relative ${className}`}>
+        {/* Static placeholder — sits behind, visible until canvas paints over it */}
+        {!canvasReady && (
+          <div className="absolute inset-0 z-[1]">
+            <StaticLogo className="w-full h-full" />
+          </div>
+        )}
+
+        {/* 3D Canvas — fades in on top */}
+        <div
+          className="w-full h-full relative z-[2] transition-opacity duration-700"
+          style={{ opacity: canvasReady ? 1 : 0 }}
+        >
+          <Canvas
+            camera={{ position: [0, 0, cameraZ], fov: 30 }}
+            gl={{ alpha: true, antialias: true }}
+            style={{ background: "transparent" }}
+          >
+            <Environment preset="sunset" environmentIntensity={3.0} />
+            <ambientLight intensity={3.0} />
+            <directionalLight position={[5, 8, 5]} intensity={8.0} />
+            <directionalLight position={[-5, 5, 3]} intensity={5.0} />
+            <directionalLight position={[0, -3, 5]} intensity={4.0} />
+            <directionalLight position={[3, 0, -4]} intensity={3.0} />
+            <directionalLight position={[0, 5, 0]} intensity={4.0} />
+
+            <Suspense fallback={null}>
+              <LogoModel spinning={spinning} onReady={() => setCanvasReady(true)} />
+            </Suspense>
+          </Canvas>
+        </div>
+      </div>
     </WebGLErrorBoundary>
   );
 }
