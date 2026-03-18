@@ -20,6 +20,13 @@ export const galleryImage = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'facebookPostId',
+      title: 'Facebook Post ID',
+      type: 'string',
+      description: 'Auto-populated when imported from Facebook. Used to prevent duplicates.',
+      readOnly: true,
+    }),
+    defineField({
       name: 'featured',
       title: 'Featured',
       type: 'boolean',

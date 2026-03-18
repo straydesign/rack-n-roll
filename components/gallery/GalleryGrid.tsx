@@ -75,7 +75,7 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
       <div className="noise absolute inset-0 pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
+        <div className="columns-3 gap-4">
           {galleryImages.map((image, i) => (
             <motion.div
               key={image.src}
@@ -87,6 +87,7 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
             >
               <button
                 onClick={() => setLightboxIndex(i)}
+                aria-label={`View photo: ${image.alt}`}
                 className="group relative block w-full rounded-2xl overflow-hidden cursor-pointer"
               >
                 {loadedImages.has(image.src) ? (

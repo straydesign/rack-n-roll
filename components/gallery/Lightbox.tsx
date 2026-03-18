@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { GalleryImage } from '@/data/events'
+import { useFocusTrap } from '@/lib/useFocusTrap'
 
 const ease = [0.33, 1, 0.68, 1] as const
 
@@ -17,6 +18,8 @@ interface LightboxProps {
 export default function Lightbox({ images, index, onClose, onPrev, onNext }: LightboxProps) {
   const isOpen = index !== null
   const image = index !== null ? images[index] : null
+  const dialogRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(dialogRef, isOpen)
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -49,6 +52,10 @@ export default function Lightbox({ images, index, onClose, onPrev, onNext }: Lig
     <AnimatePresence>
       {isOpen && image && (
         <motion.div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image lightbox"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

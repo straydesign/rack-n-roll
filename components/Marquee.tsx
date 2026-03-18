@@ -34,12 +34,8 @@ export default function Marquee() {
         style={{ skewY: skew }}
         className="py-5 sm:py-6"
       >
-        {/* Row 1 — left */}
-        <motion.div
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{ repeat: Infinity, duration: 25, ease: 'linear' }}
-          className="flex whitespace-nowrap mb-1"
-        >
+        {/* Row 1 — left (CSS animation) */}
+        <div className="flex whitespace-nowrap mb-1 animate-marquee-left will-change-transform">
           {[...Array(6)].map((_, i) => (
             <span
               key={`a-${i}`}
@@ -48,14 +44,10 @@ export default function Marquee() {
               {text}
             </span>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Row 2 — right (offset direction) */}
-        <motion.div
-          animate={{ x: ['-50%', '0%'] }}
-          transition={{ repeat: Infinity, duration: 30, ease: 'linear' }}
-          className="flex whitespace-nowrap"
-        >
+        {/* Row 2 — right (CSS animation) */}
+        <div className="flex whitespace-nowrap animate-marquee-right will-change-transform">
           {[...Array(6)].map((_, i) => (
             <span
               key={`b-${i}`}
@@ -64,7 +56,7 @@ export default function Marquee() {
               {text}
             </span>
           ))}
-        </motion.div>
+        </div>
       </motion.div>
 
       {/* Bottom line */}

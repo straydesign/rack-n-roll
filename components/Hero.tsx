@@ -29,23 +29,23 @@ function AuroraBackground({
       )}
       {...props}
     >
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0">
         <div
           className={cn(
             `[--green-gradient:repeating-linear-gradient(100deg,var(--green)_0%,var(--green)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--green)_16%)]
             [--dark-gradient:repeating-linear-gradient(100deg,var(--black)_0%,var(--black)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--black)_16%)]
-            [--aurora:repeating-linear-gradient(100deg,#1A7A3A_10%,#22c55e_15%,#16a34a_20%,#15803d_25%,#1A7A3A_30%)]
+            [--aurora:repeating-linear-gradient(100deg,#1A7A3A_8%,#22c55e_18%,#16a34a_28%,#15803d_38%,#1A7A3A_48%)]
             [background-image:var(--dark-gradient),var(--aurora)]
             [background-size:300%,_200%]
             [background-position:50%_50%,50%_50%]
-            filter blur-[10px] invert-0
+            filter blur-[30px] invert-0
             after:content-[""] after:absolute after:inset-0 after:[background-image:var(--dark-gradient),var(--aurora)]
             after:[background-size:200%,_100%]
             after:animate-aurora after:[background-attachment:fixed] after:mix-blend-difference
             pointer-events-none
-            absolute -inset-[10px] opacity-50`,
+            absolute -inset-[50px] opacity-50`,
             showRadialGradient &&
-              `[mask-image:radial-gradient(ellipse_at_100%_0%,black_10%,var(--transparent)_70%)]`
+              `[mask-image:radial-gradient(ellipse_at_100%_0%,black_5%,rgba(0,0,0,0.6)_30%,rgba(0,0,0,0.2)_55%,var(--transparent)_80%)]`
           )}
           style={{ '--green': '#1A7A3A', '--black': '#000000', '--transparent': 'transparent' } as React.CSSProperties}
         />

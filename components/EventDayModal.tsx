@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { CalendarEvent } from '@/data/events'
+import { useFocusTrap } from '@/lib/useFocusTrap'
 
 const ease = [0.33, 1, 0.68, 1] as const
 
@@ -14,6 +15,8 @@ interface EventDayModalProps {
 
 export default function EventDayModal({ date, events, onClose }: EventDayModalProps) {
   const isOpen = date !== null && events.length > 0
+  const dialogRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(dialogRef, isOpen)
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -62,6 +65,10 @@ export default function EventDayModal({ date, events, onClose }: EventDayModalPr
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Events for ${formattedDate}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

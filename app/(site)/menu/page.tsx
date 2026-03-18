@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import Header from '@/components/Header'
+import { NavigableSection } from '@/components/NavigableSection'
 import { MenuPageSkeleton, FooterSkeleton } from '@/components/Skeletons'
 import MenuPageHero from '@/components/menu/MenuPageHero'
 import { getMenuCategories, getSiteSettings } from '@/lib/queries'
@@ -47,12 +48,18 @@ export default async function MenuPage() {
   const menuData = sanityMenu.length > 0 ? toLocalMenu(sanityMenu) : undefined
 
   return (
-    <main>
+    <main id="main-content">
       <Header />
       <div className="pt-16">
-        <MenuPageHero />
-        <MenuPageContent menuData={menuData} />
-        <Footer siteSettings={siteSettings} />
+        <NavigableSection id="menu-hero" label="Menu">
+          <MenuPageHero />
+        </NavigableSection>
+        <NavigableSection id="menu-content" label="Menu Items">
+          <MenuPageContent menuData={menuData} />
+        </NavigableSection>
+        <NavigableSection id="footer" label="Footer" excludeFromScrollSpy>
+          <Footer siteSettings={siteSettings} />
+        </NavigableSection>
       </div>
     </main>
   )

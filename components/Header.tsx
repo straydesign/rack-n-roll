@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -14,7 +14,6 @@ type NavLink = {
 
 const links: NavLink[] = [
   { label: 'About', href: '#about', type: 'anchor' },
-  { label: 'Schedule', href: '#events', type: 'anchor' },
   { label: 'Events', href: '/events', type: 'page' },
   { label: 'Menu', href: '/menu', type: 'page' },
   { label: 'Gallery', href: '/gallery', type: 'page' },
@@ -24,32 +23,58 @@ const links: NavLink[] = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileMenuFocusIndex, setMobileMenuFocusIndex] = useState(0)
   const pathname = usePathname()
   const router = useRouter()
   const isHome = pathname === '/'
 
+  // Refs for desktop nav items (roving tabindex)
+  const desktopNavRefs = useRef<(HTMLElement | null)[]>([])
+  // Refs for mobile menu items
+  const mobileNavRefs = useRef<(HTMLElement | null)[]>([])
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60)
+    const onScroll = () => {
+      const shouldBeScrolled = window.scrollY > 60
+      setScrolled((prev) => (prev === shouldBeScrolled ? prev : shouldBeScrolled))
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const handleClick = (link: NavLink) => {
-    setMobileOpen(false)
-
-    if (link.type === 'page') {
-      router.push(link.href)
-      return
+  // Escape key closes mobile menu
+  useEffect(() => {
+    if (!mobileOpen) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileOpen(false)
     }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [mobileOpen])
 
-    // Anchor link
-    if (isHome) {
-      const el = document.querySelector(link.href)
-      el?.scrollIntoView({ behavior: 'smooth' })
-    } else {
-      router.push('/' + link.href)
+  // Focus the active mobile menu item when index changes
+  useEffect(() => {
+    if (mobileOpen) {
+      mobileNavRefs.current[mobileMenuFocusIndex]?.focus()
     }
-  }
+  }, [mobileOpen, mobileMenuFocusIndex])
+
+  const handleClick = useCallback(
+    (link: NavLink) => {
+      setMobileOpen(false)
+      if (link.type === 'page') {
+        router.push(link.href)
+        return
+      }
+      if (isHome) {
+        const el = document.querySelector(link.href)
+        el?.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        router.push('/' + link.href)
+      }
+    },
+    [isHome, router]
+  )
 
   const handleLogoClick = () => {
     setMobileOpen(false)
@@ -65,32 +90,85 @@ export default function Header() {
     return false
   }
 
+  // Desktop nav: Arrow Left/Right between items
+  const handleDesktopNavKeyDown = (e: React.KeyboardEvent, index: number) => {
+    let nextIndex: number | null = null
+    if (e.key === 'ArrowRight') {
+      e.preventDefault()
+      nextIndex = index < links.length - 1 ? index + 1 : 0
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault()
+      nextIndex = index > 0 ? index - 1 : links.length - 1
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      nextIndex = 0
+    } else if (e.key === 'End') {
+      e.preventDefault()
+      nextIndex = links.length - 1
+    }
+    if (nextIndex !== null) {
+      desktopNavRefs.current[nextIndex]?.focus()
+    }
+  }
+
+  // Mobile menu: Arrow Up/Down between items
+  const handleMobileNavKeyDown = (e: React.KeyboardEvent, index: number) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setMobileMenuFocusIndex(index < links.length - 1 ? index + 1 : 0)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setMobileMenuFocusIndex(index > 0 ? index - 1 : links.length - 1)
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      setMobileMenuFocusIndex(0)
+    } else if (e.key === 'End') {
+      e.preventDefault()
+      setMobileMenuFocusIndex(links.length - 1)
+    }
+  }
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-charcoal/90 backdrop-blur-2xl border-b border-cream/[0.06] shadow-lg shadow-black/20'
+          ? 'bg-charcoal/90 backdrop-blur-lg border-b border-cream/[0.06] shadow-lg shadow-black/20'
           : 'bg-transparent'
       }`}
     >
-      <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between h-12">
+      <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between h-14 md:h-12">
         {/* Logo */}
         <motion.button
           onClick={handleLogoClick}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 flex-shrink-0"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <Image src="/racknroll.svg" alt="Rack N Roll" width={150} height={150} className="h-28 w-auto md:h-32 -mt-2" />
+          <Image
+            src="/racknroll.svg"
+            alt="Rack N Roll"
+            width={150}
+            height={150}
+            className="h-[100px] w-auto md:h-[280px] md:mt-[4px]"
+          />
         </motion.button>
 
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-1">
-          {links.map((link) =>
+        {/* Badge */}
+        <span className="px-3 py-1 text-[9px] md:px-4 md:py-1.5 md:text-[12px] font-bold uppercase tracking-[0.12em] md:tracking-[0.15em] text-white bg-green rounded-full whitespace-nowrap">
+          Erie&rsquo;s Premier Karaoke Bar
+        </span>
+
+        {/* Desktop links — roving tabindex with Arrow Left/Right */}
+        <div className="hidden md:flex items-center gap-1" role="navigation" aria-label="Main navigation">
+          {links.map((link, i) =>
             link.type === 'page' ? (
               <Link
                 key={link.label}
+                ref={(el) => {
+                  desktopNavRefs.current[i] = el
+                }}
                 href={link.href}
+                onKeyDown={(e) => handleDesktopNavKeyDown(e, i)}
                 className={`px-4 py-2 text-xs font-medium uppercase tracking-[0.15em] hover:text-green transition-colors duration-300 rounded-full ${
                   isActive(link)
                     ? 'text-green'
@@ -104,7 +182,11 @@ export default function Header() {
             ) : (
               <button
                 key={link.label}
+                ref={(el) => {
+                  desktopNavRefs.current[i] = el
+                }}
                 onClick={() => handleClick(link)}
+                onKeyDown={(e) => handleDesktopNavKeyDown(e, i)}
                 className={`px-4 py-2 text-xs font-medium uppercase tracking-[0.15em] hover:text-green transition-colors duration-300 rounded-full ${
                   scrolled
                     ? 'text-cream/70 hover:bg-cream/[0.06]'
@@ -115,19 +197,18 @@ export default function Header() {
               </button>
             )
           )}
-          <a
-            href="tel:+18148643535"
-            className="ml-3 px-4 py-2 text-xs font-semibold text-green border border-green/20 rounded-full hover:bg-green/10 transition-all duration-300 uppercase tracking-wider"
-          >
-            Call Us
-          </a>
         </div>
 
         {/* Mobile hamburger */}
         <button
-          onClick={() => setMobileOpen(!mobileOpen)}
+          onClick={() => {
+            setMobileOpen(!mobileOpen)
+            if (!mobileOpen) setMobileMenuFocusIndex(0)
+          }}
           className="md:hidden flex flex-col gap-1.5 p-2"
-          aria-label="Menu"
+          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-menu"
         >
           <motion.span
             animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
@@ -144,10 +225,13 @@ export default function Header() {
         </button>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — Arrow Up/Down navigation */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
+            id="mobile-menu"
+            role="navigation"
+            aria-label="Mobile navigation"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -164,8 +248,12 @@ export default function Header() {
                     transition={{ delay: i * 0.05, duration: 0.3 }}
                   >
                     <Link
+                      ref={(el) => {
+                        mobileNavRefs.current[i] = el
+                      }}
                       href={link.href}
                       onClick={() => setMobileOpen(false)}
+                      onKeyDown={(e) => handleMobileNavKeyDown(e, i)}
                       className={`block text-left py-3 text-sm uppercase tracking-[0.15em] transition-colors border-b border-cream/[0.04] last:border-0 ${
                         isActive(link) ? 'text-green' : 'text-cream/60 hover:text-green'
                       }`}
@@ -174,27 +262,25 @@ export default function Header() {
                     </Link>
                   </motion.div>
                 ) : (
-                  <motion.button
+                  <motion.div
                     key={link.label}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05, duration: 0.3 }}
-                    onClick={() => handleClick(link)}
-                    className="text-left py-3 text-sm text-cream/60 uppercase tracking-[0.15em] hover:text-green transition-colors border-b border-cream/[0.04] last:border-0"
                   >
-                    {link.label}
-                  </motion.button>
+                    <button
+                      ref={(el) => {
+                        mobileNavRefs.current[i] = el
+                      }}
+                      onClick={() => handleClick(link)}
+                      onKeyDown={(e) => handleMobileNavKeyDown(e, i)}
+                      className="w-full text-left py-3 text-sm text-cream/60 uppercase tracking-[0.15em] hover:text-green transition-colors border-b border-cream/[0.04] last:border-0"
+                    >
+                      {link.label}
+                    </button>
+                  </motion.div>
                 )
               )}
-              <motion.a
-                href="tel:+18148643535"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: links.length * 0.05, duration: 0.3 }}
-                className="mt-3 text-center py-3 text-sm font-semibold text-green border border-green/20 rounded-full hover:bg-green/10 transition-all uppercase tracking-wider"
-              >
-                (814) 864-3535
-              </motion.a>
             </div>
           </motion.div>
         )}

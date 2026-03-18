@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useInView, useMotionValue, useSpring } from 'framer-motion'
 
 interface AnimatedCounterProps {
@@ -26,7 +26,6 @@ export default function AnimatedCounter({
     damping: 25,
     duration: duration * 1000,
   })
-  const [display, setDisplay] = useState('0')
 
   useEffect(() => {
     if (isInView) {
@@ -36,21 +35,21 @@ export default function AnimatedCounter({
 
   useEffect(() => {
     const unsubscribe = spring.on('change', (latest) => {
+      if (!ref.current) return
       const rounded = Math.round(latest)
       if (value >= 1000) {
-        // Format as "20K" style
         const k = latest / 1000
-        setDisplay(k >= 1 ? `${Math.round(k)}K` : `${rounded}`)
+        ref.current.textContent = `${prefix}${k >= 1 ? `${Math.round(k)}K` : `${rounded}`}${suffix}`
       } else {
-        setDisplay(`${rounded}`)
+        ref.current.textContent = `${prefix}${rounded}${suffix}`
       }
     })
     return unsubscribe
-  }, [spring, value])
+  }, [spring, value, prefix, suffix])
 
   return (
     <span ref={ref} className={className}>
-      {prefix}{display}{suffix}
+      {prefix}0{suffix}
     </span>
   )
 }

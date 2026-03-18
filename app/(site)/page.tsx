@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic'
 import Hero from '@/components/Hero'
 import Header from '@/components/Header'
+import { NavigableSection } from '@/components/NavigableSection'
 import { getSiteSettings, getDailySpecials } from '@/lib/queries'
 import type { DailySpecial } from '@/data/events'
 import type { SanityDailySpecial } from '@/lib/types'
@@ -38,38 +39,36 @@ export default async function Home() {
   const specials = sanitySpecials.length > 0 ? toLocalSpecials(sanitySpecials) : undefined
 
   return (
-    <main>
+    <main id="main-content">
       <Header />
-      <Hero
-        bannerEnabled={siteSettings?.bannerEnabled}
-        bannerText={siteSettings?.bannerText}
-        hiringEnabled={siteSettings?.hiringEnabled}
-        hiringText={siteSettings?.hiringText}
-      />
+      <NavigableSection id="hero" label="Hero">
+        <Hero
+          bannerEnabled={siteSettings?.bannerEnabled}
+          bannerText={siteSettings?.bannerText}
+          hiringEnabled={siteSettings?.hiringEnabled}
+          hiringText={siteSettings?.hiringText}
+        />
+      </NavigableSection>
       <div className="relative z-20">
-        {/* Light section: About + Schedule */}
-        <div id="about">
+        <NavigableSection id="about" label="About">
           <About />
-        </div>
+        </NavigableSection>
         <div className="hr-glow max-w-4xl mx-auto" />
-        {/* Dark section: Events */}
-        <div id="events">
+        <NavigableSection id="events" label="Events">
           <EventsSection specials={specials} />
-        </div>
-        {/* Light section: Menu */}
-        <div id="menu">
+        </NavigableSection>
+        <NavigableSection id="menu" label="Menu">
           <Menu />
-        </div>
-        {/* Dark section: Reviews */}
-        <div id="reviews">
+        </NavigableSection>
+        <NavigableSection id="reviews" label="Reviews">
           <Reviews />
-        </div>
-        {/* Dark section: Info */}
-        <div id="info">
+        </NavigableSection>
+        <NavigableSection id="info" label="Find Us">
           <Info siteSettings={siteSettings} />
-        </div>
-        {/* Footer */}
-        <Footer siteSettings={siteSettings} />
+        </NavigableSection>
+        <NavigableSection id="footer" label="Footer" excludeFromScrollSpy>
+          <Footer siteSettings={siteSettings} />
+        </NavigableSection>
       </div>
     </main>
   )

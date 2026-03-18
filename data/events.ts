@@ -1,3 +1,22 @@
+// --- Types ---
+
+export type DayOfWeek = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+
+export interface DailySpecial {
+  day: DayOfWeek;
+  closed: boolean;
+  specials: string[];
+  karaoke?: string;
+  hours?: string;
+}
+
+export interface CalendarEvent {
+  date: string;        // ISO "2026-03-18"
+  title: string;
+  description: string;
+  time?: string;
+}
+
 export interface Event {
   date: string;
   title: string;
@@ -118,10 +137,8 @@ export const galleryImages: GalleryImage[] = [
   { src: "/gallery/karaoke-night-1.jpg", alt: "Karaoke night at Rack N Roll", width: 1200, height: 1600, featured: true },
   { src: "/gallery/crowd-singing.jpg", alt: "Crowd singing along", width: 1200, height: 1593, featured: true },
   { src: "/gallery/bar-interior.jpg", alt: "The bar at Rack N Roll", width: 1200, height: 675, featured: true },
-  { src: "/gallery/wings-special.jpg", alt: "Wing night special", width: 1200, height: 1600 },
   { src: "/gallery/friday-night.jpg", alt: "Friday night vibes", width: 1200, height: 1600 },
   { src: "/gallery/stage-lights.jpg", alt: "Stage lights and karaoke", width: 1200, height: 1600 },
-  { src: "/gallery/pint-night.jpg", alt: "$2 pint night", width: 1080, height: 1920 },
   { src: "/gallery/saturday-crowd.jpg", alt: "Saturday night crowd", width: 1200, height: 676 },
   { src: "/gallery/good-times.jpg", alt: "Good times at Rack N Roll", width: 1200, height: 1600 },
   { src: "/gallery/trivia-night.jpg", alt: "Trivia night at Rack N Roll", width: 1080, height: 1920 },
@@ -224,8 +241,7 @@ export interface Review {
   date: string;
 }
 
-export const googleRating = 4.2;
-export const googleReviewCount = 441;
+export const googleFiveStarCount = 312;
 
 export const reviews: Review[] = [
   {
@@ -246,4 +262,82 @@ export const reviews: Review[] = [
     rating: 5,
     date: "Jan 2026",
   },
+];
+
+// --- Daily Specials (Mon–Sun, used in WeeklySpecials component) ---
+
+export const dailySpecials: DailySpecial[] = [
+  {
+    day: 'Monday',
+    closed: true,
+    specials: [],
+  },
+  {
+    day: 'Tuesday',
+    closed: false,
+    specials: ['Busch Light Bucket — 4 for $10', 'Kitchen opens 4 PM'],
+    karaoke: '9:30 PM w/ Preach',
+    hours: '3 PM – 2 AM',
+  },
+  {
+    day: 'Wednesday',
+    closed: false,
+    specials: ['Trivia Night w/ JR 8–10 PM', '$0.50 Boneless Wings', 'Busch Light Bucket — 4 for $10'],
+    karaoke: '9:30 PM (after Trivia)',
+    hours: '3 PM – 2 AM',
+  },
+  {
+    day: 'Thursday',
+    closed: false,
+    specials: ['Busch Light Bucket — 4 for $10', 'Kitchen opens 4 PM'],
+    karaoke: '9:30 PM w/ DJ Paul Amann',
+    hours: '3 PM – 2 AM',
+  },
+  {
+    day: 'Friday',
+    closed: false,
+    specials: ['Darts Tournament 7 PM', 'Busch Light Bucket — 4 for $10'],
+    karaoke: '9:30 PM w/ DJ Paul Amann',
+    hours: '3 PM – 2 AM',
+  },
+  {
+    day: 'Saturday',
+    closed: false,
+    specials: ['The Big Night', 'Busch Light Bucket — 4 for $10'],
+    karaoke: '9:30 PM w/ DJ Paul Amann',
+    hours: '3 PM – 2 AM',
+  },
+  {
+    day: 'Sunday',
+    closed: true,
+    specials: [],
+  },
+];
+
+// --- Calendar Events (seed data for March/April 2026) ---
+
+export const calendarEvents: CalendarEvent[] = [
+  // March 2026 — Trivia Wednesdays
+  { date: '2026-03-04', title: 'Trivia Night w/ JR', description: 'Movie trivia, general knowledge — it rotates. 8–10 PM.', time: '8:00 PM' },
+  { date: '2026-03-11', title: 'Trivia Night w/ JR', description: 'Test your knowledge. 8–10 PM. Karaoke follows.', time: '8:00 PM' },
+  { date: '2026-03-18', title: 'Trivia Night w/ JR', description: 'Wednesday trivia + karaoke at 9:30.', time: '8:00 PM' },
+  { date: '2026-03-25', title: 'Trivia Night w/ JR', description: 'Trivia 8–10 PM. Karaoke follows at 9:30.', time: '8:00 PM' },
+  // March 2026 — Darts Fridays
+  { date: '2026-03-06', title: 'Darts Blind Draw', description: 'Mojo Dart Gear blind draw. $10 entry. Darts fly at 7 PM.', time: '7:00 PM' },
+  { date: '2026-03-13', title: 'Darts Blind Draw', description: 'Mojo Dart Gear blind draw. $10 entry. Added money.', time: '7:00 PM' },
+  { date: '2026-03-20', title: 'Darts Blind Draw', description: '$10 entry, darts at 7 PM. Kitchen open.', time: '7:00 PM' },
+  { date: '2026-03-27', title: 'Darts Blind Draw', description: 'Mojo Dart Gear blind draw. Darts fly at 7 PM.', time: '7:00 PM' },
+  // March 2026 — Special one-offs
+  { date: '2026-03-14', title: 'St. Paddy\'s Eve Party', description: 'Green beer, Irish car bombs, and karaoke. Wear green!', time: '7:00 PM' },
+  { date: '2026-03-17', title: 'St. Patrick\'s Day', description: 'All-day green beer specials. Kitchen open early. Karaoke all night.', time: '3:00 PM' },
+  // April 2026
+  { date: '2026-04-01', title: 'Trivia Night w/ JR', description: 'April Fools edition — extra tricky questions.', time: '8:00 PM' },
+  { date: '2026-04-03', title: 'Darts Blind Draw', description: 'Mojo Dart Gear blind draw. $10 entry.', time: '7:00 PM' },
+  { date: '2026-04-08', title: 'Trivia Night w/ JR', description: 'Wednesday trivia 8–10 PM.', time: '8:00 PM' },
+  { date: '2026-04-10', title: 'Darts Blind Draw', description: 'Darts fly at 7 PM. Kitchen open.', time: '7:00 PM' },
+  { date: '2026-04-15', title: 'Trivia Night w/ JR', description: 'Test your knowledge. 8–10 PM.', time: '8:00 PM' },
+  { date: '2026-04-17', title: 'Darts Blind Draw', description: 'Mojo Dart Gear blind draw. Added money.', time: '7:00 PM' },
+  { date: '2026-04-22', title: 'Trivia Night w/ JR', description: 'Trivia 8–10 PM. Karaoke follows.', time: '8:00 PM' },
+  { date: '2026-04-24', title: 'Darts Blind Draw', description: '$10 entry. Darts at 7 PM.', time: '7:00 PM' },
+  { date: '2026-04-29', title: 'Trivia Night w/ JR', description: 'Last Wednesday of April — trivia + karaoke.', time: '8:00 PM' },
 ];

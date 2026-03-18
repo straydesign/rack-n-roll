@@ -16,19 +16,16 @@ const features = [
   {
     title: 'Karaoke 5 Nights a Week',
     desc: '9:30pm to 1:30am. 20,000+ songs on KaraFun — search on your phone, queue up, and bring the house down. DJ Paul Amann keeps it moving.',
-    span: 'col-span-2',
     accent: true,
   },
   {
     title: 'Great Drink Specials',
-    desc: '$2 pints on Wednesdays. Late-night happy hour. Always a good deal.',
-    span: 'col-span-1',
+    desc: '$0.50 boneless wings on Wednesdays. Busch Light bucket — 4 for $10 every day. Always a good deal.',
     accent: false,
   },
   {
     title: 'Open Since 1989',
     desc: 'No cover. No dress code. No pretense. Just a neighborhood spot where everybody sings and the good times never stop.',
-    span: 'col-span-2',
     accent: true,
   },
 ]
@@ -107,8 +104,8 @@ export default function About() {
           ))}
         </div>
 
-        {/* Bento grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Feature cards — all side by side on desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {features.map((f, i) => (
             <motion.div
               key={f.title}
@@ -116,7 +113,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.8, delay: i * 0.08, ease }}
-              className={`${f.span} relative overflow-hidden rounded-2xl p-8 md:p-10 group cursor-default
+              className={`relative overflow-hidden rounded-2xl p-8 md:p-10 group cursor-default
                 ${f.accent
                   ? 'bg-charcoal text-cream'
                   : 'glass-light'

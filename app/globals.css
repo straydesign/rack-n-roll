@@ -8,6 +8,45 @@
   box-sizing: border-box;
 }
 
+/* Global keyboard focus indicator — green outline, never shown on mouse click */
+*:focus-visible {
+  outline: 2px solid #1A7A3A;
+  outline-offset: 2px;
+}
+
+/* Remove browser focus ring from navigable sections — custom outlines only */
+section[tabindex="-1"] {
+  outline: none;
+}
+
+/* Active section highlight (keyboard nav with Arrow Up/Down) */
+[data-nav-active] {
+  outline: 2px solid #1A7A3A;
+  outline-offset: -2px;
+  transition: outline-color 0.2s ease;
+}
+
+/* Skip-to-content link — hidden until focused via Tab */
+.skip-to-content {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background: #1A7A3A;
+  color: #FAF7F2;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
 html {
   scroll-behavior: auto;
 }
@@ -178,6 +217,41 @@ body {
 
 .animate-aurora {
   animation: aurora-shift 60s linear infinite;
+}
+
+/* Pause aurora when hero is off-screen */
+.aurora-paused .animate-aurora {
+  animation-play-state: paused;
+}
+
+/* Marquee CSS animations (compositor thread) */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 25s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 30s linear infinite;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .animate-aurora,
+  .animate-marquee-left,
+  .animate-marquee-right,
+  .pulse-subtle,
+  .gradient-border {
+    animation: none;
+  }
 }
 
 .safe-area-bottom {

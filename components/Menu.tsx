@@ -63,13 +63,13 @@ export default function Menu() {
               transition={{ duration: 0.4, delay: i * 0.08, ease }}
               className="group flex items-start gap-4 p-5 rounded-xl hover:bg-charcoal/[0.03] transition-all duration-300"
             >
-              <div className="flex-1">
-                <div className="flex items-baseline justify-between gap-4">
-                  <h4 className="font-bold text-white text-lg group-hover:text-green transition-colors duration-300">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h4 className="font-bold text-white text-base md:text-lg group-hover:text-green transition-colors duration-300 truncate">
                     {item.name}
                   </h4>
                   {item.price && (
-                    <span className="text-green font-bold text-base flex-shrink-0">{item.price}</span>
+                    <span className="text-green font-bold text-sm md:text-base flex-shrink-0">{item.price}</span>
                   )}
                 </div>
                 {item.description && (

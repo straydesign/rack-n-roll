@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Star } from 'lucide-react'
 import TextReveal from './TextReveal'
-import { reviews, googleRating, googleReviewCount } from '@/data/events'
+import { reviews, googleFiveStarCount } from '@/data/events'
 
 const ease = [0.33, 1, 0.68, 1] as const
 
@@ -69,12 +69,12 @@ export default function Reviews() {
             {Array.from({ length: 5 }).map((_, i) => (
               <Star
                 key={i}
-                className={`w-5 h-5 ${i < Math.round(googleRating) ? 'fill-amber-400 text-amber-400' : 'fill-amber-400/30 text-amber-400/30'}`}
+                className="w-5 h-5 fill-amber-400 text-amber-400"
               />
             ))}
           </div>
           <span className="text-cream/60 text-sm">
-            {googleRating} · {googleReviewCount} reviews on Google
+            {googleFiveStarCount}+ five-star reviews on Google
           </span>
         </motion.div>
 

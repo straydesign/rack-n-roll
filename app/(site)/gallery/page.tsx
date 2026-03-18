@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import Header from '@/components/Header'
+import { NavigableSection } from '@/components/NavigableSection'
 import { GalleryPageSkeleton, FooterSkeleton } from '@/components/Skeletons'
 import GalleryPageHero from '@/components/gallery/GalleryPageHero'
 import { getGalleryImages, getSiteSettings } from '@/lib/queries'
@@ -44,12 +45,18 @@ export default async function GalleryPage() {
     : undefined
 
   return (
-    <main>
+    <main id="main-content">
       <Header />
       <div className="pt-16">
-        <GalleryPageHero />
-        <GalleryGrid images={images} />
-        <Footer siteSettings={siteSettings} />
+        <NavigableSection id="gallery-hero" label="Gallery">
+          <GalleryPageHero />
+        </NavigableSection>
+        <NavigableSection id="gallery-content" label="Photos">
+          <GalleryGrid images={images} />
+        </NavigableSection>
+        <NavigableSection id="footer" label="Footer" excludeFromScrollSpy>
+          <Footer siteSettings={siteSettings} />
+        </NavigableSection>
       </div>
     </main>
   )

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import Header from '@/components/Header'
+import { NavigableSection } from '@/components/NavigableSection'
 import { EventsPageSkeleton, FooterSkeleton } from '@/components/Skeletons'
 import EventsPageHero from '@/components/events/EventsPageHero'
 import { getDailySpecials, getFlyers, getCalendarEvents, getSiteSettings } from '@/lib/queries'
@@ -65,16 +66,22 @@ export default async function EventsPage() {
     : undefined
 
   return (
-    <main>
+    <main id="main-content">
       <Header />
       <div className="pt-16">
-        <EventsPageHero />
-        <EventsPageContent
-          specials={specials}
-          flyers={flyers}
-          sanityCalendarEvents={calendarEvents}
-        />
-        <Footer siteSettings={siteSettings} />
+        <NavigableSection id="events-hero" label="Events">
+          <EventsPageHero />
+        </NavigableSection>
+        <NavigableSection id="events-content" label="Events & Specials">
+          <EventsPageContent
+            specials={specials}
+            flyers={flyers}
+            sanityCalendarEvents={calendarEvents}
+          />
+        </NavigableSection>
+        <NavigableSection id="footer" label="Footer" excludeFromScrollSpy>
+          <Footer siteSettings={siteSettings} />
+        </NavigableSection>
       </div>
     </main>
   )

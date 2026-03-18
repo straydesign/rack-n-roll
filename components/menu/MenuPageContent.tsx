@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { menu as defaultMenu } from '@/data/events'
 import type { MenuCategory } from '@/data/events'
@@ -14,20 +14,59 @@ interface MenuPageContentProps {
 export default function MenuPageContent({ menuData }: MenuPageContentProps) {
   const menu = menuData && menuData.length > 0 ? menuData : defaultMenu
   const [activeCategory, setActiveCategory] = useState(menu[0].category)
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
 
-  const activeItems = menu.find((c) => c.category === activeCategory)?.items ?? []
+  const activeIndex = menu.findIndex((c) => c.category === activeCategory)
+  const activeItems = menu[activeIndex]?.items ?? []
+
+  const focusTab = useCallback(
+    (index: number) => {
+      const clamped = ((index % menu.length) + menu.length) % menu.length
+      setActiveCategory(menu[clamped].category)
+      tabRefs.current[clamped]?.focus()
+    },
+    [menu]
+  )
+
+  const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
+    switch (e.key) {
+      case 'ArrowRight':
+        e.preventDefault()
+        focusTab(index + 1)
+        break
+      case 'ArrowLeft':
+        e.preventDefault()
+        focusTab(index - 1)
+        break
+      case 'Home':
+        e.preventDefault()
+        focusTab(0)
+        break
+      case 'End':
+        e.preventDefault()
+        focusTab(menu.length - 1)
+        break
+    }
+  }
 
   return (
     <section className="relative px-6 py-16 md:py-24 bg-charcoal text-cream overflow-hidden">
       <div className="noise absolute inset-0 pointer-events-none" />
 
       <div className="max-w-4xl mx-auto relative z-10">
-        {/* Category tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-16">
-          {menu.map((cat) => (
+        {/* Category tabs — WAI-ARIA tablist */}
+        <div role="tablist" aria-label="Menu categories" className="flex flex-wrap justify-center gap-3 mb-16">
+          {menu.map((cat, i) => (
             <button
               key={cat.category}
+              ref={(el) => { tabRefs.current[i] = el }}
+              role="tab"
+              id={`menu-tab-${i}`}
+              aria-selected={activeCategory === cat.category}
+              aria-controls={`menu-tabpanel-${i}`}
+              tabIndex={activeCategory === cat.category ? 0 : -1}
               onClick={() => setActiveCategory(cat.category)}
+              onKeyDown={(e) => handleTabKeyDown(e, i)}
               className={`relative px-6 py-2.5 text-xs font-medium uppercase tracking-[0.15em] rounded-full transition-all duration-300 ${
                 activeCategory === cat.category
                   ? 'text-charcoal'
@@ -46,10 +85,13 @@ export default function MenuPageContent({ menuData }: MenuPageContentProps) {
           ))}
         </div>
 
-        {/* Menu items */}
+        {/* Menu items — tabpanel */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCategory}
+            role="tabpanel"
+            id={`menu-tabpanel-${activeIndex}`}
+            aria-labelledby={`menu-tab-${activeIndex}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
