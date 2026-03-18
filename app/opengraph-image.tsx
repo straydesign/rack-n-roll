@@ -1,23 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from 'next/og'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 export const alt = "Rack N Roll — Erie's Premier Karaoke Bar Since '89"
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 export default async function Image() {
-  const [logoData, buildingData] = await Promise.all([
-    fetch(new URL('../public/facebook/logo.jpg', import.meta.url)).then((res) =>
-      res.arrayBuffer()
-    ),
-    fetch(new URL('../public/building.jpg', import.meta.url)).then((res) =>
-      res.arrayBuffer()
-    ),
+  const [logoBuffer, buildingBuffer] = await Promise.all([
+    readFile(join(process.cwd(), 'public/facebook/logo.jpg')),
+    readFile(join(process.cwd(), 'public/building.jpg')),
   ])
 
-  const logoSrc = `data:image/jpeg;base64,${Buffer.from(logoData).toString('base64')}`
-  const buildingSrc = `data:image/jpeg;base64,${Buffer.from(buildingData).toString('base64')}`
+  const logoSrc = `data:image/jpeg;base64,${logoBuffer.toString('base64')}`
+  const buildingSrc = `data:image/jpeg;base64,${buildingBuffer.toString('base64')}`
 
   return new ImageResponse(
     (
