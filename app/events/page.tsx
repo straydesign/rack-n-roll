@@ -50,7 +50,7 @@ export default async function EventsPage() {
 
   const flyers = sanityFlyers.length > 0
     ? sanityFlyers.map((f) => ({
-        src: urlFor(f.image).width(600).height(600).url(),
+        src: urlFor(f.image).width(800).auto('format').quality(80).url(),
         alt: f.alt,
       }))
     : undefined

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { galleryImages as defaultGalleryImages } from '@/data/events'
 import type { GalleryImage } from '@/data/events'
 import Lightbox from './Lightbox'
@@ -42,9 +43,14 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
   const galleryImages = images && images.length > 0 ? images : defaultGalleryImages
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
+  const isSanity = images && images.length > 0
 
-  // Pre-check which images actually exist
+  // Pre-check which local images actually exist (skip for Sanity CDN)
   useEffect(() => {
+    if (isSanity) {
+      setLoadedImages(new Set(galleryImages.map((img) => img.src)))
+      return
+    }
     galleryImages.forEach((image) => {
       const img = new window.Image()
       img.onload = () => {
@@ -52,7 +58,7 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
       }
       img.src = image.src
     })
-  }, [galleryImages])
+  }, [galleryImages, isSanity])
 
   const handlePrev = () => {
     setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev))
@@ -85,12 +91,13 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
               >
                 {loadedImages.has(image.src) ? (
                   <>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={image.src}
                       alt={image.alt}
                       width={image.width}
                       height={image.height}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      loading={i < 3 ? 'eager' : 'lazy'}
                       className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     {/* Hover overlay */}

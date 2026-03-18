@@ -35,7 +35,7 @@ export default async function GalleryPage() {
 
   const images: GalleryImage[] | undefined = sanityImages.length > 0
     ? sanityImages.map((img) => ({
-        src: urlFor(img.image).width(1200).url(),
+        src: urlFor(img.image).width(1200).auto('format').quality(75).url(),
         alt: img.alt,
         width: 1200,
         height: 1600,
