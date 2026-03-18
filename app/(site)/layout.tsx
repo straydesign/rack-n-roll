@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Rack N Roll — Erie's Premier Karaoke Bar Since '89",
   description:
     "Erie's premier karaoke bar since 1989. 6 nights a week, great specials, good food. Come as you are.",
-  metadataBase: new URL("https://rack-n-roll.vercel.app"),
+  metadataBase: new URL("https://racknrollerie.com"),
   openGraph: {
     title: "Rack N Roll",
     description: "Erie's premier karaoke bar since 1989. Come as you are.",
@@ -25,8 +25,8 @@ const jsonLd = {
   name: "Rack N Roll",
   description:
     "Erie's premier karaoke bar since 1989. 6 nights a week, great specials, good food. Come as you are.",
-  url: "https://rack-n-roll.vercel.app",
-  image: "https://rack-n-roll.vercel.app/building.webp",
+  url: "https://racknrollerie.com",
+  image: "https://racknrollerie.com/building.webp",
   telephone: "",
   address: {
     "@type": "PostalAddress",
@@ -55,12 +55,12 @@ const jsonLd = {
     },
   ],
   servesCuisine: "American",
-  hasMenu: "https://rack-n-roll.vercel.app/menu",
+  hasMenu: "https://racknrollerie.com/menu",
   event: {
     "@type": "Event",
     name: "Karaoke Night",
     description: "Live karaoke 6 nights a week",
-    url: "https://rack-n-roll.vercel.app/events",
+    url: "https://racknrollerie.com/events",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
       "@type": "Place",
