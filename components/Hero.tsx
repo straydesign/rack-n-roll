@@ -145,7 +145,14 @@ function ParallaxText({ children, baseVelocity = 100 }: { children: string; base
 }
 
 // --- Main Hero ---
-export default function Hero() {
+interface HeroProps {
+  bannerEnabled?: boolean
+  bannerText?: string
+  hiringEnabled?: boolean
+  hiringText?: string
+}
+
+export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled = true, hiringText = 'Now hiring: Weekend Doorman' }: HeroProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const heroInView = useRef(true)
   const { scrollYProgress } = useScroll({
@@ -185,6 +192,23 @@ export default function Hero() {
             className="w-[220px] h-[220px] md:w-[320px] md:h-[320px] mb-2 -mt-4 md:-mt-8"
             cameraZ={3.8}
           />
+
+          {/* Announcement banner */}
+          {bannerEnabled && bannerText && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="mb-4"
+            >
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-green/15 border border-green/30 backdrop-blur-sm">
+                <span className="w-2 h-2 rounded-full bg-green animate-pulse" />
+                <span className="text-sm font-medium text-green">
+                  {bannerText}
+                </span>
+              </div>
+            </motion.div>
+          )}
 
           {/* Morphing tagline */}
           <motion.div
@@ -229,19 +253,21 @@ export default function Hero() {
           </motion.div>
 
           {/* Hiring notice */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.7 }}
-            className="mt-8 md:mt-12"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/20 backdrop-blur-sm">
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              <span className="text-xs font-medium text-amber-400 uppercase tracking-wider">
-                Now hiring: Weekend Doorman
-              </span>
-            </div>
-          </motion.div>
+          {hiringEnabled && hiringText && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 1.7 }}
+              className="mt-8 md:mt-12"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/20 backdrop-blur-sm">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <span className="text-xs font-medium text-amber-400 uppercase tracking-wider">
+                  {hiringText}
+                </span>
+              </div>
+            </motion.div>
+          )}
 
 
           {/* Floating Icons — only animate while hero is in view */}

@@ -2,11 +2,17 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { menu } from '@/data/events'
+import { menu as defaultMenu } from '@/data/events'
+import type { MenuCategory } from '@/data/events'
 
 const ease = [0.33, 1, 0.68, 1] as const
 
-export default function MenuPageContent() {
+interface MenuPageContentProps {
+  menuData?: MenuCategory[]
+}
+
+export default function MenuPageContent({ menuData }: MenuPageContentProps) {
+  const menu = menuData && menuData.length > 0 ? menuData : defaultMenu
   const [activeCategory, setActiveCategory] = useState(menu[0].category)
 
   const activeItems = menu.find((c) => c.category === activeCategory)?.items ?? []
@@ -58,13 +64,13 @@ export default function MenuPageContent() {
                 transition={{ duration: 0.4, delay: i * 0.06, ease }}
                 className="group flex items-start gap-4 p-5 rounded-xl hover:bg-cream/[0.03] transition-all duration-300"
               >
-                <div className="flex-1">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <h4 className="font-bold text-cream text-lg group-hover:text-green transition-colors duration-300">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h4 className="font-bold text-cream text-base md:text-lg group-hover:text-green transition-colors duration-300 truncate">
                       {item.name}
                     </h4>
                     {item.price && (
-                      <span className="text-green font-bold text-base flex-shrink-0">
+                      <span className="text-green font-bold text-sm md:text-base flex-shrink-0">
                         {item.price}
                       </span>
                     )}

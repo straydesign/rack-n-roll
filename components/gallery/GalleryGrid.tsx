@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { galleryImages } from '@/data/events'
+import { galleryImages as defaultGalleryImages } from '@/data/events'
+import type { GalleryImage } from '@/data/events'
 import Lightbox from './Lightbox'
 
 const ease = [0.33, 1, 0.68, 1] as const
@@ -33,7 +34,12 @@ function Placeholder({ alt, width, height }: { alt: string; width: number; heigh
   )
 }
 
-export default function GalleryGrid() {
+interface GalleryGridProps {
+  images?: GalleryImage[]
+}
+
+export default function GalleryGrid({ images }: GalleryGridProps) {
+  const galleryImages = images && images.length > 0 ? images : defaultGalleryImages
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
 
@@ -46,7 +52,7 @@ export default function GalleryGrid() {
       }
       img.src = image.src
     })
-  }, [])
+  }, [galleryImages])
 
   const handlePrev = () => {
     setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev))

@@ -3,6 +3,9 @@ import dynamic from 'next/dynamic'
 import Header from '@/components/Header'
 import { MenuPageSkeleton, FooterSkeleton } from '@/components/Skeletons'
 import MenuPageHero from '@/components/menu/MenuPageHero'
+import { getMenuCategories, getSiteSettings } from '@/lib/queries'
+import type { MenuCategory } from '@/data/events'
+import type { SanityMenuCategory } from '@/lib/types'
 
 const MenuPageContent = dynamic(
   () => import('@/components/menu/MenuPageContent'),
@@ -24,14 +27,32 @@ export const metadata: Metadata = {
   },
 }
 
-export default function MenuPage() {
+function toLocalMenu(sanity: SanityMenuCategory[]): MenuCategory[] {
+  return sanity.map((c) => ({
+    category: c.category,
+    items: (c.items ?? []).map((item) => ({
+      name: item.name,
+      price: item.price,
+      description: item.description,
+    })),
+  }))
+}
+
+export default async function MenuPage() {
+  const [sanityMenu, siteSettings] = await Promise.all([
+    getMenuCategories(),
+    getSiteSettings(),
+  ])
+
+  const menuData = sanityMenu.length > 0 ? toLocalMenu(sanityMenu) : undefined
+
   return (
     <main>
       <Header />
       <div className="pt-16">
         <MenuPageHero />
-        <MenuPageContent />
-        <Footer />
+        <MenuPageContent menuData={menuData} />
+        <Footer siteSettings={siteSettings} />
       </div>
     </main>
   )

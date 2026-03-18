@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { dailySpecials } from '@/data/events'
+import { dailySpecials as defaultSpecials } from '@/data/events'
 import type { DailySpecial } from '@/data/events'
 
 const ease = [0.33, 1, 0.68, 1] as const
@@ -96,7 +96,12 @@ function DayCard({ special, index, isTonight, cardRef }: { special: DailySpecial
   )
 }
 
-export default function WeeklySpecials() {
+interface WeeklySpecialsProps {
+  specials?: DailySpecial[]
+}
+
+export default function WeeklySpecials({ specials }: WeeklySpecialsProps = {}) {
+  const dailySpecials = specials && specials.length > 0 ? specials : defaultSpecials
   const tonightIndex = getTodayIndex()
   const scrollRef = useRef<HTMLDivElement>(null)
   const todayCardRef = useRef<HTMLDivElement>(null)

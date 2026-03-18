@@ -4,10 +4,11 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import MagneticButton from './MagneticButton'
+import type { SanitySiteSettings } from '@/lib/types'
 
 const ease = [0.33, 1, 0.68, 1] as const
 
-const details = [
+const defaultDetails = [
   {
     label: 'Address',
     value: '2040 W 38th St\nErie, PA 16508',
@@ -24,7 +25,7 @@ const details = [
   },
 ]
 
-const extras = [
+const defaultExtras = [
   'Non-smoking inside',
   'Smoke porch out front',
   'Kitchen until 11pm',
@@ -33,7 +34,31 @@ const extras = [
   '12 TVs',
 ]
 
-export default function Info() {
+interface InfoProps {
+  siteSettings?: SanitySiteSettings | null
+}
+
+export default function Info({ siteSettings }: InfoProps = {}) {
+  const details = siteSettings ? [
+    {
+      label: 'Address',
+      value: siteSettings.address ?? defaultDetails[0].value,
+      href: `https://maps.google.com/?q=${encodeURIComponent(siteSettings.address ?? '2040 W 38th St, Erie, PA 16508')}`,
+    },
+    {
+      label: 'Phone',
+      value: siteSettings.phone ?? defaultDetails[1].value,
+      href: `tel:${(siteSettings.phone ?? '(814) 864-3535').replace(/[^+\d]/g, '')}`,
+    },
+    {
+      label: 'Hours',
+      value: `${siteSettings.hours ?? 'Tue–Sat: 3pm–2am'}\n${siteSettings.closedDays ?? 'Closed Sun & Mon'}`,
+    },
+  ] : defaultDetails
+
+  const extras = siteSettings?.amenities && siteSettings.amenities.length > 0
+    ? siteSettings.amenities
+    : defaultExtras
   const sectionRef = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
     target: sectionRef,

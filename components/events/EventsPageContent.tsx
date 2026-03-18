@@ -1,161 +1,165 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useCallback } from 'react'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { allEvents, type EventCategory } from '@/data/events'
+import { dailySpecials as defaultSpecials } from '@/data/events'
+import type { CalendarEvent, DailySpecial } from '@/data/events'
+import type { SanityCalendarEvent } from '@/lib/types'
+import WeeklySpecials from '@/components/WeeklySpecials'
+import EventsCalendar from '@/components/EventsCalendar'
+import EventDayModal from '@/components/EventDayModal'
 
-const flyerImages = [
+interface FlyerImage {
+  src: string
+  alt: string
+}
+
+const defaultFlyerImages: FlyerImage[] = [
   { src: '/flyers/darts-blind-draw.jpg', alt: 'Dart Gear Blind Draw — Friday Feb 20' },
   { src: '/flyers/hiring-doorman.jpg', alt: 'Now Hiring — Weekend Doorman' },
 ]
 
 const ease = [0.33, 1, 0.68, 1] as const
 
-const tabs: { label: string; value: EventCategory }[] = [
-  { label: 'Weekly Specials', value: 'weekly' },
-  { label: 'Events', value: 'special' },
-]
+const DAY_ABBREV: Record<string, string> = {
+  Monday: 'Mon', Tuesday: 'Tue', Wednesday: 'Wed',
+  Thursday: 'Thu', Friday: 'Fri', Saturday: 'Sat', Sunday: 'Sun',
+}
 
-export default function EventsPageContent() {
-  const [activeTab, setActiveTab] = useState<EventCategory>('weekly')
+interface EventsPageContentProps {
+  flyers?: FlyerImage[]
+  specials?: DailySpecial[]
+  sanityCalendarEvents?: SanityCalendarEvent[]
+}
 
-  const filtered = allEvents.filter((e) => e.category === activeTab)
+export default function EventsPageContent({ flyers, specials, sanityCalendarEvents }: EventsPageContentProps) {
+  const dailySpecials = specials && specials.length > 0 ? specials : defaultSpecials
+  const flyerImages = flyers && flyers.length > 0 ? flyers : defaultFlyerImages
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>([])
 
-  const featured = filtered.find((e) => e.featured)
-  const rest = featured ? filtered.filter((e) => e !== featured) : filtered
+  const handleDayClick = useCallback((dateStr: string, events: CalendarEvent[]) => {
+    setSelectedDate(dateStr)
+    setSelectedEvents(events)
+  }, [])
+
+  const handleClose = useCallback(() => {
+    setSelectedDate(null)
+    setSelectedEvents([])
+  }, [])
 
   return (
     <section className="relative px-6 py-16 md:py-24 bg-charcoal text-cream overflow-hidden">
       <div className="noise absolute inset-0 pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Filter tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-16">
-          {tabs.map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => setActiveTab(tab.value)}
-              className={`relative px-6 py-2.5 text-xs font-medium uppercase tracking-[0.15em] rounded-full transition-all duration-300 ${
-                activeTab === tab.value
-                  ? 'text-charcoal'
-                  : 'text-cream/50 hover:text-cream/80 border border-cream/10 hover:border-cream/20'
-              }`}
-            >
-              {activeTab === tab.value && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute inset-0 bg-green rounded-full"
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                />
-              )}
-              <span className="relative z-10">{tab.label}</span>
-            </button>
-          ))}
-        </div>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.4, ease }}
-          >
-            {/* Featured event card */}
-            {featured && (
-              <motion.div
-                initial={{ opacity: 0, y: 60, rotateX: 5 }}
-                animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                transition={{ duration: 0.9, ease }}
-                className="group relative mb-6"
-              >
-                <div className="glass rounded-2xl p-8 md:p-12 border border-green/10 hover:border-green/25 transition-all duration-700 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-green/[0.06] to-transparent pointer-events-none" />
-                  <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-6 md:gap-12">
-                    <div className="md:w-48 flex-shrink-0">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-green/60 block mb-1">Featured</span>
-                      <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-2">
-                        {featured.date}
-                      </span>
-                      {featured.time && (
-                        <span className="text-cream/30 text-xs block">{featured.time}</span>
+        {/* ── Everyday + Weekly Schedule Card ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease }}
+          className="glass rounded-2xl border border-cream/10 overflow-hidden mb-20"
+        >
+          {/* Everyday specials */}
+          <div className="p-8 md:p-10">
+            <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-4">
+              Every Day
+            </span>
+            <div className="space-y-2">
+              <p className="text-cream/80 text-sm">Busch Light Bucket &mdash; 4 for $10</p>
+              <p className="text-cream/80 text-sm">Kitchen opens at 4 PM</p>
+              <p className="text-cream/50 text-xs mt-3">Burgers, wings, pizza, cheesesteaks &mdash; bar food done right.</p>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="flex items-center gap-4 px-8 md:px-10">
+            <div className="flex-1 h-px bg-cream/10" />
+            <span className="text-cream/30 text-[10px] font-bold uppercase tracking-[0.2em]">
+              Every Week
+            </span>
+            <div className="flex-1 h-px bg-cream/10" />
+          </div>
+
+          {/* Weekly schedule — simple list */}
+          <div className="p-8 md:p-10">
+            <div className="space-y-2">
+              {dailySpecials.map((day) => (
+                <div key={day.day} className="flex items-baseline gap-3">
+                  <span className={`text-xs font-semibold w-8 flex-shrink-0 ${day.closed ? 'text-cream/20' : 'text-cream/60'}`}>
+                    {DAY_ABBREV[day.day]}
+                  </span>
+                  {day.closed ? (
+                    <span className="text-cream/20 text-xs">Closed</span>
+                  ) : (
+                    <span className="text-cream/50 text-xs">
+                      {day.hours}
+                      {day.specials.filter(s => s !== 'Busch Light Bucket — 4 for $10' && s !== 'Kitchen opens 4 PM').length > 0 && (
+                        <span className="text-cream/40"> · {day.specials.filter(s => s !== 'Busch Light Bucket — 4 for $10' && s !== 'Kitchen opens 4 PM').join(' · ')}</span>
                       )}
-                      <div className="hidden md:block w-12 h-px bg-green/20 mt-3" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-heading text-2xl md:text-3xl lg:text-4xl text-cream mb-3 group-hover:text-green transition-colors duration-500">
-                        {featured.title}
-                      </h3>
-                      <p className="text-cream/40 text-sm md:text-base leading-relaxed max-w-xl">
-                        {featured.longDescription ?? featured.description}
-                      </p>
-                    </div>
-                  </div>
+                      {day.karaoke && (
+                        <span className="text-green/60"> · Karaoke {day.karaoke}</span>
+                      )}
+                    </span>
+                  )}
                 </div>
-              </motion.div>
-            )}
-
-            {/* Event cards */}
-            <div className="space-y-4">
-              {rest.map((event, i) => (
-                <motion.div
-                  key={event.title}
-                  initial={{ opacity: 0, y: 60, rotateX: 5 }}
-                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                  transition={{ duration: 0.9, delay: i * 0.12, ease }}
-                  className="group relative"
-                >
-                  <div className="glass rounded-2xl p-8 md:p-12 flex flex-col md:flex-row md:items-center gap-6 md:gap-12 hover:border-green/20 transition-all duration-700 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-green/[0.05] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-
-                    <div className="md:w-48 flex-shrink-0 relative z-10">
-                      <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-2">
-                        {event.date}
-                      </span>
-                      {event.time && (
-                        <span className="text-cream/30 text-xs block">{event.time}</span>
-                      )}
-                      <div className="hidden md:block w-12 h-px bg-green/20 mt-3" />
-                    </div>
-
-                    <div className="flex-1 relative z-10">
-                      <h3 className="font-heading text-2xl md:text-3xl lg:text-4xl text-cream mb-3 group-hover:text-green transition-colors duration-500">
-                        {event.title}
-                      </h3>
-                      <p className="text-cream/40 text-sm md:text-base leading-relaxed max-w-xl">
-                        {event.longDescription ?? event.description}
-                      </p>
-                    </div>
-
-                    <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border border-cream/10 group-hover:border-green/30 group-hover:bg-green/10 transition-all duration-500 flex-shrink-0 relative z-10">
-                      <svg className="w-5 h-5 text-cream/30 group-hover:text-green transition-colors duration-500 group-hover:translate-x-0.5 transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                      </svg>
-                    </div>
-                  </div>
-                </motion.div>
               ))}
             </div>
+          </div>
+        </motion.div>
 
-            {filtered.length === 0 && (
-              <p className="text-center text-cream/40 text-lg py-20">
-                No events in this category yet. Check back soon!
-              </p>
-            )}
-          </motion.div>
-        </AnimatePresence>
+        {/* ── This Week ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease }}
+          className="mb-20"
+        >
+          <h2 className="font-heading text-3xl md:text-4xl text-cream text-center mb-3">
+            This Week
+          </h2>
+          <p className="text-cream/30 text-sm text-center mb-8">
+            What&rsquo;s on tonight and the rest of the week
+          </p>
+          <WeeklySpecials specials={specials} />
+        </motion.div>
 
-        {/* Flyers & Promos */}
-        <div className="mt-24">
+        {/* ── Calendar ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease }}
+          className="max-w-xl mx-auto mb-24"
+        >
+          <h2 className="font-heading text-3xl md:text-4xl text-cream text-center mb-3">
+            Calendar
+          </h2>
+          <p className="text-cream/30 text-sm text-center mb-10">
+            Click a day to see what&rsquo;s happening
+          </p>
+          <EventsCalendar
+            onDayClick={handleDayClick}
+            externalCalendarEvents={sanityCalendarEvents?.map((e) => ({
+              ...e,
+              description: e.description ?? '',
+            }))}
+          />
+        </motion.div>
+
+        {/* ── Flyers & Promos ── */}
+        <div>
           <h2 className="font-heading text-3xl md:text-4xl text-cream text-center mb-4">
             Flyers &amp; Promos
           </h2>
           <p className="text-cream/40 text-sm text-center mb-12 max-w-md mx-auto">
-            Latest promotions and announcements from our Facebook page.
+            Latest promotions and announcements.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {flyerImages.map((flyer, i) => (
+            {flyerImages.slice(0, 10).map((flyer, i) => (
               <motion.div
                 key={flyer.src}
                 initial={{ opacity: 0, y: 40 }}
@@ -179,7 +183,38 @@ export default function EventsPageContent() {
             ))}
           </div>
         </div>
+
+        {/* ── Facebook link ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease }}
+          className="text-center mt-16"
+        >
+          <a
+            href="https://www.facebook.com/profile.php?id=100053614732579"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 px-8 py-3 text-xs font-semibold text-cream/60 border border-cream/10 rounded-full hover:border-cream/30 hover:text-cream transition-all duration-300 uppercase tracking-wider group"
+          >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+            </svg>
+            More on Facebook
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+        </motion.div>
       </div>
+
+      {/* Event Day Modal */}
+      <EventDayModal
+        date={selectedDate}
+        events={selectedEvents}
+        onClose={handleClose}
+      />
     </section>
   )
 }

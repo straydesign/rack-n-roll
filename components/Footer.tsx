@@ -3,10 +3,15 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import MagneticButton from './MagneticButton'
+import type { SanitySiteSettings } from '@/lib/types'
 
 const ease = [0.33, 1, 0.68, 1] as const
 
-export default function Footer() {
+interface FooterProps {
+  siteSettings?: SanitySiteSettings | null
+}
+
+export default function Footer({ siteSettings }: FooterProps = {}) {
   return (
     <footer className="relative bg-[#0A0A0A] text-cream overflow-hidden">
       {/* Green glow line */}
@@ -40,9 +45,8 @@ export default function Footer() {
             <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-3">
               Location
             </span>
-            <p className="text-cream/40 text-sm leading-relaxed">
-              2040 W 38th St<br />
-              Erie, PA 16508
+            <p className="text-cream/40 text-sm leading-relaxed whitespace-pre-line">
+              {siteSettings?.address ?? '2040 W 38th St, Erie, PA 16508'}
             </p>
           </motion.div>
 
@@ -56,8 +60,8 @@ export default function Footer() {
               Hours
             </span>
             <p className="text-cream/40 text-sm leading-relaxed">
-              Tue&ndash;Sat: 3pm&ndash;2am<br />
-              Karaoke: 9:30pm&ndash;1:30am
+              {siteSettings?.hours ?? 'Tue–Sat: 3pm–2am'}<br />
+              Karaoke: 9:30pm–1:30am
             </p>
           </motion.div>
 
@@ -103,11 +107,11 @@ export default function Footer() {
               Connect
             </span>
             <MagneticButton
-              href="tel:+18148643535"
+              href={`tel:${(siteSettings?.phone ?? '(814) 864-3535').replace(/[^+\d]/g, '')}`}
               className="text-cream/40 text-sm hover:text-green transition-colors duration-300"
               strength={0.15}
             >
-              (814) 864-3535
+              {siteSettings?.phone ?? '(814) 864-3535'}
             </MagneticButton>
           </motion.div>
         </div>

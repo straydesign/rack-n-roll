@@ -3,6 +3,9 @@ import dynamic from 'next/dynamic'
 import Header from '@/components/Header'
 import { GalleryPageSkeleton, FooterSkeleton } from '@/components/Skeletons'
 import GalleryPageHero from '@/components/gallery/GalleryPageHero'
+import { getGalleryImages, getSiteSettings } from '@/lib/queries'
+import { urlFor } from '@/lib/sanity'
+import type { GalleryImage } from '@/data/events'
 
 const GalleryGrid = dynamic(
   () => import('@/components/gallery/GalleryGrid'),
@@ -24,14 +27,29 @@ export const metadata: Metadata = {
   },
 }
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const [sanityImages, siteSettings] = await Promise.all([
+    getGalleryImages(),
+    getSiteSettings(),
+  ])
+
+  const images: GalleryImage[] | undefined = sanityImages.length > 0
+    ? sanityImages.map((img) => ({
+        src: urlFor(img.image).width(1200).url(),
+        alt: img.alt,
+        width: 1200,
+        height: 1600,
+        featured: img.featured,
+      }))
+    : undefined
+
   return (
     <main>
       <Header />
       <div className="pt-16">
         <GalleryPageHero />
-        <GalleryGrid />
-        <Footer />
+        <GalleryGrid images={images} />
+        <Footer siteSettings={siteSettings} />
       </div>
     </main>
   )
