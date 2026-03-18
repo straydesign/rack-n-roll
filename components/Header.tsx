@@ -149,7 +149,7 @@ export default function Header() {
             alt="Rack N Roll"
             width={150}
             height={150}
-            className="h-[100px] w-auto md:h-[280px] md:mt-[4px]"
+            className="h-[40px] w-auto md:h-[40px]"
           />
         </motion.button>
 
