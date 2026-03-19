@@ -267,7 +267,7 @@ export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled 
 
           {/* Floating Icons — only animate while hero is in view */}
           <motion.div
-            className="absolute top-[15%] left-8 md:left-16 opacity-[0.06]"
+            className="absolute top-[15%] left-8 md:left-16 opacity-30"
             whileInView={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
             viewport={{ once: false }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
@@ -275,7 +275,7 @@ export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled 
             <Mic className="w-12 h-12 md:w-16 md:h-16 text-green-500" />
           </motion.div>
           <motion.div
-            className="absolute top-[25%] right-8 md:right-16 opacity-[0.06]"
+            className="absolute top-[25%] right-8 md:right-16 opacity-30"
             whileInView={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
             viewport={{ once: false }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
