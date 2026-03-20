@@ -6,8 +6,9 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
+        disallow: "/studio",
       },
     ],
-    sitemap: "https://racknrollerie.com/sitemap.xml",
+    sitemap: "https://rack-n-roll.vercel.app/sitemap.xml",
   };
 }

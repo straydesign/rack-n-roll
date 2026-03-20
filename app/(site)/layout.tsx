@@ -8,8 +8,8 @@ const FALLBACK = {
   description:
     "Erie's premier karaoke bar since 1989. 6 nights a week, great specials, good food. Come as you are.",
   siteName: "Rack N Roll",
-  url: "https://racknrollerie.com",
-  image: "https://racknrollerie.com/building.webp",
+  url: "https://rack-n-roll.vercel.app",
+  image: "https://rack-n-roll.vercel.app/building.webp",
   phone: "(814) 864-3535",
   cuisine: "American",
   address: {
