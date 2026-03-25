@@ -41,7 +41,7 @@ function StaticLogo({ className }: { className?: string }) {
   );
 }
 
-function LogoModel({ spinning = true, onReady }: { spinning?: boolean; onReady?: () => void }) {
+function LogoModel({ onReady }: { spinning?: boolean; onReady?: () => void }) {
   const groupRef = useRef<THREE.Group>(null);
   const readyFired = useRef(false);
   const { scene } = useGLTF("/images/logo.glb");
@@ -62,10 +62,7 @@ function LogoModel({ spinning = true, onReady }: { spinning?: boolean; onReady?:
     );
   }, [clonedScene]);
 
-  useFrame((_state, delta) => {
-    if (groupRef.current && spinning) {
-      groupRef.current.rotation.y += delta * 1.2;
-    }
+  useFrame(() => {
     // Signal ready after the first frame with the model actually rendering
     if (!readyFired.current && groupRef.current) {
       readyFired.current = true;

@@ -1,11 +1,8 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import Link from 'next/link'
 import MagneticButton from './MagneticButton'
 import type { SanitySiteSettings } from '@/lib/types'
-
-const ease = [0.33, 1, 0.68, 1] as const
 
 interface FooterProps {
   siteSettings?: SanitySiteSettings | null
@@ -22,40 +19,26 @@ export default function Footer({ siteSettings }: FooterProps = {}) {
 
       <div className="max-w-6xl mx-auto px-6 py-20 md:py-28 relative z-10">
         {/* Large footer text */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease }}
+        <div
           className="text-center mb-16"
         >
           <h2 className="font-heading display-text text-cream/10 leading-none select-none" style={{ opacity: 0.1 }}>
             Rack N Roll
           </h2>
-        </motion.div>
+        </div>
 
         {/* Info row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease }}
-          >
+          <div>
             <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-3">
               Location
             </span>
             <p className="text-cream/40 text-sm leading-relaxed whitespace-pre-line">
               {siteSettings?.address ?? '2040 W 38th St, Erie, PA 16508'}
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1, ease }}
-          >
+          <div>
             <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-3">
               Hours
             </span>
@@ -63,14 +46,9 @@ export default function Footer({ siteSettings }: FooterProps = {}) {
               {siteSettings?.hours ?? 'Tue–Sat: 3pm–2am'}<br />
               Karaoke: 9:30pm–1:30am
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15, ease }}
-          >
+          <div>
             <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-3">
               Explore
             </span>
@@ -94,13 +72,9 @@ export default function Footer({ siteSettings }: FooterProps = {}) {
                 Gallery
               </Link>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2, ease }}
+          <div
             className="flex flex-col items-center md:items-start"
           >
             <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-3">
@@ -125,7 +99,7 @@ export default function Footer({ siteSettings }: FooterProps = {}) {
                 Follow on Facebook
               </MagneticButton>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Divider */}
@@ -133,33 +107,24 @@ export default function Footer({ siteSettings }: FooterProps = {}) {
 
         {/* Bottom row */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+          <p
             className="text-cream/20 text-xs tracking-wider"
           >
             &copy; {new Date().getFullYear()} Rack N Roll Inc. All rights reserved.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+          </p>
+          <p
             className="text-cream/10 text-xs tracking-wider"
           >
             Since &rsquo;89. Come as you are.
-          </motion.p>
-          <motion.a
+          </p>
+          <a
             href="https://straywebdesign.co"
             target="_blank"
             rel="noopener noreferrer"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
             className="text-cream/10 text-xs tracking-wider hover:text-green transition-colors duration-300"
           >
             Built by Stray Web Design
-          </motion.a>
+          </a>
         </div>
       </div>
     </footer>

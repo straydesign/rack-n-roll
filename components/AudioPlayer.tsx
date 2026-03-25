@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Volume2, VolumeX } from 'lucide-react'
 
 const STORAGE_KEY = 'rnr-music-playing'
@@ -50,29 +49,24 @@ export default function AudioPlayer() {
   return (
     <>
       <audio ref={audioRef} src="/audio/bg-music.mp3" loop preload="none" />
-      <AnimatePresence>
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, delay: 1.5, ease: [0.33, 1, 0.68, 1] }}
-          onClick={toggle}
-          aria-label={playing ? 'Mute background music' : 'Play background music'}
-          className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5
-            bg-charcoal/80 backdrop-blur-xl border border-cream/10 rounded-full
-            text-cream/70 hover:text-cream hover:border-cream/20
-            transition-colors duration-300 cursor-pointer
-            max-md:bottom-20 max-md:right-4"
-        >
-          {playing ? (
-            <Volume2 className="w-4 h-4" />
-          ) : (
-            <VolumeX className="w-4 h-4" />
-          )}
-          <span className="text-xs font-medium tracking-wide uppercase">
-            {playing ? 'On' : 'Off'}
-          </span>
-        </motion.button>
-      </AnimatePresence>
+      <button
+        onClick={toggle}
+        aria-label={playing ? 'Mute background music' : 'Play background music'}
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5
+          bg-charcoal/80 backdrop-blur-xl border border-cream/10 rounded-full
+          text-cream/70 hover:text-cream hover:border-cream/20
+          transition-colors duration-300 cursor-pointer
+          max-md:bottom-20 max-md:right-4"
+      >
+        {playing ? (
+          <Volume2 className="w-4 h-4" />
+        ) : (
+          <VolumeX className="w-4 h-4" />
+        )}
+        <span className="text-xs font-medium tracking-wide uppercase">
+          {playing ? 'On' : 'Off'}
+        </span>
+      </button>
     </>
   )
 }

@@ -1,13 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { galleryImages as defaultGalleryImages } from '@/data/events'
 import type { GalleryImage } from '@/data/events'
 import Lightbox from './Lightbox'
-
-const ease = [0.33, 1, 0.68, 1] as const
 
 function Placeholder({ alt, width, height }: { alt: string; width: number; height: number }) {
   return (
@@ -77,12 +74,8 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="columns-3 gap-4">
           {galleryImages.map((image, i) => (
-            <motion.div
+            <div
               key={image.src}
-              initial={{ opacity: 0, scale: 0.95, clipPath: 'inset(8% 8% 8% 8% round 16px)' }}
-              whileInView={{ opacity: 1, scale: 1, clipPath: 'inset(0% 0% 0% 0% round 16px)' }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.9, delay: i * 0.08, ease }}
               className="mb-4 break-inside-avoid"
             >
               <button
@@ -124,7 +117,7 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
                   <Placeholder alt={image.alt} width={image.width} height={image.height} />
                 )}
               </button>
-            </motion.div>
+            </div>
           ))}
         </div>
 

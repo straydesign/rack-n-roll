@@ -1,7 +1,6 @@
 'use client'
 
-import { useRef, ReactNode } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import type { ReactNode } from 'react'
 
 interface MagneticButtonProps {
   children: ReactNode
@@ -11,44 +10,16 @@ interface MagneticButtonProps {
   onClick?: () => void
 }
 
-const springConfig = { stiffness: 250, damping: 15, mass: 0.5 }
-
 export default function MagneticButton({
   children,
   className = '',
   href,
-  strength = 0.3,
   onClick,
 }: MagneticButtonProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
-  const springX = useSpring(mx, springConfig)
-  const springY = useSpring(my, springConfig)
-
-  const handleMouse = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current
-    if (!el) return
-    const { left, top, width, height } = el.getBoundingClientRect()
-    mx.set((e.clientX - left - width / 2) * strength)
-    my.set((e.clientY - top - height / 2) * strength)
-  }
-
-  const handleLeave = () => {
-    mx.set(0)
-    my.set(0)
-  }
-
   const inner = (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouse}
-      onMouseLeave={handleLeave}
-      style={{ x: springX, y: springY }}
-      className={`magnetic ${className}`}
-    >
+    <div className={className}>
       {children}
-    </motion.div>
+    </div>
   )
 
   if (href) {

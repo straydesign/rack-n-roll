@@ -1,12 +1,8 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
 import { Star } from 'lucide-react'
 import TextReveal from './TextReveal'
 import { reviews, googleFiveStarCount } from '@/data/events'
-
-const ease = [0.33, 1, 0.68, 1] as const
 
 function Stars({ count }: { count: number }) {
   return (
@@ -22,35 +18,22 @@ function Stars({ count }: { count: number }) {
 }
 
 export default function Reviews() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  })
-
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '15%'])
-
   return (
-    <section ref={sectionRef} className="relative px-6 py-28 md:py-40 bg-charcoal text-cream overflow-hidden">
+    <section className="relative px-6 py-28 md:py-40 bg-charcoal text-cream overflow-hidden">
       <div className="noise absolute inset-0 pointer-events-none" />
 
       {/* Floating orbs */}
-      <motion.div
-        style={{ y: bgY }}
+      <div
         className="absolute top-20 right-[-100px] w-[350px] h-[350px] rounded-full bg-green/[0.04] blur-[100px] pointer-events-none"
       />
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Section tag */}
-        <motion.span
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease }}
+        <span
           className="block text-green text-xs font-bold uppercase tracking-[0.3em] mb-8 text-center"
         >
           What People Say
-        </motion.span>
+        </span>
 
         <TextReveal
           text="Don't take our word for it."
@@ -58,11 +41,7 @@ export default function Reviews() {
         />
 
         {/* Google rating badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2, ease }}
+        <div
           className="flex items-center justify-center gap-3 mb-16"
         >
           <div className="flex items-center gap-1.5">
@@ -76,31 +55,29 @@ export default function Reviews() {
           <span className="text-cream/60 text-sm">
             {googleFiveStarCount}+ five-star reviews on Google
           </span>
-        </motion.div>
+        </div>
 
-        {/* Review cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {/* Review cards — asymmetric grid: featured + two stacked */}
+        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-5">
           {reviews.map((review, i) => (
-            <motion.div
+            <div
               key={review.name}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.8, delay: i * 0.12, ease }}
-              className="glass rounded-2xl p-7 group hover:scale-[1.02] transition-transform duration-500 relative"
+              className={`glass rounded-2xl p-7 group hover:scale-[1.02] active:scale-[0.98] transition-transform duration-500 relative
+                ${i === 0 ? 'md:row-span-2 md:flex md:flex-col md:justify-center' : ''}`}
             >
               {/* Hover glow */}
               <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-br from-green/5 via-transparent to-transparent" />
 
               <Stars count={review.rating} />
-              <p className="text-cream/70 text-sm leading-relaxed mt-4 mb-5 relative z-10">
+              <p className={`text-cream/70 leading-relaxed mt-4 mb-5 relative z-10
+                ${i === 0 ? 'text-base md:text-lg' : 'text-sm'}`}>
                 &ldquo;{review.text}&rdquo;
               </p>
               <div className="flex items-center justify-between relative z-10">
                 <span className="text-cream font-medium text-sm">{review.name}</span>
                 <span className="text-cream/30 text-xs">{review.date}</span>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

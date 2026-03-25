@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import { motion, useMotionValue, useScroll, useTransform } from 'framer-motion'
 import { Mic, Music, Beer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -96,20 +95,20 @@ function MorphingText({ words, className, interval = 3000 }: { words: string[]; 
 // --- Velocity Parallax Text ---
 function ParallaxText({ children, baseVelocity = 100 }: { children: string; baseVelocity: number }) {
   const baseX = useRef(0)
-  const { scrollY } = useScroll()
+  const scrollYRef = useRef(0)
   const scrollVelocity = useRef(0)
-  const x = useMotionValue(0)
-  const xPercent = useTransform(x, (v) => `${v}%`)
+  const xRef = useRef(0)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    let lastScrollY = scrollY.get()
-    const unsub = scrollY.on('change', () => {
-      const current = scrollY.get()
-      scrollVelocity.current = current - lastScrollY
-      lastScrollY = current
-    })
-    return () => unsub()
-  }, [scrollY])
+    const onScroll = () => {
+      const current = window.scrollY
+      scrollVelocity.current = current - scrollYRef.current
+      scrollYRef.current = current
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   useEffect(() => {
     let rafId: number
@@ -120,20 +119,23 @@ function ParallaxText({ children, baseVelocity = 100 }: { children: string; base
       lastTime = now
       baseX.current += baseVelocity * delta + scrollVelocity.current * delta * 0.5
       baseX.current = ((baseX.current % 25) + 25) % 25 - 50
-      x.set(baseX.current)
+      xRef.current = baseX.current
+      if (containerRef.current) {
+        containerRef.current.style.transform = `translateX(${baseX.current}%)`
+      }
       rafId = requestAnimationFrame(animate)
     }
     rafId = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(rafId)
-  }, [baseVelocity, x])
+  }, [baseVelocity])
 
   return (
     <div className="overflow-hidden whitespace-nowrap">
-      <motion.div style={{ x: xPercent }} className="font-bold uppercase text-6xl md:text-8xl flex whitespace-nowrap will-change-transform">
+      <div ref={containerRef} className="font-bold uppercase text-6xl md:text-8xl flex whitespace-nowrap will-change-transform">
         {[...Array(4)].map((_, i) => (
           <span key={i} className="block mr-8 text-green-500/20">{children} </span>
         ))}
-      </motion.div>
+      </div>
     </div>
   )
 }
@@ -148,11 +150,6 @@ interface HeroProps {
 
 export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled = true, hiringText = 'Now hiring: Weekend Doorman' }: HeroProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const heroInView = useRef(true)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
-  })
 
   // Pause aurora + floating icons when hero is off-screen
   useEffect(() => {
@@ -160,7 +157,6 @@ export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled 
     if (!el) return
     const observer = new IntersectionObserver(
       ([entry]) => {
-        heroInView.current = entry.isIntersecting
         el.classList.toggle('aurora-paused', !entry.isIntersecting)
       },
       { threshold: 0 }
@@ -169,15 +165,10 @@ export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled 
     return () => observer.disconnect()
   }, [])
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9])
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, 80])
-
   return (
     <div ref={containerRef} className="relative">
       <AuroraBackground>
-        <motion.div
-          style={{ opacity, scale, y }}
+        <div
           className="relative z-10 flex flex-col items-center justify-center px-6 text-center min-h-dvh"
         >
 
@@ -190,10 +181,7 @@ export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled 
 
           {/* Announcement banner */}
           {bannerEnabled && bannerText && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
+            <div
               className="mb-4"
             >
               <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-green/15 border border-green/30 backdrop-blur-sm">
@@ -202,14 +190,11 @@ export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled 
                   {bannerText}
                 </span>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Morphing tagline */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.9 }}
+          <div
             className="mt-8 md:mt-12 text-lg md:text-2xl lg:text-3xl text-slate-400 font-light"
           >
             <span>Where every night is </span>
@@ -217,24 +202,18 @@ export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled 
               words={['legendary', 'your night', 'karaoke night', 'a good time', 'unforgettable']}
               className="text-xl md:text-3xl lg:text-4xl"
             />
-          </motion.div>
+          </div>
 
           {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
+          <p
             className="mt-6 md:mt-8 max-w-lg md:max-w-xl text-base md:text-lg lg:text-xl text-slate-500 leading-relaxed"
           >
             Since &rsquo;89. Come as you are. Karaoke 5 nights a week,
             great specials, and great food.
-          </motion.p>
+          </p>
 
           {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.5 }}
+          <div
             className="mt-10 md:mt-14 flex flex-col sm:flex-row gap-4"
           >
             <Button
@@ -245,14 +224,11 @@ export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled 
               <Beer className="w-5 h-5 md:w-6 md:h-6 mr-2" />
               What&rsquo;s Happening This Week
             </Button>
-          </motion.div>
+          </div>
 
           {/* Hiring notice */}
           {hiringEnabled && hiringText && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.7 }}
+            <div
               className="mt-8 md:mt-12"
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/20 backdrop-blur-sm">
@@ -261,28 +237,22 @@ export default function Hero({ bannerEnabled = false, bannerText, hiringEnabled 
                   {hiringText}
                 </span>
               </div>
-            </motion.div>
+            </div>
           )}
 
 
-          {/* Floating Icons — only animate while hero is in view */}
-          <motion.div
+          {/* Floating Icons */}
+          <div
             className="absolute top-[15%] left-8 md:left-16 opacity-60"
-            whileInView={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
-            viewport={{ once: false }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
           >
             <Mic className="w-12 h-12 md:w-16 md:h-16 text-green-500" />
-          </motion.div>
-          <motion.div
+          </div>
+          <div
             className="absolute top-[25%] right-8 md:right-16 opacity-60"
-            whileInView={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
-            viewport={{ once: false }}
-            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
           >
             <Music className="w-14 h-14 md:w-20 md:h-20 text-green-500" />
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
       </AuroraBackground>
 

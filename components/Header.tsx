@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 
 type NavLink = {
@@ -138,11 +137,9 @@ export default function Header() {
     >
       <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between h-14 md:h-12">
         {/* Logo */}
-        <motion.button
+        <button
           onClick={handleLogoClick}
           className="flex items-center gap-2 flex-shrink-0"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
         >
           <Image
             src="/racknroll.svg"
@@ -151,7 +148,7 @@ export default function Header() {
             height={150}
             className="h-[40px] w-auto md:h-[40px]"
           />
-        </motion.button>
+        </button>
 
         {/* Badge */}
         <span className="px-3 py-1 text-[9px] md:px-4 md:py-1.5 md:text-[12px] font-bold uppercase tracking-[0.12em] md:tracking-[0.15em] text-white bg-green rounded-full whitespace-nowrap">
@@ -210,81 +207,62 @@ export default function Header() {
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
         >
-          <motion.span
-            animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-            className={`block w-5 h-px ${scrolled ? 'bg-cream/80' : 'bg-cream/60'}`}
+          <span
+            className={`block w-5 h-px transition-transform duration-300 ${scrolled ? 'bg-cream/80' : 'bg-cream/60'} ${mobileOpen ? 'rotate-45 translate-y-[6px]' : ''}`}
           />
-          <motion.span
-            animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-            className={`block w-5 h-px ${scrolled ? 'bg-cream/80' : 'bg-cream/60'}`}
+          <span
+            className={`block w-5 h-px transition-opacity duration-300 ${scrolled ? 'bg-cream/80' : 'bg-cream/60'} ${mobileOpen ? 'opacity-0' : 'opacity-100'}`}
           />
-          <motion.span
-            animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-            className={`block w-5 h-px ${scrolled ? 'bg-cream/80' : 'bg-cream/60'}`}
+          <span
+            className={`block w-5 h-px transition-transform duration-300 ${scrolled ? 'bg-cream/80' : 'bg-cream/60'} ${mobileOpen ? '-rotate-45 -translate-y-[6px]' : ''}`}
           />
         </button>
       </nav>
 
       {/* Mobile menu — Arrow Up/Down navigation */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            id="mobile-menu"
-            role="navigation"
-            aria-label="Mobile navigation"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
-            className="md:hidden bg-charcoal/95 backdrop-blur-xl border-b border-cream/[0.06] overflow-hidden"
-          >
-            <div className="px-6 py-6 flex flex-col gap-1">
-              {links.map((link, i) =>
-                link.type === 'page' ? (
-                  <motion.div
-                    key={link.label}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05, duration: 0.3 }}
+      {mobileOpen && (
+        <div
+          id="mobile-menu"
+          role="navigation"
+          aria-label="Mobile navigation"
+          className="md:hidden bg-charcoal/95 backdrop-blur-xl border-b border-cream/[0.06] overflow-hidden"
+        >
+          <div className="px-6 py-6 flex flex-col gap-1">
+            {links.map((link, i) =>
+              link.type === 'page' ? (
+                <div key={link.label}>
+                  <Link
+                    ref={(el) => {
+                      mobileNavRefs.current[i] = el
+                    }}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    onKeyDown={(e) => handleMobileNavKeyDown(e, i)}
+                    className={`block text-left py-3 text-sm uppercase tracking-[0.15em] transition-colors border-b border-cream/[0.04] last:border-0 ${
+                      isActive(link) ? 'text-green' : 'text-cream/60 hover:text-green'
+                    }`}
                   >
-                    <Link
-                      ref={(el) => {
-                        mobileNavRefs.current[i] = el
-                      }}
-                      href={link.href}
-                      onClick={() => setMobileOpen(false)}
-                      onKeyDown={(e) => handleMobileNavKeyDown(e, i)}
-                      className={`block text-left py-3 text-sm uppercase tracking-[0.15em] transition-colors border-b border-cream/[0.04] last:border-0 ${
-                        isActive(link) ? 'text-green' : 'text-cream/60 hover:text-green'
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key={link.label}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05, duration: 0.3 }}
+                    {link.label}
+                  </Link>
+                </div>
+              ) : (
+                <div key={link.label}>
+                  <button
+                    ref={(el) => {
+                      mobileNavRefs.current[i] = el
+                    }}
+                    onClick={() => handleClick(link)}
+                    onKeyDown={(e) => handleMobileNavKeyDown(e, i)}
+                    className="w-full text-left py-3 text-sm text-cream/60 uppercase tracking-[0.15em] hover:text-green transition-colors border-b border-cream/[0.04] last:border-0"
                   >
-                    <button
-                      ref={(el) => {
-                        mobileNavRefs.current[i] = el
-                      }}
-                      onClick={() => handleClick(link)}
-                      onKeyDown={(e) => handleMobileNavKeyDown(e, i)}
-                      className="w-full text-left py-3 text-sm text-cream/60 uppercase tracking-[0.15em] hover:text-green transition-colors border-b border-cream/[0.04] last:border-0"
-                    >
-                      {link.label}
-                    </button>
-                  </motion.div>
-                )
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                    {link.label}
+                  </button>
+                </div>
+              )
+            )}
+          </div>
+        </div>
+      )}
     </header>
   )
 }

@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
 import TextReveal from './TextReveal'
 import AnimatedCounter from './AnimatedCounter'
 
@@ -30,41 +29,26 @@ const features = [
   },
 ]
 
-const ease = [0.33, 1, 0.68, 1] as const
-
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  })
-
-  const y1 = useTransform(scrollYProgress, [0, 1], [60, -60])
-  const y2 = useTransform(scrollYProgress, [0, 1], [30, -30])
 
   return (
     <section ref={sectionRef} className="relative px-6 py-28 md:py-40 overflow-hidden">
       {/* Floating accent circles */}
-      <motion.div
-        style={{ y: y1 }}
+      <div
         className="absolute -top-20 -right-20 w-[400px] h-[400px] rounded-full bg-green/[0.04] blur-3xl pointer-events-none"
       />
-      <motion.div
-        style={{ y: y2 }}
+      <div
         className="absolute -bottom-32 -left-32 w-[300px] h-[300px] rounded-full bg-green/[0.03] blur-3xl pointer-events-none"
       />
 
       <div className="max-w-6xl mx-auto relative">
         {/* Section tag */}
-        <motion.span
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease }}
+        <span
           className="block text-green text-xs font-bold uppercase tracking-[0.3em] mb-8 text-center"
         >
           The Vibe
-        </motion.span>
+        </span>
 
         {/* Big text reveal */}
         <TextReveal
@@ -72,26 +56,18 @@ export default function About() {
           className="font-heading display-text text-white text-center max-w-4xl mx-auto mb-8"
         />
 
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.8, delay: 0.3, ease }}
+        <p
           className="text-center text-white/50 mb-20 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed"
         >
           No cover. No dress code. Just a neighborhood spot where everybody
           sings, the drinks are cold, and the good times never stop.
-        </motion.p>
+        </p>
 
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
-          {stats.map((stat, i) => (
-            <motion.div
+          {stats.map((stat) => (
+            <div
               key={stat.label}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: i * 0.1, ease }}
               className="text-center group"
             >
               <span className="font-heading text-5xl md:text-6xl lg:text-7xl text-white block leading-none group-hover:text-green transition-colors duration-700">
@@ -100,19 +76,15 @@ export default function About() {
               <span className="text-white/40 text-xs uppercase tracking-[0.2em] mt-3 block">
                 {stat.label}
               </span>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Feature cards — all side by side on desktop */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {features.map((f, i) => (
-            <motion.div
+          {features.map((f) => (
+            <div
               key={f.title}
-              initial={{ opacity: 0, y: 50, scale: 0.98 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.8, delay: i * 0.08, ease }}
               className={`relative overflow-hidden rounded-2xl p-8 md:p-10 group cursor-default
                 ${f.accent
                   ? 'bg-charcoal text-cream'
@@ -134,7 +106,7 @@ export default function About() {
               {f.accent && (
                 <div className="absolute top-0 right-0 w-24 h-24 bg-green/10 rounded-bl-full pointer-events-none" />
               )}
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

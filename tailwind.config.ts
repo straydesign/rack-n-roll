@@ -30,15 +30,6 @@ const config: Config = {
         sans: ["DM Sans", "sans-serif"],
         heading: ["Space Grotesk", "sans-serif"],
       },
-      animation: {
-        aurora: "aurora-shift 60s linear infinite",
-      },
-      keyframes: {
-        "aurora-shift": {
-          from: { backgroundPosition: "50% 50%, 50% 50%" },
-          to: { backgroundPosition: "350% 50%, 350% 50%" },
-        },
-      },
     },
   },
   plugins: [],

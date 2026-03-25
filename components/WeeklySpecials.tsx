@@ -1,11 +1,9 @@
 'use client'
 
 import { useRef, useEffect, useCallback } from 'react'
-import { motion } from 'framer-motion'
+import { Mic } from 'lucide-react'
 import { dailySpecials as defaultSpecials } from '@/data/events'
 import type { DailySpecial } from '@/data/events'
-
-const ease = [0.33, 1, 0.68, 1] as const
 
 const DAY_NAMES: Record<string, string> = {
   Monday: 'Mon', Tuesday: 'Tue', Wednesday: 'Wed',
@@ -18,16 +16,12 @@ function getTodayIndex(): number {
   return jsDay === 0 ? 6 : jsDay - 1
 }
 
-function DayCard({ special, index, isTonight, cardRef }: { special: DailySpecial; index: number; isTonight: boolean; cardRef?: React.Ref<HTMLDivElement> }) {
+function DayCard({ special, isTonight, cardRef }: { special: DailySpecial; index: number; isTonight: boolean; cardRef?: React.Ref<HTMLDivElement> }) {
   const isClosed = special.closed
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.06, ease }}
       className={`relative flex-shrink-0 w-[140px] md:w-auto snap-center rounded-2xl p-5 transition-all duration-500 group flex flex-col
         ${isTonight
           ? 'bg-green/[0.12] border-2 border-green/40 glow-green'
@@ -38,13 +32,11 @@ function DayCard({ special, index, isTonight, cardRef }: { special: DailySpecial
     >
       {/* Tonight badge */}
       {isTonight && (
-        <motion.span
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+        <span
           className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-green text-[10px] font-bold text-white uppercase tracking-wider whitespace-nowrap z-10"
         >
           Tonight
-        </motion.span>
+        </span>
       )}
 
       {/* Day name abbreviation */}
@@ -86,13 +78,13 @@ function DayCard({ special, index, isTonight, cardRef }: { special: DailySpecial
           {special.karaoke && (
             <div className={`pt-2 mt-3 border-t ${isTonight ? 'border-green/20' : 'border-cream/5'}`}>
               <span className={`text-xs font-semibold block ${isTonight ? 'text-green' : 'text-green/60'}`}>
-                🎤 {special.karaoke}
+                <Mic className="inline w-3 h-3 mr-1 -mt-0.5" /> {special.karaoke}
               </span>
             </div>
           )}
         </>
       )}
-    </motion.div>
+    </div>
   )
 }
 

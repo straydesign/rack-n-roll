@@ -1,12 +1,8 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import MagneticButton from './MagneticButton'
 import type { SanitySiteSettings } from '@/lib/types'
-
-const ease = [0.33, 1, 0.68, 1] as const
 
 const defaultDetails = [
   {
@@ -59,17 +55,9 @@ export default function Info({ siteSettings }: InfoProps = {}) {
   const extras = siteSettings?.amenities && siteSettings.amenities.length > 0
     ? siteSettings.amenities
     : defaultExtras
-  const sectionRef = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  })
-
-  const imageY = useTransform(scrollYProgress, [0, 1], [40, -40])
-  const contentY = useTransform(scrollYProgress, [0, 1], [20, -20])
 
   return (
-    <section ref={sectionRef} className="relative px-6 py-28 md:py-40 overflow-hidden bg-charcoal text-cream">
+    <section className="relative px-6 py-28 md:py-40 overflow-hidden bg-charcoal text-cream">
       {/* Background noise */}
       <div className="noise absolute inset-0 pointer-events-none" />
 
@@ -78,36 +66,24 @@ export default function Info({ siteSettings }: InfoProps = {}) {
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Tag */}
-        <motion.span
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease }}
+        <span
           className="block text-green text-xs font-bold uppercase tracking-[0.3em] mb-8 text-center"
         >
           Find Us
-        </motion.span>
+        </span>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease }}
+        <h2
           className="font-heading heading-text text-cream text-center mb-20"
         >
           Come as you are.
-        </motion.h2>
+        </h2>
 
         <div className="grid md:grid-cols-2 gap-16 items-start">
           {/* Left: Contact info */}
-          <motion.div style={{ y: contentY }} className="space-y-10">
-            {details.map((d, i) => (
-              <motion.div
+          <div className="space-y-10">
+            {details.map((d) => (
+              <div
                 key={d.label}
-                initial={{ opacity: 0, x: -40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: i * 0.1, ease }}
               >
                 <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-3">
                   {d.label}
@@ -126,16 +102,11 @@ export default function Info({ siteSettings }: InfoProps = {}) {
                     {d.value}
                   </p>
                 )}
-              </motion.div>
+              </div>
             ))}
 
             {/* Extras grid */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.3, ease }}
-            >
+            <div>
               <span className="text-green text-[10px] font-bold uppercase tracking-[0.3em] block mb-4">
                 Good to Know
               </span>
@@ -149,15 +120,10 @@ export default function Info({ siteSettings }: InfoProps = {}) {
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
             {/* Social */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.4, ease }}
-            >
+            <div>
               <MagneticButton
                 href="https://www.facebook.com/profile.php?id=100053614732579"
                 className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-cream/10 text-cream/60 text-sm hover:border-green/30 hover:text-green transition-all duration-300"
@@ -171,16 +137,12 @@ export default function Info({ siteSettings }: InfoProps = {}) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
                 </svg>
               </MagneticButton>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           {/* Right: Photo + Map */}
-          <motion.div style={{ y: imageY }} className="space-y-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease }}
+          <div className="space-y-4">
+            <div
               className="relative rounded-2xl overflow-hidden h-[280px] group"
             >
               <Image
@@ -197,13 +159,9 @@ export default function Info({ siteSettings }: InfoProps = {}) {
                   2040 W 38th St, Erie
                 </span>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.15, ease }}
+            <div
               className="rounded-2xl overflow-hidden h-[280px] border border-cream/5"
             >
               <iframe
@@ -216,8 +174,8 @@ export default function Info({ siteSettings }: InfoProps = {}) {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

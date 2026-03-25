@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect, Suspense } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 // drei no longer needed — plain lighting only
 import * as THREE from 'three'
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
@@ -106,11 +106,7 @@ function ExtrudedLogo() {
     }
   }, [meshData])
 
-  useFrame((_, delta) => {
-    if (outerRef.current) {
-      outerRef.current.rotation.y += delta * 1.2
-    }
-  })
+  // Static — no rotation
 
   return (
     <group ref={outerRef} rotation={[0.15, 0, 0]}>

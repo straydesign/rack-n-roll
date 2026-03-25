@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, MapPin } from 'lucide-react'
 
 export default function MobileCTA() {
@@ -16,13 +15,9 @@ export default function MobileCTA() {
   }, [])
 
   return (
-    <AnimatePresence>
+    <>
       {visible && (
-        <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
+        <div
           className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
         >
           <div className="bg-charcoal/95 backdrop-blur-lg border-t border-cream/10 px-4 py-3 safe-area-bottom">
@@ -45,8 +40,8 @@ export default function MobileCTA() {
               </a>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   )
 }

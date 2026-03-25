@@ -109,39 +109,6 @@ body {
   border: 1px solid rgba(26, 26, 26, 0.06);
 }
 
-/* Animated gradient border */
-@property --angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
-
-.gradient-border {
-  --angle: 0deg;
-  border: 1px solid;
-  border-image: conic-gradient(from var(--angle), #1A7A3A, transparent 40%, transparent 60%, #1A7A3A) 1;
-  animation: rotate-border 4s linear infinite;
-}
-
-@keyframes rotate-border {
-  to { --angle: 360deg; }
-}
-
-/* Text mask gradient */
-.text-gradient {
-  background: linear-gradient(135deg, #1A7A3A, #2ECC71, #1A7A3A);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-shift 6s ease infinite;
-}
-
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
 /* Noise texture for dark sections */
 .noise::before {
   content: '';
@@ -173,7 +140,6 @@ body {
 /* Stagger children animation delay */
 .stagger-children > * {
   --stagger: 0;
-  animation-delay: calc(var(--stagger) * 80ms);
 }
 
 /* Magnetic cursor area */
@@ -195,33 +161,13 @@ body {
   letter-spacing: -0.02em;
 }
 
-/* Subtle pulse */
-@keyframes subtle-pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-.pulse-subtle {
-  animation: subtle-pulse 3s ease-in-out infinite;
-}
-
-/* Aurora animation for hero background */
-@keyframes aurora-shift {
-  from {
-    background-position: 50% 50%, 50% 50%;
-  }
-  to {
-    background-position: 350% 50%, 350% 50%;
-  }
-}
-
-.animate-aurora {
-  animation: aurora-shift 60s linear infinite;
-}
-
-/* Pause aurora when hero is off-screen */
-.aurora-paused .animate-aurora {
-  animation-play-state: paused;
+/* Text mask gradient (static, no animation) */
+.text-gradient {
+  background: linear-gradient(135deg, #1A7A3A, #2ECC71, #1A7A3A);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Marquee CSS animations (compositor thread) */
@@ -243,18 +189,6 @@ body {
   animation: marquee-right 30s linear infinite;
 }
 
-/* Respect reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  .animate-aurora,
-  .animate-marquee-left,
-  .animate-marquee-right,
-  .pulse-subtle,
-  .gradient-border {
-    animation: none;
-  }
-}
-
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-

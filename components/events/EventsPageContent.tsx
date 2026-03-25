@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { dailySpecials as defaultSpecials } from '@/data/events'
 import type { CalendarEvent, DailySpecial } from '@/data/events'
@@ -19,8 +18,6 @@ const defaultFlyerImages: FlyerImage[] = [
   { src: '/flyers/darts-blind-draw.jpg', alt: 'Dart Gear Blind Draw — Friday Feb 20' },
   { src: '/flyers/hiring-doorman.jpg', alt: 'Now Hiring — Weekend Doorman' },
 ]
-
-const ease = [0.33, 1, 0.68, 1] as const
 
 const DAY_ABBREV: Record<string, string> = {
   Monday: 'Mon', Tuesday: 'Tue', Wednesday: 'Wed',
@@ -56,10 +53,7 @@ export default function EventsPageContent({ flyers, specials, sanityCalendarEven
       <div className="max-w-6xl mx-auto relative z-10">
 
         {/* ── Everyday + Weekly Schedule Card ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease }}
+        <div
           className="glass rounded-2xl border border-cream/10 overflow-hidden mb-20"
         >
           {/* Everyday specials */}
@@ -108,14 +102,10 @@ export default function EventsPageContent({ flyers, specials, sanityCalendarEven
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* ── This Week ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease }}
+        <div
           className="mb-20"
         >
           <h2 className="font-heading text-3xl md:text-4xl text-cream text-center mb-3">
@@ -125,14 +115,10 @@ export default function EventsPageContent({ flyers, specials, sanityCalendarEven
             What&rsquo;s on tonight and the rest of the week
           </p>
           <WeeklySpecials specials={specials} />
-        </motion.div>
+        </div>
 
         {/* ── Calendar ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease }}
+        <div
           className="max-w-xl mx-auto mb-24"
         >
           <h2 className="font-heading text-3xl md:text-4xl text-cream text-center mb-3">
@@ -148,7 +134,7 @@ export default function EventsPageContent({ flyers, specials, sanityCalendarEven
               description: e.description ?? '',
             }))}
           />
-        </motion.div>
+        </div>
 
         {/* ── Flyers & Promos ── */}
         <div>
@@ -160,12 +146,8 @@ export default function EventsPageContent({ flyers, specials, sanityCalendarEven
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {flyerImages.slice(0, 10).map((flyer, i) => (
-              <motion.div
+              <div
                 key={flyer.src}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.7, delay: i * 0.15, ease }}
                 className="group relative rounded-2xl overflow-hidden border border-cream/[0.06] hover:border-green/20 transition-all duration-500"
               >
                 <Image
@@ -181,17 +163,13 @@ export default function EventsPageContent({ flyers, specials, sanityCalendarEven
                 <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                   <p className="text-cream text-sm font-medium">{flyer.alt}</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
 
         {/* ── Facebook link ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease }}
+        <div
           className="text-center mt-16"
         >
           <a
@@ -208,7 +186,7 @@ export default function EventsPageContent({ flyers, specials, sanityCalendarEven
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
           </a>
-        </motion.div>
+        </div>
       </div>
 
       {/* Event Day Modal */}
